@@ -1,0 +1,35 @@
+# IntelliJ HTTP client variables
+@baseUrl = http://localhost:8080
+@userId = adda5c8d-8a9a-4562-b193-511d70a96d16
+
+### Health check
+GET {{baseUrl}}/api/v1/users/ping
+
+### GET all users
+GET {{baseUrl}}/api/v1/users
+
+### Get user by ID
+GET {{baseUrl}}/api/v1/users/{{userId}}
+
+### Create a user
+POST {{baseUrl}}/api/v1/users
+Content-Type: application/json
+
+{
+  "email": "test@bellringer.com"
+}
+
+### Update user
+PUT {{baseUrl}}/api/v1/users/{{userId}}
+Content-Type: application/json
+
+{
+  "email": "new@bellringer.com",
+  "emailVerified" : true,
+  "displayName": "bob",
+  "photoUrl" : "http://myaccount/profile/profile_picture.com"
+
+}
+
+### Delete user
+DELETE {{baseUrl}}/api/v1/users/{{userId}}
