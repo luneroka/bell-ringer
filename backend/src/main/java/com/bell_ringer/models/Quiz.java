@@ -3,11 +3,13 @@ package com.bell_ringer.models;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "quizzes", indexes = {
     @Index(name = "idx_quizzes_user", columnList = "user_id"),
-    @Index(name = "idx_quizzes_category", columnList = "category_id")
+    @Index(name = "idx_quizzes_category", columnList = "category_id"),
+    @Index(name = "idx_quizzes_user_cat_completed", columnList = "user_id, category_id, completed_at")
 })
 public class Quiz {
 
@@ -18,12 +20,13 @@ public class Quiz {
   @Column(name = "user_id", nullable = false, columnDefinition = "uuid")
   private UUID userId;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "category_id")
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "category_id", nullable = false)
   private Category category; // sub-category in your terms
 
-  @Column(name = "date_created", nullable = false)
-  private OffsetDateTime dateCreated = OffsetDateTime.now();
+  @CreationTimestamp
+  @Column(name = "date_created", nullable = false, updatable = false)
+  private OffsetDateTime dateCreated;
 
   @Column(name = "completed_at")
   private OffsetDateTime completedAt;
