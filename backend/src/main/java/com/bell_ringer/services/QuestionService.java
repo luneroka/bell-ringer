@@ -8,6 +8,7 @@ import com.bell_ringer.repositories.QuestionRepository;
 import com.bell_ringer.services.QuizService;
 import com.bell_ringer.services.dto.GenerationRequest;
 import com.bell_ringer.services.dto.GenerationRequest.Mode;
+import com.bell_ringer.services.CategoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -17,11 +18,16 @@ public class QuestionService {
   private final QuestionRepository questionRepository;
   private final QuizService quizService;
   private final GenerationProperties generationProperties;
+  private final CategoryService categoryService;
 
-  public QuestionService(QuestionRepository questionRepository, QuizService quizService, GenerationProperties generationProperties) {
+  public QuestionService(QuestionRepository questionRepository,
+                         QuizService quizService,
+                         GenerationProperties generationProperties,
+                         CategoryService categoryService) {
     this.questionRepository = questionRepository;
     this.quizService = quizService;
     this.generationProperties = generationProperties;
+    this.categoryService = categoryService;
   }
 
   // GET QUESTION BY ID
@@ -82,6 +88,76 @@ public class QuestionService {
     return (mode == Mode.ADAPTIVE)
         ? adaptiveQuota(total, req.userId(), req.categoryId())
         : randomQuota(total);
+  }
+
+  private Long[] effectiveCategoryIds(Long categoryId) {
+    java.util.List<Long> ids = categoryService.resolveSelectionIds(categoryId);
+    return ids.toArray(new Long[0]);
+  }
+
+  @Transactional(readOnly = true)
+  public List<Question> drawWithQuota(Long[] categoryIds, Quota quota, int total) {
+    if (categoryIds == null || categoryIds.length == 0) throw new IllegalArgumentException("categoryIds must not be empty");
+    if (total <= 0) throw new IllegalArgumentException("total must be > 0");
+
+    // (Optional) quick stock guard; you can relax this if you prefer partial fills
+    long stock = 0L;
+    for (Long id : categoryIds) {
+      stock += countByCategoryId(id);
+    }
+    if (stock < total) {
+      throw new IllegalArgumentException("Not enough questions in these categories (have " + stock + ", need " + total + ")");
+    }
+
+    var out  = new java.util.ArrayList<Question>(total);
+    var seen = new java.util.HashSet<Long>(total * 2);
+
+    // Overdraw factor helps reduce overlap across batches
+    int over = 2;
+
+    // EASY
+    if (quota.easy() > 0) {
+      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.EASY.name(), quota.easy() * over);
+      addUntilUnique(out, batch, quota.easy(), seen);
+    }
+
+    // MEDIUM
+    if (quota.medium() > 0) {
+      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.MEDIUM.name(), quota.medium() * over);
+      addUntilUnique(out, batch, quota.medium(), seen);
+    }
+
+    // HARD
+    if (quota.hard() > 0) {
+      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.HARD.name(), quota.hard() * over);
+      addUntilUnique(out, batch, quota.hard(), seen);
+    }
+
+    // Fallback: if any bucket was short, top up with any difficulty
+    int missing = total - out.size();
+    if (missing > 0) {
+      var topUp = questionRepository.pickRandomFilteredMany(categoryIds, null, null, missing * over);
+      addUntilUnique(out, topUp, missing, seen);
+    }
+
+    // Final shuffle so order is random across difficulties
+    java.util.Collections.shuffle(out);
+
+    // Truncate in case we slightly overfilled (defensive)
+    return out.size() > total ? out.subList(0, total) : out;
+  }
+
+  @Transactional(readOnly = true)
+  public List<Question> generate(GenerationRequest req) {
+    if (req.userId() == null)     throw new IllegalArgumentException("userId required");
+    if (req.categoryId() == null) throw new IllegalArgumentException("categoryId required");
+    if (req.total() <= 0)         throw new IllegalArgumentException("total must be > 0");
+
+    // 1) Compute difficulty split (Step 3)
+    var quota = computeQuota(req);
+
+    // 2) Draw according to quota (Step 4)
+    return drawWithQuota(effectiveCategoryIds(req.categoryId()), quota, req.total());
   }
 
   // For tests / logs
@@ -159,5 +235,20 @@ public class QuestionService {
     double h = alpha * baseH + (1.0 - alpha) * wH;
 
     return distributeByLargestRemainder(e, m, h, total);
+  }
+
+  private int addUntilUnique(List<Question> target,
+                             List<Question> batch,
+                             int need,
+                             java.util.Set<Long> seen) {
+    int added = 0;
+    for (Question q : batch) {
+      if (added >= need) break;
+      if (seen.add(q.getId())) {
+        target.add(q);
+        added++;
+      }
+    }
+    return added;
   }
 }

@@ -35,4 +35,17 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
                                     @Param("typeName") String typeName,
                                     @Param("diffName") String diffName,
                                     @Param("limit") int limit);
+  @Query(value = """
+      SELECT * FROM questions
+      WHERE (:categoryIds IS NULL OR category_id = ANY(:categoryIds))
+        AND (:typeName   IS NULL OR type = :typeName)
+        AND (:diffName   IS NULL OR difficulty = :diffName)
+      ORDER BY random()
+      LIMIT :limit
+      """,
+      nativeQuery = true)
+  List<Question> pickRandomFilteredMany(@Param("categoryIds") Long[] categoryIds,
+                                        @Param("typeName") String typeName,
+                                        @Param("diffName") String diffName,
+                                        @Param("limit") int limit);
 }
