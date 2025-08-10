@@ -84,13 +84,18 @@ public class QuestionService {
     return (completed >= required) ? Mode.ADAPTIVE : Mode.RANDOM;
   }
 
-  @Transactional(readOnly = true)
-  public Quota computeQuota(GenerationRequest req) {
-    int total = normalizeLimit(req.total()); // or just req.total() if you already validated
+  private Quota computeQuotaInternal(GenerationRequest req) {
+    int total = normalizeLimit(req.total());
     Mode mode = decideMode(req);
     return (mode == Mode.ADAPTIVE)
         ? adaptiveQuota(total, req.userId(), req.categoryId())
         : randomQuota(total);
+  }
+
+  @Transactional(readOnly = true)
+  public QuotaDTO computeQuota(GenerationRequest req) {
+    Quota q = computeQuotaInternal(req);
+    return new QuotaDTO(q.easy(), q.medium(), q.hard(), q.sum());
   }
 
   private Long[] effectiveCategoryIds(Long categoryId) {
@@ -162,7 +167,7 @@ public class QuestionService {
     if (req.total() <= 0)         throw new IllegalArgumentException("total must be > 0");
 
     // 1) Compute difficulty split (Step 3)
-    var quota = computeQuota(req);
+    var quota = computeQuotaInternal(req);
 
     // 2) Draw according to quota (Step 4)
     return drawWithQuota(effectiveCategoryIds(req.categoryId()), quota, req.total());
@@ -179,6 +184,7 @@ public class QuestionService {
   record Quota(int easy, int medium, int hard) {
     int sum() { return easy + medium + hard; }
   }
+  public static record QuotaDTO(int easy, int medium, int hard, int sum) {}
 
   // ***** HELPERS ***** //
   private int normalizeLimit(int limit) {
