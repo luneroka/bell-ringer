@@ -5,7 +5,7 @@ import com.bell_ringer.models.Question;
 import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.models.Question.Difficulty;
 import com.bell_ringer.repositories.QuestionRepository;
-import com.bell_ringer.repositories.QuizRepository;
+import com.bell_ringer.services.QuizService;
 import com.bell_ringer.services.dto.GenerationRequest;
 import com.bell_ringer.services.dto.GenerationRequest.Mode;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ import java.util.List;
 @Service
 public class QuestionService {
   private final QuestionRepository questionRepository;
-  private final QuizRepository quizRepository;
+  private final QuizService quizService;
   private final GenerationProperties generationProperties;
 
-  public QuestionService(QuestionRepository questionRepository, QuizRepository quizRepository, GenerationProperties generationProperties) {
+  public QuestionService(QuestionRepository questionRepository, QuizService quizService, GenerationProperties generationProperties) {
     this.questionRepository = questionRepository;
-    this.quizRepository = quizRepository;
+    this.quizService = quizService;
     this.generationProperties = generationProperties;
   }
 
@@ -70,7 +70,7 @@ public class QuestionService {
 
     // 2. Otherwise, switch when the user has enough history in the sub_category
     int required = generationProperties.getMinQuizzesForAdaptive();
-    long completed = quizRepository.countCompletedByUserAndCategoryWithCompletedAt(req.userId(), req.categoryId());
+    long completed = quizService.countCompletedByUserAndCategory(req.userId(), req.categoryId());
 
     return (completed >= required) ? Mode.ADAPTIVE : Mode.RANDOM;
   }
