@@ -20,6 +20,9 @@ public class QuestionService {
   private final GenerationProperties generationProperties;
   private final CategoryService categoryService;
 
+  private static final int MAX_LIMIT = 100; // hard cap to protect DB
+  private static final java.util.Set<Integer> ALLOWED_LIMITS = java.util.Set.of(5, 10, 20);
+
   public QuestionService(QuestionRepository questionRepository,
                          QuizService quizService,
                          GenerationProperties generationProperties,
@@ -95,19 +98,24 @@ public class QuestionService {
     return ids.toArray(new Long[0]);
   }
 
-  @Transactional(readOnly = true)
-  public List<Question> drawWithQuota(Long[] categoryIds, Quota quota, int total) {
-    if (categoryIds == null || categoryIds.length == 0) throw new IllegalArgumentException("categoryIds must not be empty");
-    if (total <= 0) throw new IllegalArgumentException("total must be > 0");
-
-    // (Optional) quick stock guard; you can relax this if you prefer partial fills
+  private void assertEnoughStock(Long[] categoryIds, int total) {
     long stock = 0L;
     for (Long id : categoryIds) {
       stock += countByCategoryId(id);
     }
     if (stock < total) {
-      throw new IllegalArgumentException("Not enough questions in these categories (have " + stock + ", need " + total + ")");
+      throw new IllegalArgumentException(
+        "Not enough questions in these categories (have " + stock + ", need " + total + ")");
     }
+  }
+
+  @Transactional(readOnly = true)
+  public List<Question> drawWithQuota(Long[] categoryIds, Quota quota, int total) {
+    if (categoryIds == null || categoryIds.length == 0) throw new IllegalArgumentException("categoryIds must not be empty");
+    if (total <= 0) throw new IllegalArgumentException("total must be > 0");
+
+    // Stock guard (can be relaxed to allow partial fills)
+    assertEnoughStock(categoryIds, total);
 
     var out  = new java.util.ArrayList<Question>(total);
     var seen = new java.util.HashSet<Long>(total * 2);
@@ -174,8 +182,10 @@ public class QuestionService {
 
   // ***** HELPERS ***** //
   private int normalizeLimit(int limit) {
-    if (limit <= 0) return 1;
-    return Math.min(limit, 1000);
+    if (!ALLOWED_LIMITS.contains(limit)) {
+      throw new IllegalArgumentException("limit must be one of " + ALLOWED_LIMITS);
+    }
+    return Math.min(limit, MAX_LIMIT);
   }
 
   private Quota distributeByLargestRemainder(double wEasy, double wMed, double wHard, int total) {
