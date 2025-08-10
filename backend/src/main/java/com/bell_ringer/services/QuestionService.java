@@ -5,6 +5,9 @@ import com.bell_ringer.models.Question;
 import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.models.Question.Difficulty;
 import com.bell_ringer.repositories.QuestionRepository;
+import com.bell_ringer.repositories.QuizRepository;
+import com.bell_ringer.services.dto.GenerationRequest;
+import com.bell_ringer.services.dto.GenerationRequest.Mode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -12,10 +15,12 @@ import java.util.List;
 @Service
 public class QuestionService {
   private final QuestionRepository questionRepository;
+  private final QuizRepository quizRepository;
   private final GenerationProperties generationProperties;
 
-  public QuestionService(QuestionRepository questionRepository, GenerationProperties generationProperties) {
+  public QuestionService(QuestionRepository questionRepository, QuizRepository quizRepository, GenerationProperties generationProperties) {
     this.questionRepository = questionRepository;
+    this.quizRepository = quizRepository;
     this.generationProperties = generationProperties;
   }
 
@@ -55,6 +60,19 @@ public class QuestionService {
   public boolean existsByCategoryId(Long categoryId) {
     if (categoryId == null) throw new IllegalArgumentException("categoryId must not be null");
     return questionRepository.existsByCategoryId(categoryId);
+  }
+
+  //  ***** DECIDE MODE ***** //
+  @Transactional(readOnly = true)
+  Mode decideMode(GenerationRequest req) {
+    // 1. Respect explicit override if provided
+    if (req.modeOverride() != null) return req.modeOverride();
+
+    // 2. Otherwise, switch when the user has enough history in the sub_category
+    int required = generationProperties.getMinQuizzesForAdaptive();
+    long completed = quizRepository.countCompletedByUserAndCategoryWithCompletedAt(req.userId(), req.categoryId());
+
+    return (completed >= required) ? Mode.ADAPTIVE : Mode.RANDOM;
   }
 
   // ***** HELPERS ***** //
