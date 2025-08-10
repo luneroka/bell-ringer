@@ -1,5 +1,6 @@
 package com.bell_ringer.services;
 
+import com.bell_ringer.config.GenerationProperties;
 import com.bell_ringer.models.Question;
 import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.models.Question.Difficulty;
@@ -11,9 +12,11 @@ import java.util.List;
 @Service
 public class QuestionService {
   private final QuestionRepository questionRepository;
+  private final GenerationProperties generationProperties;
 
-  public QuestionService(QuestionRepository questionRepository) {
+  public QuestionService(QuestionRepository questionRepository, GenerationProperties generationProperties) {
     this.questionRepository = questionRepository;
+    this.generationProperties = generationProperties;
   }
 
   // GET QUESTION BY ID
@@ -53,6 +56,8 @@ public class QuestionService {
     if (categoryId == null) throw new IllegalArgumentException("categoryId must not be null");
     return questionRepository.existsByCategoryId(categoryId);
   }
+
+  // ***** HELPERS ***** //
   private int normalizeLimit(int limit) {
     if (limit <= 0) return 1;
     return Math.min(limit, 1000);

@@ -1,8 +1,6 @@
 package com.bell_ringer.repositories;
 
 import com.bell_ringer.models.Question;
-import com.bell_ringer.models.Question.Difficulty;
-import com.bell_ringer.models.Question.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
