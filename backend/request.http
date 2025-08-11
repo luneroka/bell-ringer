@@ -1,6 +1,6 @@
 # IntelliJ HTTP client variables
 @baseUrl = http://localhost:8080
-@userId = adda5c8d-8a9a-4562-b193-511d70a96d16
+@userId = 34e5c290-09e2-4c14-8752-0e7ae8963ffe
 
 ### Health check
 GET {{baseUrl}}/api/v1/users/ping

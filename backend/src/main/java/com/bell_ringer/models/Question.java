@@ -37,6 +37,9 @@ public class Question {
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
 
+  @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+  private java.util.Set<QuizQuestion> quizLinks = new java.util.LinkedHashSet<>();
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private OffsetDateTime createdAt;

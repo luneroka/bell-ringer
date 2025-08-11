@@ -22,7 +22,10 @@ public class Quiz {
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "category_id", nullable = false)
-  private Category category; // sub-category in your terms
+  private Category category;
+
+  @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private java.util.Set<QuizQuestion> quizQuestions = new java.util.LinkedHashSet<>();
 
   @CreationTimestamp
   @Column(name = "date_created", nullable = false, updatable = false)
