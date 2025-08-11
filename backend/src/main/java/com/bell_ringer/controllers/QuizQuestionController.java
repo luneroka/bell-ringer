@@ -31,12 +31,6 @@ public class QuizQuestionController {
 
     // ---------------- Reads ----------------
 
-    /** Return full link rows for a quiz (debug/admin). */
-    @GetMapping
-    public List<QuizQuestion> listLinks(@PathVariable Long quizId) {
-        return quizQuestionService.findAllByQuizId(quizId);
-    }
-
     /** Return only question IDs linked to this quiz. */
     @GetMapping("/ids")
     public Map<String, Object> listQuestionIds(@PathVariable Long quizId) {
@@ -56,23 +50,23 @@ public class QuizQuestionController {
 
     /** Add a single question to a quiz. */
     @PostMapping("/{questionId}")
-    public ResponseEntity<QuizQuestion> addOne(@PathVariable Long quizId, @PathVariable Long questionId) {
-        QuizQuestion qq = quizQuestionService.addIfAbsent(quizId, questionId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(qq);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addOne(@PathVariable Long quizId, @PathVariable Long questionId) {
+        quizQuestionService.addIfAbsent(quizId, questionId);
     }
 
-    /** Add many questions to a quiz (duplicates ignored). */
-    @PostMapping
-    public ResponseEntity<?> addMany(@PathVariable Long quizId, @RequestBody AddManyRequest body) {
-        if (body == null || body.questionIds == null || body.questionIds.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "questionIds must not be empty"));
-        }
-        var created = quizQuestionService.addAllIfAbsent(quizId, body.questionIds);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-            "quizId", quizId,
-            "created", created.size()
-        ));
-    }
+     /** Add many questions to a quiz (duplicates ignored). */
+     @PostMapping
+     public ResponseEntity<?> addMany(@PathVariable Long quizId, @RequestBody AddManyRequest body) {
+         if (body == null || body.questionIds == null || body.questionIds.isEmpty()) {
+             return ResponseEntity.badRequest().body(Map.of("error", "questionIds must not be empty"));
+         }
+         var created = quizQuestionService.addAllIfAbsent(quizId, body.questionIds);
+         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+             "quizId", quizId,
+             "created", created.size()
+         ));
+     }
 
     /** Replace all links with the provided ordered list. */
     @PutMapping

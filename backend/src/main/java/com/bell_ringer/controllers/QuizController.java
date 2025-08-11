@@ -44,33 +44,6 @@ public class QuizController {
         return quizService.getRequired(id);
     }
 
-    /** Create an empty quiz (no questions yet) */
-    @PostMapping
-    public ResponseEntity<Quiz> create(@RequestBody CreateQuizRequest body) {
-        if (body == null || body.userId == null || body.categoryId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        Quiz quiz = quizService.create(body.userId, body.categoryId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(quiz);
-    }
-
-    /** Create a quiz and attach the provided questions */
-    @PostMapping("/with-questions")
-    public ResponseEntity<Quiz> createWithQuestions(@RequestBody CreateWithQuestionsRequest body) {
-        if (body == null || body.userId == null || body.categoryId == null || body.questionIds == null || body.questionIds.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        Quiz quiz = quizService.createWithQuestions(body.userId, body.categoryId, body.questionIds);
-        return ResponseEntity.status(HttpStatus.CREATED).body(quiz);
-    }
-
-    /** Attach additional questions to an existing quiz */
-    @PostMapping("/{id}/questions")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addQuestions(@PathVariable Long id, @RequestBody List<Long> questionIds) {
-        quizService.addQuestions(id, questionIds);
-    }
-
     /** Mark a quiz as completed (sets completed_at = now) */
     @PostMapping("/{id}/complete")
     public Quiz markCompleted(@PathVariable Long id) {
@@ -84,14 +57,14 @@ public class QuizController {
         quizService.clearCompleted(id);
     }
 
-    /** Step 2.B: Count completed quizzes for a user in a category */
+    /** Count completed quizzes for a user in a category */
     @GetMapping("/history/count")
     public Map<String, Object> countCompleted(@RequestParam UUID userId, @RequestParam Long categoryId) {
         long count = quizService.countCompletedByUserAndCategory(userId, categoryId);
         return Map.of("userId", userId, "categoryId", categoryId, "completedCount", count);
     }
 
-    /** Step 2.C: Accuracy per difficulty for a user in a category */
+    /** Accuracy per difficulty for a user in a category */
     @GetMapping("/accuracy")
     public Map<String, Object> accuracy(@RequestParam UUID userId, @RequestParam Long categoryId) {
         QuizService.Accuracy acc = quizService.loadAccuracy(userId, categoryId);

@@ -11,10 +11,10 @@
 # ----------------------
 # IDs you will populate
 # ----------------------
-@userId = e81558f1-f055-447e-b2ec-79c9567ab21e
+@userId = af4ff4c5-8ffa-4e3d-b71c-f3bfa2a5c051
 @rootCategoryId = 1
 @childCategoryId = 2
-@quizId = 3
+@quizId = 2
 
 ########################################################
 # USERS
@@ -71,26 +71,26 @@ DELETE {{baseUrl}}/api/v1/users/{{userId}}
 # CATEGORIES
 ########################################################
 
-# TODO : FIX THESE TWO
+# Commented out until prod
 ### Create a root category (e.g., Frontend)
-POST {{baseUrl}}/api/v1/categories
-Content-Type: application/json
-
-{
-  "area": "frontend",
-  "name": "Frontend",
-  "parentId": null
-}
+#POST {{baseUrl}}/api/v1/categories
+#Content-Type: application/json
+#
+#{
+#  "area": "frontend",
+#  "name": "Frontend",
+#  "parentId": null
+#}
 
 ### Create a child category (e.g., React under Frontend)
-POST {{baseUrl}}/api/v1/categories
-Content-Type: application/json
-
-{
-  "area": "frontend",
-  "name": "React",
-  "parentId": {{rootCategoryId}}
-}
+#POST {{baseUrl}}/api/v1/categories
+#Content-Type: application/json
+#
+#{
+#  "area": "frontend",
+#  "name": "React",
+#  "parentId": {{rootCategoryId}}
+#}
 
 ### List root categories
 GET {{baseUrl}}/api/v1/categories/roots
@@ -111,16 +111,7 @@ Accept: application/json
 ########################################################
 # QUIZZES
 ########################################################
-
-### Create empty quiz (no questions yet)
-POST {{baseUrl}}/api/v1/quizzes
-Content-Type: application/json
-
-{
-  "userId": "{{userId}}",
-  "categoryId": {{childCategoryId}}
-}
-
+/
 ### Get quiz by id
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
 Accept: application/json
@@ -136,7 +127,7 @@ DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
 GET {{baseUrl}}/api/v1/quizzes/history/count?userId={{userId}}&categoryId={{childCategoryId}}
 Accept: application/json
 
-# TODO : FIX THIS ONE
+# TODO : TEST AFTER IMPLEMENTING ATTEMPT AND ATTEMPT_ANSWER
 ### Accuracy per difficulty (user + category)
 GET {{baseUrl}}/api/v1/quizzes/accuracy?userId={{userId}}&categoryId={{childCategoryId}}
 Accept: application/json
@@ -144,11 +135,7 @@ Accept: application/json
 ########################################################
 # QUIZ_QUESTIONS (join table)
 ########################################################
-# TODO FIX THIS ONE
-### List links for a quiz (debug)
-GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
-Accept: application/json
-
+/
 ### List only question IDs linked to a quiz
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/ids
 Accept: application/json
@@ -157,7 +144,9 @@ Accept: application/json
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/count
 Accept: application/json
 
-# TODO : FIX THIS ONE
+### Add a single question to a quiz
+POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/11
+
 ### Add many questions to a quiz (provide existing question IDs)
 POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 Content-Type: application/json
@@ -171,11 +160,8 @@ PUT {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 Content-Type: application/json
 
 {
-  "questionIds": [1, 2, 3, 4]
+  "questionIds": [5, 6, 7, 8]
 }
-
-### Add a single question to a quiz
-POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/1
 
 ### Remove a single question from a quiz
 DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/1
@@ -186,7 +172,7 @@ DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 ########################################################
 # QUESTION GENERATION (service-level)
 ########################################################
-
+/
 ### Compute quota only (RANDOM/ADAPTIVE decided in service)
 POST {{baseUrl}}/api/v1/questions/quota
 Content-Type: application/json
@@ -208,16 +194,3 @@ Content-Type: application/json
   "total": 10,
   "modeOverride": null
 }
-
-########################################################
-# (Optional) Seeding — mock questions for testing
-# If you don't have CRUD endpoints for questions yet,
-# seed via SQL in your DB or create a temporary admin endpoint.
-# Example SQL (psql):
-# INSERT INTO questions(type, category_id, difficulty, question)
-# VALUES ('UNIQUE_CHOICE', {{childCategoryId}}, 'EASY', 'What is React?'),
-#        ('TRUE_FALSE',    {{childCategoryId}}, 'EASY', 'React uses a virtual DOM.'),
-#        ('MULTIPLE_CHOICE', {{childCategoryId}}, 'MEDIUM', 'Which are React hooks?'),
-#        ('SHORT_ANSWER',  {{childCategoryId}}, 'HARD', 'Explain reconciliation.');
-# Then add choices for MCQ/TF as needed and test generation.
-########################################################
