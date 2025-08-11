@@ -11,10 +11,10 @@
 # ----------------------
 # IDs you will populate
 # ----------------------
-@userId = 2ca38b59-55b3-468d-82d8-98b9fd7f652a
+@userId = 4d885547-e552-453d-a1ea-05973823fec7
 @rootCategoryId = 1
 @childCategoryId = 2
-@quizId = 2
+@quizId = 1
 @questionIds = []
 
 ########################################################

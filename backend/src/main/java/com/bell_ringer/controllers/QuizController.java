@@ -5,6 +5,7 @@ import com.bell_ringer.models.Quiz;
 import com.bell_ringer.services.QuizService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class QuizController {
     // -------------------- Endpoints --------------------
 
     /** Get a quiz by id */
+    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     public Quiz getById(@PathVariable Long id) {
         return quizService.getRequired(id);

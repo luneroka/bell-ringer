@@ -1,5 +1,6 @@
 package com.bell_ringer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,6 +34,7 @@ public class Question {
   @Column(name = "question", nullable = false, columnDefinition = "TEXT")
   private String question;
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;

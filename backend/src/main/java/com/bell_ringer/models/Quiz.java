@@ -1,5 +1,6 @@
 package com.bell_ringer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -20,10 +21,12 @@ public class Quiz {
   @Column(name = "user_id", nullable = false, columnDefinition = "uuid")
   private UUID userId;
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private java.util.Set<QuizQuestion> quizQuestions = new java.util.LinkedHashSet<>();
 

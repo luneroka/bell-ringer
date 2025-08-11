@@ -6,6 +6,7 @@ import com.bell_ringer.services.dto.GenerationRequest;
 import com.bell_ringer.services.QuestionService.QuotaDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
+  @Transactional(readOnly = true)
   @PostMapping("/generate")
   public ResponseEntity<List<Question>> generate(@RequestBody GenerationRequest request) {
     if (request == null) return ResponseEntity.badRequest().build();
