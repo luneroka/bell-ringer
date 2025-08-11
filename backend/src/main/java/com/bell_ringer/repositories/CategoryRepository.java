@@ -35,5 +35,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
          WHERE id = :parentId OR parent_id = :parentId
         ORDER BY id
     """, nativeQuery = true)
-    List<Long> getParentAndChildrenIds(@Param("parentId") Long parentId);
+    List<Integer> getParentAndChildrenIds(@Param("parentId") Long parentId);
 }

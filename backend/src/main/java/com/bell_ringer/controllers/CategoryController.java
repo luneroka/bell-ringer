@@ -60,7 +60,7 @@ public class CategoryController {
     /** Resolve selection ids: parent -> [parent + children], leaf -> [id] */
     @GetMapping("/{id}/ids")
     public Map<String, Object> resolveSelection(@PathVariable Long id) {
-        List<Long> ids = categoryService.resolveSelectionIds(id);
+        List<Integer> ids = categoryService.resolveSelectionIds(id);
         return Map.of("categoryId", id, "effectiveIds", ids);
     }
 

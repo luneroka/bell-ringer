@@ -1,4 +1,3 @@
-
 package com.bell_ringer.services;
 
 import com.bell_ringer.models.Category;
@@ -6,7 +5,6 @@ import com.bell_ringer.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -47,11 +45,13 @@ public class CategoryService {
      */
     public List<Long> resolveSelectionIds(Long categoryId) {
         if (categoryId == null) throw new IllegalArgumentException("categoryId must not be null");
-        List<Long> ids = categories.getParentAndChildrenIds(categoryId);
+        List<Integer> ids = categories.getParentAndChildrenIds(categoryId);
         if (ids == null || ids.isEmpty()) {
             return List.of(categoryId);
         }
-        return ids;
+        return ids.stream()
+                .map(Integer::longValue)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     // ---------- Write methods ---------- //

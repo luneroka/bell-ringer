@@ -5,13 +5,14 @@ import com.bell_ringer.models.Question;
 import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.models.Question.Difficulty;
 import com.bell_ringer.repositories.QuestionRepository;
-import com.bell_ringer.services.QuizService;
 import com.bell_ringer.services.dto.GenerationRequest;
 import com.bell_ringer.services.dto.GenerationRequest.Mode;
-import com.bell_ringer.services.CategoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class QuestionService {
@@ -98,15 +99,16 @@ public class QuestionService {
     return new QuotaDTO(q.easy(), q.medium(), q.hard(), q.sum());
   }
 
-  private Long[] effectiveCategoryIds(Long categoryId) {
-    java.util.List<Long> ids = categoryService.resolveSelectionIds(categoryId);
-    return ids.toArray(new Long[0]);
+  private Integer[] effectiveCategoryIds(Long categoryId) {
+    // CategoryService returns List<Long>; convert to Integer[] for the repository's native query (int[])
+    List<Long> ids = categoryService.resolveSelectionIds(categoryId);
+    return ids.stream().map(Long::intValue).toArray(Integer[]::new);
   }
 
-  private void assertEnoughStock(Long[] categoryIds, int total) {
+  private void assertEnoughStock(Integer[] categoryIds, int total) {
     long stock = 0L;
-    for (Long id : categoryIds) {
-      stock += countByCategoryId(id);
+    for (Integer id : categoryIds) {
+      stock += countByCategoryId(Long.valueOf(id));
     }
     if (stock < total) {
       throw new IllegalArgumentException(
@@ -115,15 +117,15 @@ public class QuestionService {
   }
 
   @Transactional(readOnly = true)
-  public List<Question> drawWithQuota(Long[] categoryIds, Quota quota, int total) {
+  public List<Question> drawWithQuota(Integer[] categoryIds, Quota quota, int total) {
     if (categoryIds == null || categoryIds.length == 0) throw new IllegalArgumentException("categoryIds must not be empty");
     if (total <= 0) throw new IllegalArgumentException("total must be > 0");
 
     // Stock guard (can be relaxed to allow partial fills)
     assertEnoughStock(categoryIds, total);
 
-    var out  = new java.util.ArrayList<Question>(total);
-    var seen = new java.util.HashSet<Long>(total * 2);
+      List<Question> out = new java.util.ArrayList<>(total);
+      java.util.Set<Long> seen = new java.util.HashSet<>(total * 2);
 
     // Overdraw factor helps reduce overlap across batches
     int over = 2;
@@ -253,10 +255,10 @@ public class QuestionService {
     return distributeByLargestRemainder(e, m, h, total);
   }
 
-  private int addUntilUnique(List<Question> target,
+    private int addUntilUnique(List<Question> target,
                              List<Question> batch,
                              int need,
-                             java.util.Set<Long> seen) {
+                             Set<Long> seen) {
     int added = 0;
     for (Question q : batch) {
       if (added >= need) break;
