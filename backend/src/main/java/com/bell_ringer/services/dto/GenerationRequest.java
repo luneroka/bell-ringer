@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public record GenerationRequest(
     UUID userId,
+    Long quizId,
     Long categoryId,
     int total,
     Mode modeOverride // null means auto-decide

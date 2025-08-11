@@ -2,11 +2,10 @@ package com.bell_ringer.controllers;
 
 import com.bell_ringer.models.Question;
 import com.bell_ringer.services.QuestionService;
-import com.bell_ringer.services.dto.GenerationRequest;
 import com.bell_ringer.services.QuestionService.QuotaDTO;
+import com.bell_ringer.services.dto.GenerationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +20,12 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
-  @Transactional(readOnly = true)
   @PostMapping("/generate")
   public ResponseEntity<List<Question>> generate(@RequestBody GenerationRequest request) {
     if (request == null) return ResponseEntity.badRequest().build();
     // QuestionService handles the rest (mode, quota, draw)
     var list = questionService.generate(request);
-    return ResponseEntity.status(HttpStatus.OK).body(list);
+    return ResponseEntity.ok(list);
   }
 
   // Optional sanity endpoint

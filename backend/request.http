@@ -11,11 +11,10 @@
 # ----------------------
 # IDs you will populate
 # ----------------------
-@userId = bea99d52-e82c-4728-9f8d-cde2e27ea9c5
+@userId = e81558f1-f055-447e-b2ec-79c9567ab21e
 @rootCategoryId = 1
 @childCategoryId = 2
-@quizId = 1
-@questionIds = []
+@quizId = 3
 
 ########################################################
 # USERS
@@ -72,6 +71,7 @@ DELETE {{baseUrl}}/api/v1/users/{{userId}}
 # CATEGORIES
 ########################################################
 
+# TODO : FIX THESE TWO
 ### Create a root category (e.g., Frontend)
 POST {{baseUrl}}/api/v1/categories
 Content-Type: application/json
@@ -136,6 +136,7 @@ DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
 GET {{baseUrl}}/api/v1/quizzes/history/count?userId={{userId}}&categoryId={{childCategoryId}}
 Accept: application/json
 
+# TODO : FIX THIS ONE
 ### Accuracy per difficulty (user + category)
 GET {{baseUrl}}/api/v1/quizzes/accuracy?userId={{userId}}&categoryId={{childCategoryId}}
 Accept: application/json
@@ -143,7 +144,7 @@ Accept: application/json
 ########################################################
 # QUIZ_QUESTIONS (join table)
 ########################################################
-
+# TODO FIX THIS ONE
 ### List links for a quiz (debug)
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 Accept: application/json
@@ -156,12 +157,13 @@ Accept: application/json
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/count
 Accept: application/json
 
+# TODO : FIX THIS ONE
 ### Add many questions to a quiz (provide existing question IDs)
 POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 Content-Type: application/json
 
 {
-  "questionIds": {{questionIds}}
+  "questionIds": [1, 2, 3, 4]
 }
 
 ### Replace all links with an ordered list
@@ -169,7 +171,7 @@ PUT {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 Content-Type: application/json
 
 {
-  "questionIds": {{questionIds}}
+  "questionIds": [1, 2, 3, 4]
 }
 
 ### Add a single question to a quiz

@@ -53,14 +53,14 @@ public class CategoryController {
     /** List direct children of a category */
     @Transactional(readOnly = true)
     @GetMapping("/{id}/children")
-    public List<Category> listChildren(@PathVariable Long id, Reader reader) {
+    public List<Category> listChildren(@PathVariable Long id) {
         return categoryService.listChildren(id);
     }
 
     /** Resolve selection ids: parent -> [parent + children], leaf -> [id] */
     @GetMapping("/{id}/ids")
     public Map<String, Object> resolveSelection(@PathVariable Long id) {
-        List<Integer> ids = categoryService.resolveSelectionIds(id);
+        List<Long> ids = categoryService.resolveSelectionIds(id);
         return Map.of("categoryId", id, "effectiveIds", ids);
     }
 

@@ -2,17 +2,19 @@ package com.bell_ringer.services;
 
 import com.bell_ringer.config.GenerationProperties;
 import com.bell_ringer.models.Question;
-import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.models.Question.Difficulty;
+import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.repositories.QuestionRepository;
 import com.bell_ringer.services.dto.GenerationRequest;
-import com.bell_ringer.services.dto.GenerationRequest.Mode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class QuestionService {
@@ -22,7 +24,7 @@ public class QuestionService {
   private final CategoryService categoryService;
 
   private static final int MAX_LIMIT = 100; // hard cap to protect DB
-  private static final java.util.Set<Integer> ALLOWED_LIMITS = java.util.Set.of(5, 10, 20);
+  private static final Set<Integer> ALLOWED_LIMITS = Set.of(5, 10, 20);
 
   public QuestionService(QuestionRepository questionRepository,
                          QuizService quizService,
@@ -34,15 +36,13 @@ public class QuestionService {
     this.categoryService = categoryService;
   }
 
-  // GET QUESTION BY ID
+  // ===== Basic Reads =====
   @Transactional(readOnly = true)
   public Question getQuestionById(Long id) {
     if (id == null) throw new IllegalArgumentException("id must not be null");
     return questionRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Question not found: " + id));
   }
-
-  // ***** RANDOM SELECTION ***** //
 
   @Transactional(readOnly = true)
   public List<Question> pickRandom(int limit) {
@@ -53,13 +53,12 @@ public class QuestionService {
   @Transactional(readOnly = true)
   public List<Question> pickRandomFiltered(Long categoryId, Type type, Difficulty difficulty, int limit) {
     int safe = normalizeLimit(limit);
-    String typeName = type == null ? null : type.name();
-    String diffName = difficulty == null ? null : difficulty.name();
+    String typeName = (type == null ? null : type.name());
+    String diffName = (difficulty == null ? null : difficulty.name());
     return questionRepository.pickRandomFiltered(categoryId, typeName, diffName, safe);
   }
 
-  // ***** METRICS & GUARDS ***** //
-
+  // ===== Metrics & Guards =====
   @Transactional(readOnly = true)
   public long countByCategoryId(Long categoryId) {
     if (categoryId == null) throw new IllegalArgumentException("categoryId must not be null");
@@ -72,23 +71,19 @@ public class QuestionService {
     return questionRepository.existsByCategoryId(categoryId);
   }
 
-  //  ***** DECIDE MODE ***** //
+  // ===== Mode Decision & Quota =====
   @Transactional(readOnly = true)
-  Mode decideMode(GenerationRequest req) {
-    // 1. Respect explicit override if provided
+  GenerationRequest.Mode decideMode(GenerationRequest req) {
     if (req.modeOverride() != null) return req.modeOverride();
-
-    // 2. Otherwise, switch when the user has enough history in the sub_category
     int required = generationProperties.getMinQuizzesForAdaptive();
     long completed = quizService.countCompletedByUserAndCategory(req.userId(), req.categoryId());
-
-    return (completed >= required) ? Mode.ADAPTIVE : Mode.RANDOM;
+    return (completed >= required) ? GenerationRequest.Mode.ADAPTIVE : GenerationRequest.Mode.RANDOM;
   }
 
   private Quota computeQuotaInternal(GenerationRequest req) {
     int total = normalizeLimit(req.total());
-    Mode mode = decideMode(req);
-    return (mode == Mode.ADAPTIVE)
+    var mode = decideMode(req);
+    return (mode == GenerationRequest.Mode.ADAPTIVE)
         ? adaptiveQuota(total, req.userId(), req.categoryId())
         : randomQuota(total);
   }
@@ -99,33 +94,33 @@ public class QuestionService {
     return new QuotaDTO(q.easy(), q.medium(), q.hard(), q.sum());
   }
 
-  private Integer[] effectiveCategoryIds(Long categoryId) {
-    // CategoryService returns List<Long>; convert to Integer[] for the repository's native query (int[])
+  private List<Integer> effectiveCategoryIds(Long categoryId) {
+    // CategoryService returns List<Long>; convert to List<Integer> for repository (IN (:categoryIds))
     List<Long> ids = categoryService.resolveSelectionIds(categoryId);
-    return ids.stream().map(Long::intValue).toArray(Integer[]::new);
+    return ids.stream().map(Long::intValue).toList();
   }
 
-  private void assertEnoughStock(Integer[] categoryIds, int total) {
+  private void assertEnoughStock(List<Integer> categoryIds, int total) {
     long stock = 0L;
     for (Integer id : categoryIds) {
       stock += countByCategoryId(Long.valueOf(id));
     }
     if (stock < total) {
       throw new IllegalArgumentException(
-        "Not enough questions in these categories (have " + stock + ", need " + total + ")");
+          "Not enough questions in these categories (have " + stock + ", need " + total + ")");
     }
   }
 
   @Transactional(readOnly = true)
-  public List<Question> drawWithQuota(Integer[] categoryIds, Quota quota, int total) {
-    if (categoryIds == null || categoryIds.length == 0) throw new IllegalArgumentException("categoryIds must not be empty");
+  public List<Question> drawWithQuota(List<Integer> categoryIds, Quota quota, int total) {
+    if (categoryIds == null || categoryIds.isEmpty()) throw new IllegalArgumentException("categoryIds must not be empty");
     if (total <= 0) throw new IllegalArgumentException("total must be > 0");
 
     // Stock guard (can be relaxed to allow partial fills)
     assertEnoughStock(categoryIds, total);
 
-      List<Question> out = new java.util.ArrayList<>(total);
-      java.util.Set<Long> seen = new java.util.HashSet<>(total * 2);
+    List<Question> out = new ArrayList<>(total);
+    Set<Long> seen = new HashSet<>(total * 2);
 
     // Overdraw factor helps reduce overlap across batches
     int over = 2;
@@ -156,13 +151,14 @@ public class QuestionService {
     }
 
     // Final shuffle so order is random across difficulties
-    java.util.Collections.shuffle(out);
+    Collections.shuffle(out);
 
     // Truncate in case we slightly overfilled (defensive)
     return out.size() > total ? out.subList(0, total) : out;
   }
 
-  @Transactional(readOnly = true)
+  // ===== Orchestrator =====
+  @Transactional
   public List<Question> generate(GenerationRequest req) {
     if (req.userId() == null)     throw new IllegalArgumentException("userId required");
     if (req.categoryId() == null) throw new IllegalArgumentException("categoryId required");
@@ -172,23 +168,23 @@ public class QuestionService {
     var quota = computeQuotaInternal(req);
 
     // 2) Draw according to quota (Step 4)
-    return drawWithQuota(effectiveCategoryIds(req.categoryId()), quota, req.total());
-  }
+    var selected = drawWithQuota(effectiveCategoryIds(req.categoryId()), quota, req.total());
 
-  // For tests / logs
-  private void assertQuotaSums(Quota q, int total) {
-    if (q.sum() != total) {
-      throw new IllegalStateException("Quota sum mismatch: " + q.sum() + " != " + total);
+    // 3) Ensure we have a quiz to attach to (auto-create if needed)
+    Long quizId = req.quizId();
+    if (quizId == null) {
+      var quiz = quizService.create(req.userId(), req.categoryId());
+      quizId = quiz.getId();
     }
+
+    // 4) Attach the generated questions to the quiz
+    var questionIds = selected.stream().map(Question::getId).toList();
+    quizService.addQuestions(quizId, questionIds);
+
+    return selected;
   }
 
-  /** How many questions to draw per difficulty. */
-  record Quota(int easy, int medium, int hard) {
-    int sum() { return easy + medium + hard; }
-  }
-  public static record QuotaDTO(int easy, int medium, int hard, int sum) {}
-
-  // ***** HELPERS ***** //
+  // ===== Helpers =====
   private int normalizeLimit(int limit) {
     if (!ALLOWED_LIMITS.contains(limit)) {
       throw new IllegalArgumentException("limit must be one of " + ALLOWED_LIMITS);
@@ -197,7 +193,6 @@ public class QuestionService {
   }
 
   private Quota distributeByLargestRemainder(double wEasy, double wMed, double wHard, int total) {
-    // avoid division by zero
     double sum = Math.max(1e-9, wEasy + wMed + wHard);
     double e = (wEasy / sum) * total;
     double m = (wMed  / sum) * total;
@@ -221,9 +216,8 @@ public class QuestionService {
     double baseE = generationProperties.getBase().getEasy();
     double baseM = generationProperties.getBase().getMedium();
     double baseH = generationProperties.getBase().getHard();
-    double noise = generationProperties.getNoise(); // e.g. 0.10
+    double noise = generationProperties.getNoise();
 
-    // add a small jitter of ±noise/2 to each bucket
     double e = baseE + (Math.random() - 0.5) * (noise / 2.0);
     double m = baseM + (Math.random() - 0.5) * (noise / 2.0);
     double h = baseH + (Math.random() - 0.5) * (noise / 2.0);
@@ -231,13 +225,12 @@ public class QuestionService {
     return distributeByLargestRemainder(e, m, h, total);
   }
 
-  private Quota adaptiveQuota(int total, java.util.UUID userId, Long categoryId) {
+  private Quota adaptiveQuota(int total, UUID userId, Long categoryId) {
     var acc = quizService.loadAccuracy(userId, categoryId); // values in [0,1]
     double wE = 1.0 - acc.easy();
     double wM = 1.0 - acc.medium();
     double wH = 1.0 - acc.hard();
 
-    // normalize weakness weights (if all 0, give equal weight)
     double ws = wE + wM + wH;
     if (ws <= 1e-9) { wE = wM = wH = 1.0; ws = 3.0; }
     wE /= ws; wM /= ws; wH /= ws;
@@ -245,9 +238,8 @@ public class QuestionService {
     double baseE = generationProperties.getBase().getEasy();
     double baseM = generationProperties.getBase().getMedium();
     double baseH = generationProperties.getBase().getHard();
-    double alpha = generationProperties.getAdaptiveAlpha(); // e.g. 0.6
+    double alpha = generationProperties.getAdaptiveAlpha();
 
-    // mix base with user weaknesses
     double e = alpha * baseE + (1.0 - alpha) * wE;
     double m = alpha * baseM + (1.0 - alpha) * wM;
     double h = alpha * baseH + (1.0 - alpha) * wH;
@@ -255,7 +247,7 @@ public class QuestionService {
     return distributeByLargestRemainder(e, m, h, total);
   }
 
-    private int addUntilUnique(List<Question> target,
+  private int addUntilUnique(List<Question> target,
                              List<Question> batch,
                              int need,
                              Set<Long> seen) {
@@ -269,4 +261,8 @@ public class QuestionService {
     }
     return added;
   }
+
+  // ===== DTOs =====
+  record Quota(int easy, int medium, int hard) { int sum() { return easy + medium + hard; } }
+  public static record QuotaDTO(int easy, int medium, int hard, int sum) {}
 }
