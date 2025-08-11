@@ -31,8 +31,8 @@ public class Quiz {
   private java.util.Set<QuizQuestion> quizQuestions = new java.util.LinkedHashSet<>();
 
   @CreationTimestamp
-  @Column(name = "date_created", nullable = false, updatable = false)
-  private OffsetDateTime dateCreated;
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private OffsetDateTime createdAt;
 
   @Column(name = "completed_at")
   private OffsetDateTime completedAt;
@@ -50,8 +50,8 @@ public class Quiz {
   public void setUserId(UUID userId) { this.userId = userId; }
   public Category getCategory() { return category; }
   public void setCategory(Category category) { this.category = category; }
-  public OffsetDateTime getDateCreated() { return dateCreated; }
-  public void setDateCreated(OffsetDateTime dateCreated) { this.dateCreated = dateCreated; }
+  public OffsetDateTime getCreatedAt() { return createdAt; }
+  public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
   public OffsetDateTime getCompletedAt() { return completedAt; }
   public void setCompletedAt(OffsetDateTime completedAt) { this.completedAt = completedAt; }
 }

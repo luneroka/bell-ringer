@@ -26,6 +26,11 @@ public class Question {
   @Column(nullable = false, length = 50)
   private Type type;
 
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 50)
   private Difficulty difficulty;
@@ -33,11 +38,6 @@ public class Question {
   @NotBlank
   @Column(name = "question", nullable = false, columnDefinition = "TEXT")
   private String question;
-
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "category_id", nullable = false)
-  private Category category;
 
   @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
   private java.util.Set<QuizQuestion> quizLinks = new java.util.LinkedHashSet<>();
