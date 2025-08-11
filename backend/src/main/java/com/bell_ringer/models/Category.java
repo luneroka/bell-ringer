@@ -48,6 +48,7 @@ public class Category {
     private String slug;
 
     // Self-reference to support parent → children hierarchy
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;

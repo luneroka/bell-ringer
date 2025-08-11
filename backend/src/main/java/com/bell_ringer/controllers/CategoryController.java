@@ -4,8 +4,10 @@ import com.bell_ringer.models.Category;
 import com.bell_ringer.services.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 
@@ -35,20 +37,23 @@ public class CategoryController {
     // ---------------- Reads ----------------
 
     /** Get a category by id */
+    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     public Category getById(@PathVariable Long id) {
         return categoryService.getRequired(id);
     }
 
     /** List all root categories */
+    @Transactional(readOnly = true)
     @GetMapping("/roots")
     public List<Category> listRoots() {
         return categoryService.listRoots();
     }
 
     /** List direct children of a category */
+    @Transactional(readOnly = true)
     @GetMapping("/{id}/children")
-    public List<Category> listChildren(@PathVariable Long id) {
+    public List<Category> listChildren(@PathVariable Long id, Reader reader) {
         return categoryService.listChildren(id);
     }
 

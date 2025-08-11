@@ -1,17 +1,38 @@
-# IntelliJ HTTP client variables
+# ==================================
+# Bell-Ringer API — HTTP Test Suite
+# ==================================
+# How to use:
+# - Open this file in IntelliJ IDEA and click the ▶ icons.
+# - Fill the variables below with real IDs as you create data.
+# - Run top → bottom to create, then query.
+
 @baseUrl = http://localhost:8080
-@userId = 34e5c290-09e2-4c14-8752-0e7ae8963ffe
+
+# ----------------------
+# IDs you will populate
+# ----------------------
+@userId = 2ca38b59-55b3-468d-82d8-98b9fd7f652a
+@rootCategoryId = 1
+@childCategoryId = 2
+@quizId = 2
+@questionIds = []
+
+########################################################
+# USERS
+########################################################
 
 ### Health check
 GET {{baseUrl}}/api/v1/users/ping
 
-### GET all users
+### Get all users
 GET {{baseUrl}}/api/v1/users
+Accept: application/json
 
 ### Get user by ID
 GET {{baseUrl}}/api/v1/users/{{userId}}
+Accept: application/json
 
-### Create a user
+### Create a user (minimal — if your controller auto-generates UUID)
 POST {{baseUrl}}/api/v1/users
 Content-Type: application/json
 
@@ -19,17 +40,182 @@ Content-Type: application/json
   "email": "test@bellringer.com"
 }
 
-### Update user
+### Create a user (full — if your controller expects auth provider info)
+# NOTE: Use this variant if your UserController requires provider + uid
+POST {{baseUrl}}/api/v1/users
+Content-Type: application/json
+
+{
+  "authProvider": "firebase",
+  "authUid": "dev-uid-001",
+  "email": "test+firebase@bellringer.com",
+  "emailVerified": false,
+  "displayName": "Dev Tester",
+  "photoUrl": "https://example.com/avatar.png"
+}
+
+### Update user (useful to verify updates with a known UUID)
 PUT {{baseUrl}}/api/v1/users/{{userId}}
 Content-Type: application/json
 
 {
   "email": "new@bellringer.com",
-  "emailVerified" : true,
-  "displayName": "bob",
-  "photoUrl" : "http://myaccount/profile/profile_picture.com"
-
+  "emailVerified": true,
+  "displayName": "Bob",
+  "photoUrl": "https://example.com/new-avatar.png"
 }
 
 ### Delete user
 DELETE {{baseUrl}}/api/v1/users/{{userId}}
+
+########################################################
+# CATEGORIES
+########################################################
+
+### Create a root category (e.g., Frontend)
+POST {{baseUrl}}/api/v1/categories
+Content-Type: application/json
+
+{
+  "area": "frontend",
+  "name": "Frontend",
+  "parentId": null
+}
+
+### Create a child category (e.g., React under Frontend)
+POST {{baseUrl}}/api/v1/categories
+Content-Type: application/json
+
+{
+  "area": "frontend",
+  "name": "React",
+  "parentId": {{rootCategoryId}}
+}
+
+### List root categories
+GET {{baseUrl}}/api/v1/categories/roots
+Accept: application/json
+
+### Get category by id (root)
+GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}
+Accept: application/json
+
+### List children of a category
+GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}/children
+Accept: application/json
+
+### Resolve selection ids (parent → [parent + children])
+GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}/ids
+Accept: application/json
+
+########################################################
+# QUIZZES
+########################################################
+
+### Create empty quiz (no questions yet)
+POST {{baseUrl}}/api/v1/quizzes
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "categoryId": {{childCategoryId}}
+}
+
+### Get quiz by id
+GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
+Accept: application/json
+
+### Mark quiz completed
+POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
+Accept: application/json
+
+### Clear completion flag
+DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
+
+### Completed quizzes count (user + category)
+GET {{baseUrl}}/api/v1/quizzes/history/count?userId={{userId}}&categoryId={{childCategoryId}}
+Accept: application/json
+
+### Accuracy per difficulty (user + category)
+GET {{baseUrl}}/api/v1/quizzes/accuracy?userId={{userId}}&categoryId={{childCategoryId}}
+Accept: application/json
+
+########################################################
+# QUIZ_QUESTIONS (join table)
+########################################################
+
+### List links for a quiz (debug)
+GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
+Accept: application/json
+
+### List only question IDs linked to a quiz
+GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/ids
+Accept: application/json
+
+### Count how many questions are attached to a quiz
+GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/count
+Accept: application/json
+
+### Add many questions to a quiz (provide existing question IDs)
+POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
+Content-Type: application/json
+
+{
+  "questionIds": {{questionIds}}
+}
+
+### Replace all links with an ordered list
+PUT {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
+Content-Type: application/json
+
+{
+  "questionIds": {{questionIds}}
+}
+
+### Add a single question to a quiz
+POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/1
+
+### Remove a single question from a quiz
+DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/1
+
+### Clear all questions from a quiz
+DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
+
+########################################################
+# QUESTION GENERATION (service-level)
+########################################################
+
+### Compute quota only (RANDOM/ADAPTIVE decided in service)
+POST {{baseUrl}}/api/v1/questions/quota
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "categoryId": {{childCategoryId}},
+  "total": 10,
+  "modeOverride": null
+}
+
+### Generate questions (requires stock in DB)
+POST {{baseUrl}}/api/v1/questions/generate
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "categoryId": {{childCategoryId}},
+  "total": 10,
+  "modeOverride": null
+}
+
+########################################################
+# (Optional) Seeding — mock questions for testing
+# If you don't have CRUD endpoints for questions yet,
+# seed via SQL in your DB or create a temporary admin endpoint.
+# Example SQL (psql):
+# INSERT INTO questions(type, category_id, difficulty, question)
+# VALUES ('UNIQUE_CHOICE', {{childCategoryId}}, 'EASY', 'What is React?'),
+#        ('TRUE_FALSE',    {{childCategoryId}}, 'EASY', 'React uses a virtual DOM.'),
+#        ('MULTIPLE_CHOICE', {{childCategoryId}}, 'MEDIUM', 'Which are React hooks?'),
+#        ('SHORT_ANSWER',  {{childCategoryId}}, 'HARD', 'Explain reconciliation.');
+# Then add choices for MCQ/TF as needed and test generation.
+########################################################
