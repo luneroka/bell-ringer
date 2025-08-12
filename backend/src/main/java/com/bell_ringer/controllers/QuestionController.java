@@ -1,9 +1,9 @@
 package com.bell_ringer.controllers;
 
-import com.bell_ringer.models.Question;
 import com.bell_ringer.services.QuestionService;
 import com.bell_ringer.services.QuestionService.QuotaDTO;
 import com.bell_ringer.services.dto.GenerationRequest;
+import com.bell_ringer.services.dto.QuestionDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +19,14 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<QuestionDto> getById(@PathVariable Long id) {
+    QuestionDto question = questionService.getQuestionDtoById(id);
+    return ResponseEntity.ok(question);
+  }
+
   @PostMapping("/generate")
-  public ResponseEntity<List<Question>> generate(@RequestBody GenerationRequest request) {
+  public ResponseEntity<List<QuestionDto>> generate(@RequestBody GenerationRequest request) {
     if (request == null)
       return ResponseEntity.badRequest().build();
     // QuestionService handles the rest (mode, quota, draw)

@@ -172,7 +172,16 @@ DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 ########################################################
 # QUESTION GENERATION (service-level)
 ########################################################
-/
+
+# ----------------------
+# IDs you will populate
+# ----------------------
+@questionId = 1
+
+### Get a single question by ID (with choices)
+GET {{baseUrl}}/api/v1/questions/{{questionId}}
+Accept: application/json
+
 ### Compute quota only (RANDOM/ADAPTIVE decided in service)
 POST {{baseUrl}}/api/v1/questions/quota
 Content-Type: application/json
@@ -180,18 +189,18 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 20,
+  "total": 15,
   "modeOverride": null
 }
 
-### Generate questions (requires stock in DB)
+### Generate questions (requires stock in DB) - Returns QuestionDto[]
 POST {{baseUrl}}/api/v1/questions/generate
 Content-Type: application/json
 
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 20,
+  "total": 15,
   "modeOverride": null
 }
 

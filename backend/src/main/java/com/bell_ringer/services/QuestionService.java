@@ -6,6 +6,8 @@ import com.bell_ringer.models.Question.Difficulty;
 import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.repositories.QuestionRepository;
 import com.bell_ringer.services.dto.GenerationRequest;
+import com.bell_ringer.services.dto.QuestionDto;
+import com.bell_ringer.services.dto.ChoiceDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,54 @@ public class QuestionService {
     this.categoryService = categoryService;
   }
 
+  // ===== DTO Conversion Methods =====
+
+  /**
+   * Convert Question entity to QuestionDto without choices (for performance).
+   */
+  private QuestionDto convertToDtoWithoutChoices(Question question) {
+    return QuestionDto.forResponseWithoutChoices(
+        question.getId(),
+        question.getType().name(),
+        question.getCategory().getId(),
+        question.getDifficulty().name(),
+        question.getQuestion(),
+        question.getCreatedAt(),
+        question.getUpdatedAt());
+  }
+
+  /**
+   * Convert Question entity to QuestionDto with choices.
+   */
+  private QuestionDto convertToDtoWithChoices(Question question) {
+    List<ChoiceDto> choiceDtos = question.getChoices().stream()
+        .map(choice -> ChoiceDto.forResponse(
+            choice.getId(),
+            question.getId(),
+            choice.getChoiceText(),
+            choice.isCorrect()))
+        .toList();
+
+    return QuestionDto.forResponse(
+        question.getId(),
+        question.getType().name(),
+        question.getCategory().getId(),
+        question.getDifficulty().name(),
+        question.getQuestion(),
+        choiceDtos,
+        question.getCreatedAt(),
+        question.getUpdatedAt());
+  }
+
+  /**
+   * Convert list of Question entities to list of QuestionDtos without choices.
+   */
+  private List<QuestionDto> convertToDtoListWithoutChoices(List<Question> questions) {
+    return questions.stream()
+        .map(this::convertToDtoWithoutChoices)
+        .toList();
+  }
+
   // ===== Basic Reads =====
   @Transactional(readOnly = true)
   public Question getQuestionById(Long id) {
@@ -43,6 +93,12 @@ public class QuestionService {
       throw new IllegalArgumentException("id must not be null");
     return questionRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Question not found: " + id));
+  }
+
+  @Transactional(readOnly = true)
+  public QuestionDto getQuestionDtoById(Long id) {
+    Question question = getQuestionById(id);
+    return convertToDtoWithChoices(question);
   }
 
   @Transactional(readOnly = true)
@@ -169,7 +225,7 @@ public class QuestionService {
 
   // ===== Orchestrator =====
   @Transactional
-  public List<Question> generate(GenerationRequest req) {
+  public List<QuestionDto> generate(GenerationRequest req) {
     if (req.userId() == null)
       throw new IllegalArgumentException("userId required");
     if (req.categoryId() == null)
@@ -194,7 +250,8 @@ public class QuestionService {
     var questionIds = selected.stream().map(Question::getId).toList();
     quizService.addQuestions(quizId, questionIds);
 
-    return selected;
+    // 5) Convert to DTOs (without choices for performance)
+    return convertToDtoListWithoutChoices(selected);
   }
 
   // ===== Helpers =====
