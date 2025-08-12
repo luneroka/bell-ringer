@@ -24,6 +24,7 @@ public class QuestionService {
   private final QuizService quizService;
   private final GenerationProperties generationProperties;
   private final CategoryService categoryService;
+  private final AttemptService attemptService;
 
   private static final int MAX_LIMIT = 100; // hard cap to protect DB
   private static final Set<Integer> ALLOWED_LIMITS = Set.of(5, 10, 15, 20);
@@ -31,11 +32,13 @@ public class QuestionService {
   public QuestionService(QuestionRepository questionRepository,
       QuizService quizService,
       GenerationProperties generationProperties,
-      CategoryService categoryService) {
+      CategoryService categoryService,
+      AttemptService attemptService) {
     this.questionRepository = questionRepository;
     this.quizService = quizService;
     this.generationProperties = generationProperties;
     this.categoryService = categoryService;
+    this.attemptService = attemptService;
   }
 
   // ===== DTO Conversion Methods =====
@@ -250,7 +253,10 @@ public class QuestionService {
     var questionIds = selected.stream().map(Question::getId).toList();
     quizService.addQuestions(quizId, questionIds);
 
-    // 5) Convert to DTOs (without choices for performance)
+    // 5) Create the initial attempt for this quiz
+    attemptService.startAttempt(quizId);
+
+    // 6) Convert to DTOs (without choices for performance)
     return convertToDtoListWithoutChoices(selected);
   }
 

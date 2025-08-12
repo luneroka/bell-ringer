@@ -270,3 +270,365 @@ Content-Type: application/json
 ### Get scoring information for rubric evaluation
 GET http://localhost:8080/api/v1/open-answers/1/scoring-info
 Content-Type: application/json
+
+########################################################
+# ATTEMPTS
+########################################################
+
+# ----------------------
+# IDs that will populate
+# ----------------------
+@attemptId = 1
+@quizIdForAttempt = 1
+
+### Get attempt by ID (basic view)
+GET {{baseUrl}}/api/v1/attempts/{{attemptId}}
+Accept: application/json
+
+### Get attempt by ID (detailed view with all answers)
+GET {{baseUrl}}/api/v1/attempts/{{attemptId}}/detailed
+Accept: application/json
+
+### Get all attempts for a quiz
+GET {{baseUrl}}/api/v1/attempts?quizId={{quizIdForAttempt}}
+Accept: application/json
+
+### Get all attempts for a user
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}
+Accept: application/json
+
+### Get all attempts for a user in a specific category
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/category/{{childCategoryId}}
+Accept: application/json
+
+### Get the most recent attempt for a quiz
+GET {{baseUrl}}/api/v1/attempts/quiz/{{quizIdForAttempt}}/latest
+Accept: application/json
+
+### Get completed attempts for a user
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/completed
+Accept: application/json
+
+### Get incomplete attempts for a user
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/incomplete
+Accept: application/json
+
+### Get attempt statistics for a user
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/stats
+Accept: application/json
+
+### Retry a quiz (start a new attempt for an existing quiz)
+### Note: Initial attempts are created automatically via /questions/generate
+POST {{baseUrl}}/api/v1/attempts/retry
+Content-Type: application/json
+
+{
+  "quizId": {{quizIdForAttempt}}
+}
+
+### Submit selected choices for an attempt
+POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/choices
+Content-Type: application/json
+
+{
+  "selectedChoices": [
+    {
+      "questionId": 1,
+      "choiceId": 1
+    },
+    {
+      "questionId": 2,
+      "choiceId": 5
+    }
+  ]
+}
+
+### Submit text answers for an attempt
+POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/text-answers
+Content-Type: application/json
+
+{
+  "textAnswers": [
+    {
+      "questionId": 7,
+      "answerText": "React hooks allow functional components to use state and lifecycle methods. useState is for state management."
+    },
+    {
+      "questionId": 8,
+      "answerText": "useEffect is used for side effects like data fetching, subscriptions, or manually changing the DOM."
+    }
+  ]
+}
+
+### Complete an attempt (mark as finished)
+POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/complete
+Accept: application/json
+
+### Score a text answer (admin/teacher functionality)
+PUT {{baseUrl}}/api/v1/attempts/{{attemptId}}/text-answers/score
+Content-Type: application/json
+
+{
+  "questionId": 7,
+  "score": 85,
+  "isCorrect": true,
+  "feedback": "Good explanation of React hooks. Could be more detailed about useState syntax."
+}
+
+### Get all unscored text answers (for grading interface)
+GET {{baseUrl}}/api/v1/attempts/text-answers/unscored
+Accept: application/json
+
+### Get unscored text answers for a specific attempt
+GET {{baseUrl}}/api/v1/attempts/{{attemptId}}/text-answers/unscored
+Accept: application/json
+
+########################################################
+# ATTEMPT SELECTED CHOICES
+########################################################
+
+# ----------------------
+# IDs that will populate
+# ----------------------
+@attemptChoiceAttemptId = 1
+@attemptChoiceQuestionId = 1
+@attemptChoiceChoiceId = 1
+
+### Get a specific selected choice by composite ID
+GET {{baseUrl}}/api/v1/attempt-choices/{{attemptChoiceAttemptId}}/{{attemptChoiceQuestionId}}/{{attemptChoiceChoiceId}}
+Accept: application/json
+
+### Get all selected choices for an attempt
+GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}
+Accept: application/json
+
+### Get selected choices for a specific question in an attempt
+GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}/question/{{attemptChoiceQuestionId}}
+Accept: application/json
+
+### Get choice selection statistics for an attempt
+GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}/stats
+Accept: application/json
+
+### Submit a single choice selection
+POST {{baseUrl}}/api/v1/attempt-choices
+Content-Type: application/json
+
+{
+  "attemptId": {{attemptChoiceAttemptId}},
+  "questionId": {{attemptChoiceQuestionId}},
+  "choiceId": {{attemptChoiceChoiceId}}
+}
+
+### Submit multiple choice selections in batch
+POST {{baseUrl}}/api/v1/attempt-choices/batch
+Content-Type: application/json
+
+{
+  "attemptId": {{attemptChoiceAttemptId}},
+  "selectedChoices": [
+    {
+      "questionId": 1,
+      "choiceId": 1
+    },
+    {
+      "questionId": 2,
+      "choiceId": 5
+    },
+    {
+      "questionId": 3,
+      "choiceId": 9
+    }
+  ]
+}
+
+### Update a choice selection (change from one choice to another)
+PUT {{baseUrl}}/api/v1/attempt-choices/{{attemptChoiceAttemptId}}/{{attemptChoiceQuestionId}}/{{attemptChoiceChoiceId}}
+Content-Type: application/json
+
+{
+  "newChoiceId": 2
+}
+
+### Remove a specific choice selection
+DELETE {{baseUrl}}/api/v1/attempt-choices/{{attemptChoiceAttemptId}}/{{attemptChoiceQuestionId}}/{{attemptChoiceChoiceId}}
+
+### Remove all choice selections for an attempt
+DELETE {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}
+
+### Check if a question has been answered in an attempt
+GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}/question/{{attemptChoiceQuestionId}}/answered
+Accept: application/json
+
+########################################################
+# ATTEMPT TEXT ANSWERS
+########################################################
+
+# ----------------------
+# IDs that will populate
+# ----------------------
+@attemptTextAttemptId = 1
+@attemptTextQuestionId = 7
+
+### Get a specific text answer by composite ID
+GET {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}
+Accept: application/json
+
+### Get a text answer for a specific attempt and question (alternative endpoint)
+GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/question/{{attemptTextQuestionId}}
+Accept: application/json
+
+### Get all text answers for an attempt
+GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}
+Accept: application/json
+
+### Get text answer statistics for an attempt
+GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/stats
+Accept: application/json
+
+### Submit a single text answer
+POST {{baseUrl}}/api/v1/attempt-text-answers
+Content-Type: application/json
+
+{
+  "attemptId": {{attemptTextAttemptId}},
+  "questionId": {{attemptTextQuestionId}},
+  "answerText": "React hooks allow functional components to use state and lifecycle methods. The most common hooks are useState for state management and useEffect for side effects."
+}
+
+### Submit multiple text answers in batch
+POST {{baseUrl}}/api/v1/attempt-text-answers/batch
+Content-Type: application/json
+
+{
+  "attemptId": {{attemptTextAttemptId}},
+  "textAnswers": [
+    {
+      "questionId": 7,
+      "answerText": "React hooks allow functional components to use state and lifecycle methods like useState and useEffect."
+    },
+    {
+      "questionId": 8,
+      "answerText": "useEffect is used for side effects like data fetching, subscriptions, event listeners, and DOM manipulation."
+    },
+    {
+      "questionId": 9,
+      "answerText": "useState returns an array with two elements: the current state value and a function to update it."
+    }
+  ]
+}
+
+### Update a text answer (before grading)
+PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}
+Content-Type: application/json
+
+{
+  "answerText": "React hooks allow functional components to use state and lifecycle methods. useState manages component state, useEffect handles side effects, and there are many other hooks like useContext, useReducer, etc."
+}
+
+### Grade a text answer (admin/teacher functionality)
+PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}/grade
+Content-Type: application/json
+
+{
+  "score": 85,
+  "isCorrect": true,
+  "feedback": "Excellent explanation of React hooks! You covered the main concepts well. Consider adding examples of how to use useState and useEffect for even better answers."
+}
+
+### Get all unscored text answers (for grading interface)
+GET {{baseUrl}}/api/v1/attempt-text-answers/unscored
+Accept: application/json
+
+### Get unscored text answers for a specific attempt
+GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/unscored
+Accept: application/json
+
+### Remove a specific text answer
+DELETE {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}
+
+### Remove all text answers for an attempt
+DELETE {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}
+
+### Check if a text question has been answered in an attempt
+GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/question/{{attemptTextQuestionId}}/answered
+Accept: application/json
+
+########################################################
+# COMPLETE QUIZ WORKFLOW EXAMPLE
+########################################################
+
+### 1. Generate questions (creates quiz + first attempt automatically)
+POST {{baseUrl}}/api/v1/questions/generate
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "categoryId": {{childCategoryId}},
+  "total": 5,
+  "modeOverride": null
+}
+
+### 2. Get the generated quiz details
+GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
+Accept: application/json
+
+### 3. Get the auto-created attempt
+GET {{baseUrl}}/api/v1/attempts/quiz/{{quizId}}/latest
+Accept: application/json
+
+### 4. Submit choice answers (batch)
+POST {{baseUrl}}/api/v1/attempt-choices/batch
+Content-Type: application/json
+
+{
+  "attemptId": {{attemptId}},
+  "selectedChoices": [
+    {"questionId": 1, "choiceId": 1},
+    {"questionId": 2, "choiceId": 5}
+  ]
+}
+
+### 5. Submit text answers (batch)
+POST {{baseUrl}}/api/v1/attempt-text-answers/batch
+Content-Type: application/json
+
+{
+  "attemptId": {{attemptId}},
+  "textAnswers": [
+    {
+      "questionId": 7,
+      "answerText": "React hooks allow functional components to use state."
+    }
+  ]
+}
+
+### 6. Complete the attempt
+POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/complete
+Accept: application/json
+
+### 7. View detailed attempt results
+GET {{baseUrl}}/api/v1/attempts/{{attemptId}}/detailed
+Accept: application/json
+
+### 8. Grade text answers (admin/teacher)
+PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/7/grade
+Content-Type: application/json
+
+{
+  "score": 80,
+  "isCorrect": true,
+  "feedback": "Good basic understanding. Could be more detailed."
+}
+
+### 9. Retry the same quiz (creates new attempt)
+POST {{baseUrl}}/api/v1/attempts/retry
+Content-Type: application/json
+
+{
+  "quizId": {{quizId}}
+}
+
+### 10. View user statistics
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/stats
+Accept: application/json
