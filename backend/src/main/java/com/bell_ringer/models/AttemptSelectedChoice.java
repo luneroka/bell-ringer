@@ -1,6 +1,7 @@
 package com.bell_ringer.models;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -51,4 +52,107 @@ public class AttemptSelectedChoice {
   @CreationTimestamp
   @Column(name = "selected_at", nullable = false, updatable = false)
   private OffsetDateTime selectedAt;
+
+  // Constructors
+  public AttemptSelectedChoice() {
+  }
+
+  public AttemptSelectedChoice(Long attemptId, Long questionId, Long choiceId) {
+    this.attemptId = attemptId;
+    this.questionId = questionId;
+    this.choiceId = choiceId;
+  }
+
+  // Getters and setters
+  public Long getAttemptId() {
+    return attemptId;
+  }
+
+  public void setAttemptId(Long attemptId) {
+    this.attemptId = attemptId;
+  }
+
+  public Long getQuestionId() {
+    return questionId;
+  }
+
+  public void setQuestionId(Long questionId) {
+    this.questionId = questionId;
+  }
+
+  public Long getChoiceId() {
+    return choiceId;
+  }
+
+  public void setChoiceId(Long choiceId) {
+    this.choiceId = choiceId;
+  }
+
+  public Attempt getAttempt() {
+    return attempt;
+  }
+
+  public void setAttempt(Attempt attempt) {
+    this.attempt = attempt;
+  }
+
+  public Quiz getQuiz() {
+    return quiz;
+  }
+
+  public void setQuiz(Quiz quiz) {
+    this.quiz = quiz;
+  }
+
+  public Question getQuestion() {
+    return question;
+  }
+
+  public void setQuestion(Question question) {
+    this.question = question;
+  }
+
+  public Choice getChoice() {
+    return choice;
+  }
+
+  public void setChoice(Choice choice) {
+    this.choice = choice;
+  }
+
+  public OffsetDateTime getSelectedAt() {
+    return selectedAt;
+  }
+
+  public void setSelectedAt(OffsetDateTime selectedAt) {
+    this.selectedAt = selectedAt;
+  }
+
+  // Equals and hashCode based on composite key
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    AttemptSelectedChoice that = (AttemptSelectedChoice) o;
+    return Objects.equals(attemptId, that.attemptId) &&
+        Objects.equals(questionId, that.questionId) &&
+        Objects.equals(choiceId, that.choiceId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(attemptId, questionId, choiceId);
+  }
+
+  @Override
+  public String toString() {
+    return "AttemptSelectedChoice{" +
+        "attemptId=" + attemptId +
+        ", questionId=" + questionId +
+        ", choiceId=" + choiceId +
+        ", selectedAt=" + selectedAt +
+        '}';
+  }
 }

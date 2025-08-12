@@ -85,4 +85,49 @@ public class Attempt {
   public void setCompletedAt(OffsetDateTime completedAt) {
     this.completedAt = completedAt;
   }
+
+  public Set<AttemptSelectedChoice> getSelectedChoices() {
+    return selectedChoices;
+  }
+
+  public void setSelectedChoices(Set<AttemptSelectedChoice> selectedChoices) {
+    this.selectedChoices = selectedChoices;
+  }
+
+  public Set<AttemptTextAnswer> getTextAnswers() {
+    return textAnswers;
+  }
+
+  public void setTextAnswers(Set<AttemptTextAnswer> textAnswers) {
+    this.textAnswers = textAnswers;
+  }
+
+  // Helper methods
+  public boolean isCompleted() {
+    return completedAt != null;
+  }
+
+  public void markCompleted() {
+    this.completedAt = OffsetDateTime.now();
+  }
+
+  public void addSelectedChoice(AttemptSelectedChoice selectedChoice) {
+    selectedChoices.add(selectedChoice);
+    selectedChoice.setAttempt(this);
+  }
+
+  public void removeSelectedChoice(AttemptSelectedChoice selectedChoice) {
+    selectedChoices.remove(selectedChoice);
+    selectedChoice.setAttempt(null);
+  }
+
+  public void addTextAnswer(AttemptTextAnswer textAnswer) {
+    textAnswers.add(textAnswer);
+    textAnswer.setAttempt(this);
+  }
+
+  public void removeTextAnswer(AttemptTextAnswer textAnswer) {
+    textAnswers.remove(textAnswer);
+    textAnswer.setAttempt(null);
+  }
 }
