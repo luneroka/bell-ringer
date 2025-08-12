@@ -2,12 +2,12 @@ package com.bell_ringer.controllers;
 
 import com.bell_ringer.models.Category;
 import com.bell_ringer.services.CategoryService;
+import com.bell_ringer.services.dto.CategoryDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +29,9 @@ public class CategoryController {
     }
 
     public static class UpdateCategoryRequest {
-        public String area;     // optional
-        public String name;     // optional
-        public Long parentId;   // optional (null to move to root)
+        public String area; // optional
+        public String name; // optional
+        public Long parentId; // optional (null to move to root)
     }
 
     // ---------------- Reads ----------------
@@ -39,22 +39,22 @@ public class CategoryController {
     /** Get a category by id */
     @Transactional(readOnly = true)
     @GetMapping("/{id}")
-    public Category getById(@PathVariable Long id) {
-        return categoryService.getRequired(id);
+    public CategoryDto getById(@PathVariable Long id) {
+        return categoryService.getRequiredDto(id);
     }
 
     /** List all root categories */
     @Transactional(readOnly = true)
     @GetMapping("/roots")
-    public List<Category> listRoots() {
-        return categoryService.listRoots();
+    public List<CategoryDto> listRoots() {
+        return categoryService.listRootsDto();
     }
 
     /** List direct children of a category */
     @Transactional(readOnly = true)
     @GetMapping("/{id}/children")
-    public List<Category> listChildren(@PathVariable Long id) {
-        return categoryService.listChildren(id);
+    public List<CategoryDto> listChildren(@PathVariable Long id) {
+        return categoryService.listChildrenDto(id);
     }
 
     /** Resolve selection ids: parent -> [parent + children], leaf -> [id] */
@@ -68,11 +68,11 @@ public class CategoryController {
 
     /** Create a new category */
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody CreateCategoryRequest body) {
+    public ResponseEntity<CategoryDto> create(@RequestBody CreateCategoryRequest body) {
         if (body == null || body.name == null || body.name.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
-        Category c = categoryService.create(body.area, body.name, body.parentId);
+        CategoryDto c = categoryService.createDto(body.area, body.name, body.parentId);
         return ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
 

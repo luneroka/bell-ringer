@@ -2,6 +2,7 @@ package com.bell_ringer.services;
 
 import com.bell_ringer.models.Category;
 import com.bell_ringer.repositories.CategoryRepository;
+import com.bell_ringer.services.dto.CategoryDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,96 @@ public class CategoryService {
         this.categories = categories;
     }
 
+    // ===== DTO Conversion Methods =====
+
+    /**
+     * Convert Category entity to CategoryDto without children (for performance).
+     */
+    private CategoryDto convertToDto(Category category) {
+        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+        String parentName = category.getParent() != null ? category.getParent().getName() : null;
+        boolean hasChildren = !category.getChildren().isEmpty();
+        long questionCount = category.getQuestions().size();
+
+        return CategoryDto.forResponse(
+                category.getId(),
+                category.getArea(),
+                category.getName(),
+                category.getSlug(),
+                parentId,
+                parentName,
+                hasChildren,
+                questionCount,
+                category.getCreatedAt(),
+                category.getUpdatedAt());
+    }
+
+    /**
+     * Convert Category entity to CategoryDto with children included.
+     */
+    private CategoryDto convertToDtoWithChildren(Category category) {
+        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+        String parentName = category.getParent() != null ? category.getParent().getName() : null;
+        long questionCount = category.getQuestions().size();
+
+        List<CategoryDto> childrenDtos = category.getChildren().stream()
+                .map(this::convertToDtoBasic)
+                .toList();
+
+        return CategoryDto.forResponseWithChildren(
+                category.getId(),
+                category.getArea(),
+                category.getName(),
+                category.getSlug(),
+                parentId,
+                parentName,
+                childrenDtos,
+                questionCount,
+                category.getCreatedAt(),
+                category.getUpdatedAt());
+    }
+
+    /**
+     * Convert Category entity to basic CategoryDto (for child categories).
+     */
+    private CategoryDto convertToDtoBasic(Category category) {
+        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+        String parentName = category.getParent() != null ? category.getParent().getName() : null;
+        long questionCount = category.getQuestions().size();
+
+        return CategoryDto.forBasicResponse(
+                category.getId(),
+                category.getArea(),
+                category.getName(),
+                category.getSlug(),
+                parentId,
+                parentName,
+                questionCount,
+                category.getCreatedAt(),
+                category.getUpdatedAt());
+    }
+
+    /**
+     * Convert list of Category entities to list of CategoryDtos.
+     */
+    private List<CategoryDto> convertToDtoList(List<Category> categories) {
+        return categories.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
     /** Get a category by id or throw a clear error. */
     public Category getRequired(Long id) {
-        if (id == null) throw new IllegalArgumentException("categoryId must not be null");
+        if (id == null)
+            throw new IllegalArgumentException("categoryId must not be null");
         return categories.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found: " + id));
+    }
+
+    /** Get a category by id as DTO or throw a clear error. */
+    public CategoryDto getRequiredDto(Long id) {
+        Category category = getRequired(id);
+        return convertToDto(category);
     }
 
     /** List all root categories (no parent). */
@@ -32,10 +118,25 @@ public class CategoryService {
         return categories.findAllByParentIsNull();
     }
 
+    /** List all root categories as DTOs (no parent). */
+    public List<CategoryDto> listRootsDto() {
+        List<Category> rootCategories = categories.findAllByParentIsNull();
+        return convertToDtoList(rootCategories);
+    }
+
     /** List direct children of a parent category. */
     public List<Category> listChildren(Long parentId) {
-        if (parentId == null) return Collections.emptyList();
+        if (parentId == null)
+            return Collections.emptyList();
         return categories.findAllByParentId(parentId);
+    }
+
+    /** List direct children of a parent category as DTOs. */
+    public List<CategoryDto> listChildrenDto(Long parentId) {
+        if (parentId == null)
+            return Collections.emptyList();
+        List<Category> childCategories = categories.findAllByParentId(parentId);
+        return convertToDtoList(childCategories);
     }
 
     /**
@@ -44,7 +145,8 @@ public class CategoryService {
      * If it's a leaf, return just [id].
      */
     public List<Long> resolveSelectionIds(Long categoryId) {
-        if (categoryId == null) throw new IllegalArgumentException("categoryId must not be null");
+        if (categoryId == null)
+            throw new IllegalArgumentException("categoryId must not be null");
         List<Integer> ids = categories.getParentAndChildrenIds(categoryId);
         if (ids == null || ids.isEmpty()) {
             return List.of(categoryId);
@@ -84,6 +186,13 @@ public class CategoryService {
         return categories.save(c);
     }
 
+    /** Create a new category and return as DTO. */
+    @Transactional
+    public CategoryDto createDto(String area, String name, Long parentId) {
+        Category category = create(area, name, parentId);
+        return convertToDto(category);
+    }
+
     /** Rename and/or move a category under a new parent. */
     @Transactional
     public Category update(Long id, String newArea, String newName, Long newParentId) {
@@ -110,10 +219,14 @@ public class CategoryService {
         return categories.save(c);
     }
 
-    /** Delete a category. Caller should ensure it is safe (no dependent data) or rely on FK rules. */
+    /**
+     * Delete a category. Caller should ensure it is safe (no dependent data) or
+     * rely on FK rules.
+     */
     @Transactional
     public void delete(Long id) {
-        if (id == null) return;
+        if (id == null)
+            return;
         categories.deleteById(id);
     }
 }

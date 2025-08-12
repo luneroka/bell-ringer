@@ -92,15 +92,15 @@ DELETE {{baseUrl}}/api/v1/users/{{userId}}
 #  "parentId": {{rootCategoryId}}
 #}
 
-### List root categories
+### List root categories - Returns CategoryDto[]
 GET {{baseUrl}}/api/v1/categories/roots
 Accept: application/json
 
-### Get category by id (root)
+### Get category by id (root) - Returns CategoryDto
 GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}
 Accept: application/json
 
-### List children of a category
+### List children of a category - Returns CategoryDto[]
 GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}/children
 Accept: application/json
 
