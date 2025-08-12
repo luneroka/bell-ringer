@@ -9,12 +9,11 @@
 @baseUrl = http://localhost:8080
 
 # ----------------------
-# IDs you will populate
+# IDs that will populate
 # ----------------------
-@userId = da93d868-218c-4be0-ba80-8faf0c1472ed
+@userId = dc418f94-9f1c-4324-809b-d1fd244fb3a6
 @rootCategoryId = 1
 @childCategoryId = 2
-@quizId = 1
 
 ########################################################
 # USERS
@@ -112,6 +111,11 @@ Accept: application/json
 # QUIZZES
 ########################################################
 
+# ----------------------
+# IDs that will populate
+# ----------------------
+@quizId = 1
+
 ### Get quiz by id - Returns QuizDto
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
 Accept: application/json
@@ -174,7 +178,7 @@ DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 ########################################################
 
 # ----------------------
-# IDs you will populate
+# IDs that will populate
 # ----------------------
 @singleQuestionId = 1
 
@@ -189,7 +193,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 15,
+  "total": 10,
   "modeOverride": null
 }
 
@@ -200,7 +204,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 15,
+  "total": 10,
   "modeOverride": null
 }
 
@@ -209,9 +213,9 @@ Content-Type: application/json
 ########################################################
 
 # ----------------------
-# IDs you will populate
+# IDs that will populate
 # ----------------------
-@questionId = 11
+@mCquestionId = 1
 @choiceId = 1
 
 ### Get a single choice by ID
@@ -219,7 +223,7 @@ GET {{baseUrl}}/api/v1/choices/{{choiceId}}
 Accept: application/json
 
 ### Get choices for a given question
-GET {{baseUrl}}/api/v1/choices/question/{{questionId}}
+GET {{baseUrl}}/api/v1/choices/question/{{mCquestionId}}
 Accept: application/json
 
 ### Check if a choice is correct by ID
@@ -227,49 +231,42 @@ GET {{baseUrl}}/api/v1/choices/{{choiceId}}/is-correct
 Accept: application/json
 
 ### Get correct choices for a question
-GET {{baseUrl}}/api/v1/choices/question/{{questionId}}/correct
+GET {{baseUrl}}/api/v1/choices/question/{{mCquestionId}}/correct
 Accept: application/json
 
 ### Get correct choice IDs for a question
-GET {{baseUrl}}/api/v1/choices/question/{{questionId}}/correct-ids
+GET {{baseUrl}}/api/v1/choices/question/{{mCquestionId}}/correct-ids
 Accept: application/json
 
 ########################################################
 # OPEN_ANSWERS
 ########################################################
 
+# ----------------------
+# IDs that will populate
+# ----------------------
+@sAquestionId = 4
+
 ### Get open answer by ID
-GET http://localhost:8080/api/v1/open-answers/1
+GET http://localhost:8080/api/v1/open-answers/2
 Content-Type: application/json
 
 ### Get all open answers for a specific question
-GET http://localhost:8080/api/v1/open-answers/question/1
+GET http://localhost:8080/api/v1/open-answers/question/{{sAquestionId}}
 Content-Type: application/json
 
 ### Search for open answer by question ID and answer text
-GET http://localhost:8080/api/v1/open-answers/search?questionId=1&answer=React uses virtual DOM
+GET http://localhost:8080/api/v1/open-answers/search?questionId={{sAquestionId}}&answer=useState
 Content-Type: application/json
 
 ### Check if open answer exists
-GET http://localhost:8080/api/v1/open-answers/exists?questionId=1&answer=React uses virtual DOM
+GET http://localhost:8080/api/v1/open-answers/exists?questionId={{sAquestionId}}&answer=useState
 Content-Type: application/json
 
 ### Get rubric information for an open answer
-GET http://localhost:8080/api/v1/open-answers/1/rubric
+GET http://localhost:8080/api/v1/open-answers/{{sAquestionId}}/rubric
 Content-Type: application/json
 
 ### Get scoring information for rubric evaluation
 GET http://localhost:8080/api/v1/open-answers/1/scoring-info
-Content-Type: application/json
-
-### Test validation - invalid ID (should return 400)
-GET http://localhost:8080/api/v1/open-answers/-1
-Content-Type: application/json
-
-### Test not found (should return 404)
-GET http://localhost:8080/api/v1/open-answers/999999
-Content-Type: application/json
-
-### Search with non-existent question ID (should return empty result)
-GET http://localhost:8080/api/v1/open-answers/question/999999
 Content-Type: application/json
