@@ -152,7 +152,7 @@ POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 Content-Type: application/json
 
 {
-  "questionIds": [1, 2, 3, 4]
+  "questionIds": [1, 2, 4]
 }
 
 ### Replace all links with an ordered list
@@ -180,7 +180,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 10,
+  "total": 20,
   "modeOverride": null
 }
 
@@ -191,7 +191,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 10,
+  "total": 20,
   "modeOverride": null
 }
 

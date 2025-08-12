@@ -24,12 +24,12 @@ public class QuestionService {
   private final CategoryService categoryService;
 
   private static final int MAX_LIMIT = 100; // hard cap to protect DB
-  private static final Set<Integer> ALLOWED_LIMITS = Set.of(5, 10, 20);
+  private static final Set<Integer> ALLOWED_LIMITS = Set.of(5, 10, 15, 20);
 
   public QuestionService(QuestionRepository questionRepository,
-                         QuizService quizService,
-                         GenerationProperties generationProperties,
-                         CategoryService categoryService) {
+      QuizService quizService,
+      GenerationProperties generationProperties,
+      CategoryService categoryService) {
     this.questionRepository = questionRepository;
     this.quizService = quizService;
     this.generationProperties = generationProperties;
@@ -39,7 +39,8 @@ public class QuestionService {
   // ===== Basic Reads =====
   @Transactional(readOnly = true)
   public Question getQuestionById(Long id) {
-    if (id == null) throw new IllegalArgumentException("id must not be null");
+    if (id == null)
+      throw new IllegalArgumentException("id must not be null");
     return questionRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Question not found: " + id));
   }
@@ -61,20 +62,23 @@ public class QuestionService {
   // ===== Metrics & Guards =====
   @Transactional(readOnly = true)
   public long countByCategoryId(Long categoryId) {
-    if (categoryId == null) throw new IllegalArgumentException("categoryId must not be null");
+    if (categoryId == null)
+      throw new IllegalArgumentException("categoryId must not be null");
     return questionRepository.countByCategoryId(categoryId);
   }
 
   @Transactional(readOnly = true)
   public boolean existsByCategoryId(Long categoryId) {
-    if (categoryId == null) throw new IllegalArgumentException("categoryId must not be null");
+    if (categoryId == null)
+      throw new IllegalArgumentException("categoryId must not be null");
     return questionRepository.existsByCategoryId(categoryId);
   }
 
   // ===== Mode Decision & Quota =====
   @Transactional(readOnly = true)
   GenerationRequest.Mode decideMode(GenerationRequest req) {
-    if (req.modeOverride() != null) return req.modeOverride();
+    if (req.modeOverride() != null)
+      return req.modeOverride();
     int required = generationProperties.getMinQuizzesForAdaptive();
     long completed = quizService.countCompletedByUserAndCategory(req.userId(), req.categoryId());
     return (completed >= required) ? GenerationRequest.Mode.ADAPTIVE : GenerationRequest.Mode.RANDOM;
@@ -95,7 +99,8 @@ public class QuestionService {
   }
 
   private List<Integer> effectiveCategoryIds(Long categoryId) {
-    // CategoryService returns List<Long>; convert to List<Integer> for repository (IN (:categoryIds))
+    // CategoryService returns List<Long>; convert to List<Integer> for repository
+    // (IN (:categoryIds))
     List<Long> ids = categoryService.resolveSelectionIds(categoryId);
     return ids.stream().map(Long::intValue).toList();
   }
@@ -113,8 +118,10 @@ public class QuestionService {
 
   @Transactional(readOnly = true)
   public List<Question> drawWithQuota(List<Integer> categoryIds, Quota quota, int total) {
-    if (categoryIds == null || categoryIds.isEmpty()) throw new IllegalArgumentException("categoryIds must not be empty");
-    if (total <= 0) throw new IllegalArgumentException("total must be > 0");
+    if (categoryIds == null || categoryIds.isEmpty())
+      throw new IllegalArgumentException("categoryIds must not be empty");
+    if (total <= 0)
+      throw new IllegalArgumentException("total must be > 0");
 
     // Stock guard (can be relaxed to allow partial fills)
     assertEnoughStock(categoryIds, total);
@@ -127,19 +134,22 @@ public class QuestionService {
 
     // EASY
     if (quota.easy() > 0) {
-      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.EASY.name(), quota.easy() * over);
+      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.EASY.name(),
+          quota.easy() * over);
       addUntilUnique(out, batch, quota.easy(), seen);
     }
 
     // MEDIUM
     if (quota.medium() > 0) {
-      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.MEDIUM.name(), quota.medium() * over);
+      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.MEDIUM.name(),
+          quota.medium() * over);
       addUntilUnique(out, batch, quota.medium(), seen);
     }
 
     // HARD
     if (quota.hard() > 0) {
-      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.HARD.name(), quota.hard() * over);
+      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.HARD.name(),
+          quota.hard() * over);
       addUntilUnique(out, batch, quota.hard(), seen);
     }
 
@@ -160,9 +170,12 @@ public class QuestionService {
   // ===== Orchestrator =====
   @Transactional
   public List<Question> generate(GenerationRequest req) {
-    if (req.userId() == null)     throw new IllegalArgumentException("userId required");
-    if (req.categoryId() == null) throw new IllegalArgumentException("categoryId required");
-    if (req.total() <= 0)         throw new IllegalArgumentException("total must be > 0");
+    if (req.userId() == null)
+      throw new IllegalArgumentException("userId required");
+    if (req.categoryId() == null)
+      throw new IllegalArgumentException("categoryId required");
+    if (req.total() <= 0)
+      throw new IllegalArgumentException("total must be > 0");
 
     // 1) Compute difficulty split (Step 3)
     var quota = computeQuotaInternal(req);
@@ -195,7 +208,7 @@ public class QuestionService {
   private Quota distributeByLargestRemainder(double wEasy, double wMed, double wHard, int total) {
     double sum = Math.max(1e-9, wEasy + wMed + wHard);
     double e = (wEasy / sum) * total;
-    double m = (wMed  / sum) * total;
+    double m = (wMed / sum) * total;
     double h = (wHard / sum) * total;
 
     int Ei = (int) Math.floor(e);
@@ -205,9 +218,16 @@ public class QuestionService {
 
     double re = e - Ei, rm = m - Mi, rh = h - Hi;
     while (remain-- > 0) {
-      if (re >= rm && re >= rh) { Ei++; re = -1; }
-      else if (rm >= re && rm >= rh) { Mi++; rm = -1; }
-      else { Hi++; rh = -1; }
+      if (re >= rm && re >= rh) {
+        Ei++;
+        re = -1;
+      } else if (rm >= re && rm >= rh) {
+        Mi++;
+        rm = -1;
+      } else {
+        Hi++;
+        rh = -1;
+      }
     }
     return new Quota(Ei, Mi, Hi);
   }
@@ -232,8 +252,13 @@ public class QuestionService {
     double wH = 1.0 - acc.hard();
 
     double ws = wE + wM + wH;
-    if (ws <= 1e-9) { wE = wM = wH = 1.0; ws = 3.0; }
-    wE /= ws; wM /= ws; wH /= ws;
+    if (ws <= 1e-9) {
+      wE = wM = wH = 1.0;
+      ws = 3.0;
+    }
+    wE /= ws;
+    wM /= ws;
+    wH /= ws;
 
     double baseE = generationProperties.getBase().getEasy();
     double baseM = generationProperties.getBase().getMedium();
@@ -248,12 +273,13 @@ public class QuestionService {
   }
 
   private int addUntilUnique(List<Question> target,
-                             List<Question> batch,
-                             int need,
-                             Set<Long> seen) {
+      List<Question> batch,
+      int need,
+      Set<Long> seen) {
     int added = 0;
     for (Question q : batch) {
-      if (added >= need) break;
+      if (added >= need)
+        break;
       if (seen.add(q.getId())) {
         target.add(q);
         added++;
@@ -263,6 +289,12 @@ public class QuestionService {
   }
 
   // ===== DTOs =====
-  record Quota(int easy, int medium, int hard) { int sum() { return easy + medium + hard; } }
-  public static record QuotaDTO(int easy, int medium, int hard, int sum) {}
+  record Quota(int easy, int medium, int hard) {
+    int sum() {
+      return easy + medium + hard;
+    }
+  }
+
+  public static record QuotaDTO(int easy, int medium, int hard, int sum) {
+  }
 }

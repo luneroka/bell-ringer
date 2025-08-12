@@ -79,8 +79,7 @@ public class QuizService {
         Objects.requireNonNull(quizId, "quizId must not be null");
         if (questionIds == null || questionIds.isEmpty()) return;
 
-        // Optional: enforce same-category policy in service (cheap guard)
-        // You can add a validation query here if needed.
+        // TODO : enforce same-category policy in service (cheap guard)
 
         // Batch insert
         for (Long qid : questionIds) {
@@ -111,7 +110,7 @@ public class QuizService {
 
     // ----------------- History & accuracy -----------------
 
-    /** Step 2.B — Count completed quizzes by user & category (uses quizzes.completed_at). */
+    /** Count completed quizzes by user & category (uses quizzes.completed_at). */
     public long countCompletedByUserAndCategory(UUID userId, Long categoryId) {
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(categoryId, "categoryId must not be null");
@@ -121,7 +120,7 @@ public class QuizService {
     /** DTO for per-difficulty accuracy. Values are in [0,1]. */
     public record Accuracy(double easy, double medium, double hard) {}
 
-    /** Step 2.C — Load accuracy per difficulty for a user in a category. */
+    /** Load accuracy per difficulty for a user in a category. */
     public Accuracy loadAccuracy(UUID userId, Long categoryId) {
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(categoryId, "categoryId must not be null");
