@@ -45,6 +45,10 @@ public class Question {
       CascadeType.MERGE }, orphanRemoval = true)
   private List<Choice> choices = new ArrayList<>();
 
+  @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+      CascadeType.MERGE }, orphanRemoval = true)
+  private List<OpenAnswer> openAnswers = new ArrayList<>();
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private OffsetDateTime createdAt;
@@ -87,6 +91,16 @@ public class Question {
   public void removeChoice(Choice choice) {
     this.choices.remove(choice);
     choice.setQuestion(null);
+  }
+
+  public void addOpenAnswer(OpenAnswer openAnswer) {
+    openAnswer.setQuestion(this);
+    this.openAnswers.add(openAnswer);
+  }
+
+  public void removeOpenAnswer(OpenAnswer openAnswer) {
+    this.openAnswers.remove(openAnswer);
+    openAnswer.setQuestion(null);
   }
 
   // Getters and setters
@@ -139,6 +153,18 @@ public class Question {
     if (choices != null) {
       for (Choice c : choices)
         addChoice(c);
+    }
+  }
+
+  public java.util.List<OpenAnswer> getOpenAnswers() {
+    return openAnswers;
+  }
+
+  public void setOpenAnswers(java.util.List<OpenAnswer> openAnswers) {
+    this.openAnswers.clear();
+    if (openAnswers != null) {
+      for (OpenAnswer oa : openAnswers)
+        addOpenAnswer(oa);
     }
   }
 

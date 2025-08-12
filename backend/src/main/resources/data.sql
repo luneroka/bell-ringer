@@ -15,7 +15,7 @@
 -- DELETE FROM attempts;
 -- DELETE FROM quiz_questions;
 -- DELETE FROM choices WHERE question_id IN (SELECT id FROM questions WHERE category_id = 2);
--- DELETE FROM answers WHERE question_id IN (SELECT id FROM questions WHERE category_id = 2);
+-- DELETE FROM open_answers WHERE question_id IN (SELECT id FROM questions WHERE category_id = 2);
 -- DELETE FROM questions WHERE category_id = 2;
 -- -----------------------------------------------------------------------
 
@@ -82,7 +82,19 @@ SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
 
 INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
 VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'react'), 'EASY', 'Which hook is used to manage state in a function component?', NOW(), NOW());
-/*INSERT INTO answers(question_id, answer) SELECT id, 'useState' FROM q;*/
+
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Which hook is used to manage state in a function component?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, min_score)
+SELECT id, 'useState', 60 FROM q;
+
+-- Additional comprehensive answer
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Which hook is used to manage state in a function component?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useState is a React hook that allows functional components to have state by returning a state variable and a setter function.', '{"must": ["useState", "state"], "should": ["hook", "functional components", "setter function"]}', 70 FROM q;
 
 WITH q AS (
   INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
@@ -120,7 +132,19 @@ SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
 
 INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
 VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'react'), 'EASY', 'Name the hook used to access a mutable value that persists across renders without causing re-renders.', NOW(), NOW());
-/*INSERT INTO answers(question_id, answer) SELECT id, 'useRef' FROM q;*/
+
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Name the hook used to access a mutable value that persists across renders without causing re-renders.' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, min_score)
+SELECT id, 'useRef', 60 FROM q;
+
+-- Additional comprehensive answer
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Name the hook used to access a mutable value that persists across renders without causing re-renders.' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useRef creates a mutable ref object that persists across renders and does not trigger re-renders when its value changes, commonly used for DOM element access.', '{"must": ["useRef", "mutable", "persists"], "should": ["re-renders", "DOM element", "ref object"]}', 75 FROM q;
 
 -- =======================
 -- MEDIUM (8 questions)
@@ -162,7 +186,19 @@ SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
 
 INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
 VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'react'), 'MEDIUM', 'What hook memoizes a computed value based on dependencies?', NOW(), NOW());
-/*INSERT INTO answers(question_id, answer) SELECT id, 'useMemo' FROM q;*/
+
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'What hook memoizes a computed value based on dependencies?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useMemo', '{"must": ["useMemo", "memoization"], "should": ["dependencies", "performance", "optimization"]}', 65 FROM q;
+
+-- Additional comprehensive answer
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'What hook memoizes a computed value based on dependencies?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useMemo is a React hook that memoizes expensive computations to avoid recalculating them on every render, only recalculating when dependencies change.', '{"must": ["useMemo", "memoization", "dependencies"], "should": ["performance", "expensive", "recalculate", "render"]}', 75 FROM q;
 
 WITH q AS (
   INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
@@ -200,7 +236,19 @@ SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
 
 INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
 VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'react'), 'MEDIUM', 'Which hook is used to imperatively access a child component DOM node?', NOW(), NOW());
-/*INSERT INTO answers(question_id, answer) SELECT id, 'useRef' FROM q;*/
+
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Which hook is used to imperatively access a child component DOM node?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, min_score)
+SELECT id, 'useRef', 65 FROM q;
+
+-- Additional comprehensive answer
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Which hook is used to imperatively access a child component DOM node?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useRef hook creates a reference that can be attached to DOM elements, allowing imperative access to child component DOM nodes for operations like focus or scrolling.', '{"must": ["useRef", "DOM", "imperative"], "should": ["reference", "elements", "focus", "child component"]}', 75 FROM q;
 
 -- =======================
 -- HARD (8 questions)
@@ -242,7 +290,19 @@ SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
 
 INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
 VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'react'), 'HARD', 'Name the hook that memoizes a callback function.', NOW(), NOW());
-/*INSERT INTO answers(question_id, answer) SELECT id, 'useCallback' FROM q;*/
+
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Name the hook that memoizes a callback function.' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useCallback', '{"must": ["useCallback", "memoization"], "should": ["callback", "function", "performance"]}', 70 FROM q;
+
+-- Additional comprehensive answer
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Name the hook that memoizes a callback function.' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useCallback is a React hook that returns a memoized version of a callback function that only changes if one of its dependencies has changed, preventing unnecessary re-renders.', '{"must": ["useCallback", "memoized", "callback"], "should": ["dependencies", "re-renders", "performance", "function"]}', 80 FROM q;
 
 WITH q AS (
   INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
@@ -280,11 +340,25 @@ SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
 
 INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
 VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'react'), 'HARD', 'Which hook memoizes a function and returns a stable reference across renders?', NOW(), NOW());
-/*INSERT INTO answers(question_id, answer) SELECT id, 'useCallback' FROM q;*/
+
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Which hook memoizes a function and returns a stable reference across renders?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useCallback', '{"must": ["useCallback", "stable reference"], "should": ["memoizes", "renders", "function"]}', 70 FROM q;
+
+-- Additional comprehensive answer
+WITH q AS (
+  SELECT id FROM questions WHERE question = 'Which hook memoizes a function and returns a stable reference across renders?' AND category_id = (SELECT id FROM categories WHERE slug = 'react')
+)
+INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useCallback hook memoizes functions and returns a stable reference that persists across renders unless dependencies change, helping to prevent child component re-renders.', '{"must": ["useCallback", "stable reference", "memoizes"], "should": ["dependencies", "re-renders", "child component", "persists"]}', 75 FROM q;
 
 -- =======================
 -- Sanity checks (optional)
 -- =======================
 -- SELECT difficulty, type, COUNT(*) FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'react') GROUP BY difficulty, type ORDER BY difficulty, type;
 -- SELECT COUNT(*) FROM choices WHERE question_id IN (SELECT id FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'react'));
+-- SELECT COUNT(*) FROM open_answers WHERE question_id IN (SELECT id FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'react'));
 -- SELECT * FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'react') ORDER BY id;
+-- SELECT oa.*, q.question FROM open_answers oa JOIN questions q ON oa.question_id = q.id WHERE q.category_id = (SELECT id FROM categories WHERE slug = 'react') ORDER BY oa.id;
