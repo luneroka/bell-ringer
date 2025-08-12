@@ -1,10 +1,9 @@
 
 package com.bell_ringer.controllers;
 
-import com.bell_ringer.models.Quiz;
 import com.bell_ringer.services.QuizService;
+import com.bell_ringer.services.dto.QuizDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,14 +39,14 @@ public class QuizController {
     /** Get a quiz by id */
     @Transactional(readOnly = true)
     @GetMapping("/{id}")
-    public Quiz getById(@PathVariable Long id) {
-        return quizService.getRequired(id);
+    public QuizDto getById(@PathVariable Long id) {
+        return quizService.getRequiredDto(id);
     }
 
     /** Mark a quiz as completed (sets completed_at = now) */
     @PostMapping("/{id}/complete")
-    public Quiz markCompleted(@PathVariable Long id) {
-        return quizService.markCompleted(id);
+    public QuizDto markCompleted(@PathVariable Long id) {
+        return quizService.markCompletedDto(id);
     }
 
     /** Clear completion flag (admin/debug) */
@@ -69,11 +68,10 @@ public class QuizController {
     public Map<String, Object> accuracy(@RequestParam UUID userId, @RequestParam Long categoryId) {
         QuizService.Accuracy acc = quizService.loadAccuracy(userId, categoryId);
         return Map.of(
-            "userId", userId,
-            "categoryId", categoryId,
-            "easy", acc.easy(),
-            "medium", acc.medium(),
-            "hard", acc.hard()
-        );
+                "userId", userId,
+                "categoryId", categoryId,
+                "easy", acc.easy(),
+                "medium", acc.medium(),
+                "hard", acc.hard());
     }
 }

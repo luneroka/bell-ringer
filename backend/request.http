@@ -111,12 +111,12 @@ Accept: application/json
 ########################################################
 # QUIZZES
 ########################################################
-/
-### Get quiz by id
+
+### Get quiz by id - Returns QuizDto
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
 Accept: application/json
 
-### Mark quiz completed
+### Mark quiz completed - Returns QuizDto
 POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
 Accept: application/json
 

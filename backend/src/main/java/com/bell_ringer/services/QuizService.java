@@ -5,6 +5,7 @@ import com.bell_ringer.models.Category;
 import com.bell_ringer.models.Quiz;
 import com.bell_ringer.repositories.QuizRepository;
 import com.bell_ringer.repositories.QuizRepository.DifficultyStatsRow;
+import com.bell_ringer.services.dto.QuizDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,35 @@ public class QuizService {
         this.categories = categories;
     }
 
+    // ===== DTO Conversion Methods =====
+
+    /**
+     * Convert Quiz entity to QuizDto without question IDs (for performance).
+     */
+    private QuizDto convertToDto(Quiz quiz) {
+        return QuizDto.forResponse(
+                quiz.getId(),
+                quiz.getUserId(),
+                quiz.getCategory().getId(),
+                quiz.getCategory().getName(),
+                quiz.getCreatedAt(),
+                quiz.getCompletedAt());
+    }
+
+    /**
+     * Convert Quiz entity to QuizDto with question IDs included.
+     */
+    private QuizDto convertToDtoWithQuestions(Quiz quiz, List<Long> questionIds) {
+        return QuizDto.forResponseWithQuestions(
+                quiz.getId(),
+                quiz.getUserId(),
+                quiz.getCategory().getId(),
+                quiz.getCategory().getName(),
+                questionIds,
+                quiz.getCreatedAt(),
+                quiz.getCompletedAt());
+    }
+
     // ----------------- Basic reads -----------------
 
     public Optional<Quiz> findById(Long id) {
@@ -41,6 +71,11 @@ public class QuizService {
     public Quiz getRequired(Long id) {
         return quizzes.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Quiz not found: " + id));
+    }
+
+    public QuizDto getRequiredDto(Long id) {
+        Quiz quiz = getRequired(id);
+        return convertToDto(quiz);
     }
 
     // ----------------- Creation & linkage -----------------
@@ -58,7 +93,8 @@ public class QuizService {
     }
 
     /**
-     * Create a quiz and attach the given question ids into the link table `quiz_questions`.
+     * Create a quiz and attach the given question ids into the link table
+     * `quiz_questions`.
      * This uses a native batch insert for simplicity.
      */
     @Transactional
@@ -77,16 +113,18 @@ public class QuizService {
     @Transactional
     public void addQuestions(Long quizId, List<Long> questionIds) {
         Objects.requireNonNull(quizId, "quizId must not be null");
-        if (questionIds == null || questionIds.isEmpty()) return;
+        if (questionIds == null || questionIds.isEmpty())
+            return;
 
         // TODO : enforce same-category policy in service (cheap guard)
 
         // Batch insert
         for (Long qid : questionIds) {
-            em.createNativeQuery("INSERT INTO quiz_questions(quiz_id, question_id) VALUES (:quizId, :qid) ON CONFLICT DO NOTHING")
-              .setParameter("quizId", quizId)
-              .setParameter("qid", qid)
-              .executeUpdate();
+            em.createNativeQuery(
+                    "INSERT INTO quiz_questions(quiz_id, question_id) VALUES (:quizId, :qid) ON CONFLICT DO NOTHING")
+                    .setParameter("quizId", quizId)
+                    .setParameter("qid", qid)
+                    .executeUpdate();
         }
     }
 
@@ -98,6 +136,13 @@ public class QuizService {
         Quiz quiz = getRequired(quizId);
         quiz.setCompletedAt(OffsetDateTime.now());
         return quizzes.save(quiz);
+    }
+
+    /** Mark a quiz as completed now and return DTO. */
+    @Transactional
+    public QuizDto markCompletedDto(Long quizId) {
+        Quiz quiz = markCompleted(quizId);
+        return convertToDto(quiz);
     }
 
     /** Clear completion flag (admin/debug). */
@@ -118,7 +163,8 @@ public class QuizService {
     }
 
     /** DTO for per-difficulty accuracy. Values are in [0,1]. */
-    public record Accuracy(double easy, double medium, double hard) {}
+    public record Accuracy(double easy, double medium, double hard) {
+    }
 
     /** Load accuracy per difficulty for a user in a category. */
     public Accuracy loadAccuracy(UUID userId, Long categoryId) {
@@ -126,19 +172,29 @@ public class QuizService {
         Objects.requireNonNull(categoryId, "categoryId must not be null");
 
         List<DifficultyStatsRow> rows = quizzes.findAccuracyByUserAndCategory(userId, categoryId);
-        long eTot=0,eCor=0, mTot=0,mCor=0, hTot=0,hCor=0;
+        long eTot = 0, eCor = 0, mTot = 0, mCor = 0, hTot = 0, hCor = 0;
         for (DifficultyStatsRow r : rows) {
             String d = r.getDifficulty();
-            if (d == null) continue;
+            if (d == null)
+                continue;
             switch (d.toUpperCase()) {
-                case "EASY" -> { eTot += r.getTotal(); eCor += r.getCorrect(); }
-                case "MEDIUM" -> { mTot += r.getTotal(); mCor += r.getCorrect(); }
-                case "HARD" -> { hTot += r.getTotal(); hCor += r.getCorrect(); }
+                case "EASY" -> {
+                    eTot += r.getTotal();
+                    eCor += r.getCorrect();
+                }
+                case "MEDIUM" -> {
+                    mTot += r.getTotal();
+                    mCor += r.getCorrect();
+                }
+                case "HARD" -> {
+                    hTot += r.getTotal();
+                    hCor += r.getCorrect();
+                }
             }
         }
-        double e = eTot == 0 ? 0.5 : (double)eCor / eTot;
-        double m = mTot == 0 ? 0.5 : (double)mCor / mTot;
-        double h = hTot == 0 ? 0.5 : (double)hCor / hTot;
+        double e = eTot == 0 ? 0.5 : (double) eCor / eTot;
+        double m = mTot == 0 ? 0.5 : (double) mCor / mTot;
+        double h = hTot == 0 ? 0.5 : (double) hCor / hTot;
         return new Accuracy(e, m, h);
     }
 }
