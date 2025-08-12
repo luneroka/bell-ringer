@@ -11,7 +11,7 @@
 # ----------------------
 # IDs you will populate
 # ----------------------
-@userId = 805da6de-f660-4d9e-88c8-d3389e12a1f2
+@userId = da93d868-218c-4be0-ba80-8faf0c1472ed
 @rootCategoryId = 1
 @childCategoryId = 2
 @quizId = 1
@@ -145,7 +145,7 @@ GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/count
 Accept: application/json
 
 ### Add a single question to a quiz
-POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/11
+POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/2
 
 ### Add many questions to a quiz (provide existing question IDs)
 POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
@@ -164,7 +164,7 @@ Content-Type: application/json
 }
 
 ### Remove a single question from a quiz
-DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/3
+DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/2
 
 ### Clear all questions from a quiz
 DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
@@ -176,10 +176,10 @@ DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
 # ----------------------
 # IDs you will populate
 # ----------------------
-@questionId = 1
+@singleQuestionId = 1
 
 ### Get a single question by ID (with choices)
-GET {{baseUrl}}/api/v1/questions/{{questionId}}
+GET {{baseUrl}}/api/v1/questions/{{singleQuestionId}}
 Accept: application/json
 
 ### Compute quota only (RANDOM/ADAPTIVE decided in service)

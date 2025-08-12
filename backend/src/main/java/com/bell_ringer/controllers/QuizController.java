@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,19 +18,6 @@ public class QuizController {
 
     public QuizController(QuizService quizService) {
         this.quizService = quizService;
-    }
-
-    // -------------------- DTOs --------------------
-
-    public static class CreateQuizRequest {
-        public UUID userId;
-        public Long categoryId;
-    }
-
-    public static class CreateWithQuestionsRequest {
-        public UUID userId;
-        public Long categoryId;
-        public List<Long> questionIds;
     }
 
     // -------------------- Endpoints --------------------

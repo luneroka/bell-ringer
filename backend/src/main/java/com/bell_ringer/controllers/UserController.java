@@ -1,7 +1,10 @@
 package com.bell_ringer.controllers;
 
 import com.bell_ringer.services.UserService;
+import com.bell_ringer.services.dto.UserRequest;
+import com.bell_ringer.services.dto.UserResponse;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import com.bell_ringer.models.User;
 import java.util.stream.StreamSupport;
@@ -12,7 +15,7 @@ import org.springframework.http.HttpStatus;
 public class UserController {
   private final UserService userService;
 
-  //  Constructor
+  // Constructor
   public UserController(UserService userService) {
     this.userService = userService;
   }
@@ -40,23 +43,19 @@ public class UserController {
   // CREATE USER
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserResponse createUser(@RequestBody CreateUserRequest req) {
-    if (req == null || req.getEmail() == null || req.getEmail().isBlank()) {
-        throw new IllegalArgumentException("email is required");
-    }
-    
-    User user = userService.createUser(req.getEmail());
+  public UserResponse createUser(@Valid @RequestBody UserRequest.Create req) {
+    User user = userService.createUser(req.email());
     return new UserResponse(user.getId(), user.getEmail());
-}
+  }
 
   // UPDATE USER
   @PutMapping("/{id}")
-  public String updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequest req) {
+  public String updateUser(@PathVariable UUID id, @RequestBody UserRequest.Update req) {
     if (req == null) {
       throw new IllegalArgumentException("request body is required");
     }
 
-    User updatedUser = userService.updateUser(id, req.getEmail(), req.getEmailVerified(), req.getDisplayName(), req.getPhotoUrl());
+    User updatedUser = userService.updateUser(id, req.email(), req.emailVerified(), req.displayName(), req.photoUrl());
     return updatedUser.getEmail();
   }
 
@@ -65,44 +64,6 @@ public class UserController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteUser(@PathVariable UUID id) {
     userService.deleteUser(id);
-  }
-
-  // *** MODELS *** //
-  public static class CreateUserRequest {
-    private String email;
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-  }
-  
-  public static class UserResponse {
-    private UUID id;
-    private String email;
-    
-    public UserResponse(UUID id, String email) {
-        this.id = id;
-        this.email = email;
-    }
-    
-    // Getters
-    public UUID getId() { return id; }
-    public String getEmail() { return email; }
-  }
-
-  public static class UpdateUserRequest {
-    private String email;
-    private Boolean emailVerified;
-    private String displayName;
-    private String photoUrl;
-
-    // Getters and setters
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public Boolean getEmailVerified() { return emailVerified; }
-    public void setEmailVerified(Boolean emailVerified) { this.emailVerified = emailVerified; }
-    public String getDisplayName() { return displayName; }
-    public void setDisplayName(String displayName) { this.displayName = displayName; }
-    public String getPhotoUrl() { return photoUrl; }
-    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
   }
 
   // PING TO TEST CONNECTION

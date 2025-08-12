@@ -1,11 +1,12 @@
 
 package com.bell_ringer.controllers;
 
-import com.bell_ringer.models.QuizQuestion;
 import com.bell_ringer.services.QuizQuestionService;
+import com.bell_ringer.services.dto.QuizQuestionRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
@@ -18,15 +19,6 @@ public class QuizQuestionController {
 
     public QuizQuestionController(QuizQuestionService quizQuestionService) {
         this.quizQuestionService = quizQuestionService;
-    }
-
-    // ---------------- DTOs ----------------
-    public static class AddManyRequest {
-        public List<Long> questionIds;
-    }
-
-    public static class ReplaceAllRequest {
-        public List<Long> questionIds; // desired final order
     }
 
     // ---------------- Reads ----------------
@@ -55,23 +47,19 @@ public class QuizQuestionController {
         quizQuestionService.addIfAbsent(quizId, questionId);
     }
 
-     /** Add many questions to a quiz (duplicates ignored). */
-     @PostMapping
-     public ResponseEntity<?> addMany(@PathVariable Long quizId, @RequestBody AddManyRequest body) {
-         if (body == null || body.questionIds == null || body.questionIds.isEmpty()) {
-             return ResponseEntity.badRequest().body(Map.of("error", "questionIds must not be empty"));
-         }
-         var created = quizQuestionService.addAllIfAbsent(quizId, body.questionIds);
-         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-             "quizId", quizId,
-             "created", created.size()
-         ));
-     }
+    /** Add many questions to a quiz (duplicates ignored). */
+    @PostMapping
+    public ResponseEntity<?> addMany(@PathVariable Long quizId, @Valid @RequestBody QuizQuestionRequest.AddMany body) {
+        var created = quizQuestionService.addAllIfAbsent(quizId, body.questionIds());
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                "quizId", quizId,
+                "created", created.size()));
+    }
 
     /** Replace all links with the provided ordered list. */
     @PutMapping
-    public Map<String, Object> replaceAll(@PathVariable Long quizId, @RequestBody ReplaceAllRequest body) {
-        List<Long> finalOrder = quizQuestionService.replaceAll(quizId, body == null ? null : body.questionIds);
+    public Map<String, Object> replaceAll(@PathVariable Long quizId, @RequestBody QuizQuestionRequest.ReplaceAll body) {
+        List<Long> finalOrder = quizQuestionService.replaceAll(quizId, body == null ? null : body.questionIds());
         return Map.of("quizId", quizId, "questionIds", finalOrder, "count", finalOrder.size());
     }
 
