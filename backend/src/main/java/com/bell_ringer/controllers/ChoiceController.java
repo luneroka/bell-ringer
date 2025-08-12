@@ -44,9 +44,9 @@ public class ChoiceController {
 
   // GET is correct choice by ID
   @GetMapping("/{id}/is-correct")
-  public ResponseEntity<Boolean> isCorrect(@PathVariable @Positive Long id) {
-    boolean correct = choiceService.isCorrect(id);
-    return ResponseEntity.ok(correct);
+  public ResponseEntity<ChoiceDto.ChoiceCheckDto> isCorrect(@PathVariable @Positive Long id) {
+    ChoiceDto.ChoiceCheckDto payload = choiceService.isCorrect(id);
+    return ResponseEntity.ok(payload);
   }
 
   // GET correct choices by question ID

@@ -52,10 +52,11 @@ public class ChoiceService {
   }
 
   @Transactional(readOnly = true)
-  public boolean isCorrect(Long choiceId) {
+  public ChoiceDto.ChoiceCheckDto isCorrect(Long choiceId) {
     if (choiceId == null)
       throw new IllegalArgumentException("choiceId must not be null");
-    return choiceRepository.existsByIdAndIsCorrectTrue(choiceId);
+    boolean correct = choiceRepository.existsByIdAndIsCorrectTrue(choiceId);
+    return ChoiceDto.check(choiceId, correct);
   }
 
   @Transactional(readOnly = true)

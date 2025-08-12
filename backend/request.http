@@ -11,10 +11,10 @@
 # ----------------------
 # IDs you will populate
 # ----------------------
-@userId = af4ff4c5-8ffa-4e3d-b71c-f3bfa2a5c051
+@userId = 805da6de-f660-4d9e-88c8-d3389e12a1f2
 @rootCategoryId = 1
 @childCategoryId = 2
-@quizId = 2
+@quizId = 1
 
 ########################################################
 # USERS
@@ -164,7 +164,7 @@ Content-Type: application/json
 }
 
 ### Remove a single question from a quiz
-DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/1
+DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/3
 
 ### Clear all questions from a quiz
 DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
@@ -194,3 +194,33 @@ Content-Type: application/json
   "total": 10,
   "modeOverride": null
 }
+
+########################################################
+# CHOICES
+########################################################
+
+# ----------------------
+# IDs you will populate
+# ----------------------
+@questionId = 11
+@choiceId = 1
+
+### Get a single choice by ID
+GET {{baseUrl}}/api/v1/choices/{{choiceId}}
+Accept: application/json
+
+### Get choices for a given question
+GET {{baseUrl}}/api/v1/choices/question/{{questionId}}
+Accept: application/json
+
+### Check if a choice is correct by ID
+GET {{baseUrl}}/api/v1/choices/{{choiceId}}/is-correct
+Accept: application/json
+
+### Get correct choices for a question
+GET {{baseUrl}}/api/v1/choices/question/{{questionId}}/correct
+Accept: application/json
+
+### Get correct choice IDs for a question
+GET {{baseUrl}}/api/v1/choices/question/{{questionId}}/correct-ids
+Accept: application/json

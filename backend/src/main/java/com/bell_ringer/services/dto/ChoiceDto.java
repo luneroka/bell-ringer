@@ -30,4 +30,14 @@ public record ChoiceDto(
   public static ChoiceDto forResponse(Long id, Long questionId, String choiceText, boolean isCorrect) {
     return new ChoiceDto(id, questionId, choiceText, isCorrect);
   }
+
+  // Lightweight DTO for correctness checks
+  public static record ChoiceCheckDto(Long choiceId, boolean isCorrect) {}
+
+  /**
+   * Factory for correctness-check responses.
+   */
+  public static ChoiceCheckDto check(Long choiceId, boolean isCorrect) {
+    return new ChoiceCheckDto(choiceId, isCorrect);
+  }
 }
