@@ -11,9 +11,9 @@
 # ----------------------
 # IDs that will populate
 # ----------------------
-@userId = 28b0db31-efe0-4a0f-bfb5-32c12d81f2d1
+@userId = 1f84244e-f59e-405b-8987-4a01657af560
 @parentCategoryId = 1
-@childCategoryId = 2
+@childCategoryId = 11
 
 ########################################################
 # USERS
@@ -187,7 +187,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 10,
+  "total": 5,
   "modeOverride": null
 }
 
@@ -198,7 +198,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 10,
+  "total": 5,
   "modeOverride": null
 }
 
@@ -209,7 +209,7 @@ Content-Type: application/json
 # ----------------------
 # IDs that will populate
 # ----------------------
-@mCquestionId = 1
+@mCquestionId = 3
 @choiceId = 1
 
 ### Get a single choice by ID
@@ -239,7 +239,7 @@ Accept: application/json
 # ----------------------
 # IDs that will populate
 # ----------------------
-@sAquestionId = 4
+@sAquestionId = 2
 
 ### Get open answer by ID
 GET http://localhost:8080/api/v1/open-answers/2
