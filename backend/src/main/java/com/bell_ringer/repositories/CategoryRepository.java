@@ -16,24 +16,25 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findBySlug(String slug);
 
     // All root categories (no parent)
-    List<Category> findAllByParentIsNull();
+    List<Category> findAllByParentIsNullOrderByNameAsc();
 
     // All direct children of a given parent
-    List<Category> findAllByParentId(Long parentId);
+    List<Category> findAllByParentIdOrderByNameAsc(Long parentId);
 
     // Bulk lookup by ids
     List<Category> findAllByIdIn(Collection<Long> ids);
 
     // Guard against duplicates under the same parent (case-insensitive)
     boolean existsByParentIdAndNameIgnoreCase(Long parentId, String name);
+
     Optional<Category> findByParentIdAndNameIgnoreCase(Long parentId, String name);
 
     // Helper: parent id + its direct children ids (for "All Frontend" selection)
     @Query(value = """
-        SELECT id
-          FROM categories
-         WHERE id = :parentId OR parent_id = :parentId
-        ORDER BY id
-    """, nativeQuery = true)
+                SELECT id
+                  FROM categories
+                 WHERE id = :parentId OR parent_id = :parentId
+                ORDER BY id
+            """, nativeQuery = true)
     List<Integer> getParentAndChildrenIds(@Param("parentId") Long parentId);
 }

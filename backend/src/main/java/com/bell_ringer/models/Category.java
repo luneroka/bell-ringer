@@ -14,28 +14,18 @@ import java.util.Locale;
 import java.util.Set;
 
 @Entity
-@Table(
-    name = "categories",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uk_categories_slug", columnNames = {"slug"}),
-        @UniqueConstraint(name = "uk_parent_name", columnNames = {"parent_id", "name"})
-    },
-    indexes = {
+@Table(name = "categories", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_categories_slug", columnNames = { "slug" }),
+        @UniqueConstraint(name = "uk_parent_name", columnNames = { "parent_id", "name" })
+}, indexes = {
         @Index(name = "idx_categories_slug", columnList = "slug"),
-        @Index(name = "idx_categories_area", columnList = "area"),
         @Index(name = "idx_categories_parent", columnList = "parent_id")
-    }
-)
+})
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // Optional high-level domain grouping (e.g., "frontend", "backend")
-    @Size(max = 100)
-    @Column(name = "area")
-    private String area;
 
     @NotBlank
     @Size(max = 150)
@@ -70,26 +60,26 @@ public class Category {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    public Category() {}
+    public Category() {
+    }
 
-    public Category(String area, String name, Category parent) {
-        this.area = area;
+    public Category(String name, Category parent) {
         this.name = name;
         this.parent = parent;
-        this.slug = buildSlug(area, name, parent);
+        this.slug = buildSlug(name, parent);
     }
 
     @PrePersist
     public void prePersist() {
         if (this.slug == null || this.slug.isBlank()) {
-            this.slug = buildSlug(area, name, parent);
+            this.slug = buildSlug(name, parent);
         }
     }
 
     @PreUpdate
     public void preUpdate() {
         if (this.slug == null || this.slug.isBlank()) {
-            this.slug = buildSlug(area, name, parent);
+            this.slug = buildSlug(name, parent);
         }
     }
 
@@ -105,20 +95,25 @@ public class Category {
     }
 
     /**
-     * Slug builder: area (optional) + name (+ parent's name if present) → URL-friendly.
-     * Example: area="frontend", parent.name="React", name="Hooks" → "frontend-react-hooks"
+     * Slug builder: parent name (if present) + name → URL-friendly.
+     * Example: parent.name="Frontend", name="React Hooks" → "frontend-react-hooks"
+     * For root categories: just the name → "frontend"
      */
-    private static String buildSlug(String area, String name, Category parent) {
-        String base = String.join("-",
-                safe(area),
-                parent != null ? safe(parent.getName()) : "",
-                safe(name)
-        ).replaceAll("-{2,}", "-").replaceAll("(^-|-$)", "");
-        return base.toLowerCase(Locale.ROOT);
+    private static String buildSlug(String name, Category parent) {
+        String base;
+        if (parent != null) {
+            base = String.join("-", safe(parent.getName()), safe(name));
+        } else {
+            base = safe(name);
+        }
+        return base.replaceAll("-{2,}", "-")
+                .replaceAll("(^-|-$)", "")
+                .toLowerCase(Locale.ROOT);
     }
 
     private static String safe(String s) {
-        if (s == null) return "";
+        if (s == null)
+            return "";
         String x = s.trim();
         String n = Normalizer.normalize(x, Normalizer.Form.NFD);
         return n.replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
@@ -126,30 +121,67 @@ public class Category {
     }
 
     // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getArea() { return area; }
-    public void setArea(String area) { this.area = area; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getSlug() { return slug; }
-    public void setSlug(String slug) { this.slug = slug; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Category getParent() { return parent; }
-    public void setParent(Category parent) { this.parent = parent; }
+    public String getSlug() {
+        return slug;
+    }
 
-    public Set<Category> getChildren() { return children; }
-    public void setChildren(Set<Category> children) { this.children = children; }
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
 
-    public Set<Question> getQuestions() { return questions; }
-    public void setQuestions(Set<Question> questions) { this.questions = questions; }
+    public Category getParent() {
+        return parent;
+    }
 
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
 
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public Set<Category> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<Category> children) {
+        this.children = children;
+    }
+
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

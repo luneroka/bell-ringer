@@ -58,17 +58,16 @@ public class CategoryController {
     /** Create a new category */
     @PostMapping
     public ResponseEntity<CategoryDto> create(@Valid @RequestBody CategoryRequest.Create body) {
-        CategoryDto c = categoryService.createDto(body.area(), body.name(), body.parentId());
+        CategoryDto c = categoryService.createDto(body.name(), body.parentId());
         return ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
 
     /** Update an existing category */
     @PutMapping("/{id}")
     public Category update(@PathVariable Long id, @RequestBody CategoryRequest.Update body) {
-        String area = body == null ? null : body.area();
         String name = body == null ? null : body.name();
         Long parentId = body == null ? null : body.parentId();
-        return categoryService.update(id, area, name, parentId);
+        return categoryService.update(id, name, parentId);
     }
 
     /** Delete a category */

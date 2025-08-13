@@ -11,8 +11,8 @@
 # ----------------------
 # IDs that will populate
 # ----------------------
-@userId = dc418f94-9f1c-4324-809b-d1fd244fb3a6
-@rootCategoryId = 1
+@userId = 28b0db31-efe0-4a0f-bfb5-32c12d81f2d1
+@parentCategoryId = 1
 @childCategoryId = 2
 
 ########################################################
@@ -76,36 +76,30 @@ DELETE {{baseUrl}}/api/v1/users/{{userId}}
 #Content-Type: application/json
 #
 #{
-#  "area": "frontend",
-#  "name": "Frontend",
-#  "parentId": null
+#  "name": "Frontend"
 #}
 
-### Create a child category (e.g., React under Frontend)
+### Create a child category (e.g., React Hooks under Frontend)
 #POST {{baseUrl}}/api/v1/categories
 #Content-Type: application/json
 #
 #{
-#  "area": "frontend",
-#  "name": "React",
-#  "parentId": {{rootCategoryId}}
+#  "name": "React Hooks",
+#  "parentId": {{parentCategoryId}}
 #}
 
 ### List root categories - Returns CategoryDto[]
 GET {{baseUrl}}/api/v1/categories/roots
 Accept: application/json
 
-### Get category by id (root) - Returns CategoryDto
-GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}
-Accept: application/json
+### Get category by ID
+GET {{baseUrl}}/api/v1/categories/{{parentCategoryId}}
 
-### List children of a category - Returns CategoryDto[]
-GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}/children
-Accept: application/json
+### Get children of a category
+GET {{baseUrl}}/api/v1/categories/{{parentCategoryId}}/children
 
-### Resolve selection ids (parent → [parent + children])
-GET {{baseUrl}}/api/v1/categories/{{rootCategoryId}}/ids
-Accept: application/json
+### Get effective IDs for selection (parent → [parent + children], leaf → [id])
+GET {{baseUrl}}/api/v1/categories/{{parentCategoryId}}/ids
 
 ########################################################
 # QUIZZES
