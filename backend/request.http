@@ -1,501 +1,122 @@
-# ==================================
-# Bell-Ringer API — HTTP Test Suite
-# ==================================
+# ====================================
+# Bell-Ringer API — Simplified Test Suite
+# ====================================
 # How to use:
-# - Open this file in IntelliJ IDEA and click the ▶ icons.
-# - Fill the variables below with real IDs as you create data.
-# - Run top → bottom to create, then query.
+# 1. Run the "Quick Setup" section first to create test data
+# 2. Use the "Core Testing Workflows" for main functionality
+# 3. Use "Automatic Scoring Tests" to verify text answer scoring
+# 4. Update IDs below as needed based on your responses
 
 @baseUrl = http://localhost:8080
 
 # ----------------------
-# IDs that will populate
+# Test Data IDs (update these based on your responses)
 # ----------------------
-@userId = 91cda570-c689-4703-b71e-08e2cdd1764e
-@parentCategoryId = 1
-@childCategoryId = 11
+@userId = test-user-id
+@categoryId = 1
+@quizId = 1
+@attemptId = 1
+@questionId = 7
 
 ########################################################
-# USERS
+# QUICK SETUP - Run these first to create test data
 ########################################################
 
-### Health check
+### 1. Health check
 GET {{baseUrl}}/api/v1/users/ping
 
-### Get all users
-GET {{baseUrl}}/api/v1/users
-Accept: application/json
-
-### Get user by ID
-GET {{baseUrl}}/api/v1/users/{{userId}}
-Accept: application/json
-
-### Create a user (minimal — if your controller auto-generates UUID)
+### 2. Create test user
 POST {{baseUrl}}/api/v1/users
 Content-Type: application/json
 
 {
-  "email": "test@bellringer.com"
+  "email": "test@bellringer.com",
+  "displayName": "Test User"
 }
 
-### Create a user (full — if your controller expects auth provider info)
-# NOTE: Use this variant if your UserController requires provider + uid
-POST {{baseUrl}}/api/v1/users
-Content-Type: application/json
-
-{
-  "authProvider": "firebase",
-  "authUid": "dev-uid-001",
-  "email": "test+firebase@bellringer.com",
-  "emailVerified": false,
-  "displayName": "Dev Tester",
-  "photoUrl": "https://example.com/avatar.png"
-}
-
-### Update user (useful to verify updates with a known UUID)
-PUT {{baseUrl}}/api/v1/users/{{userId}}
-Content-Type: application/json
-
-{
-  "email": "new@bellringer.com",
-  "emailVerified": true,
-  "displayName": "Bob",
-  "photoUrl": "https://example.com/new-avatar.png"
-}
-
-### Delete user
-DELETE {{baseUrl}}/api/v1/users/{{userId}}
-
-########################################################
-# CATEGORIES
-########################################################
-
-# Commented out until prod
-### Create a root category (e.g., Frontend)
-#POST {{baseUrl}}/api/v1/categories
-#Content-Type: application/json
-#
-#{
-#  "name": "Frontend"
-#}
-
-### Create a child category (e.g., React Hooks under Frontend)
-#POST {{baseUrl}}/api/v1/categories
-#Content-Type: application/json
-#
-#{
-#  "name": "React Hooks",
-#  "parentId": {{parentCategoryId}}
-#}
-
-### List root categories - Returns CategoryDto[]
-GET {{baseUrl}}/api/v1/categories/roots
-Accept: application/json
-
-### Get category by ID
-GET {{baseUrl}}/api/v1/categories/{{parentCategoryId}}
-
-### Get children of a category
-GET {{baseUrl}}/api/v1/categories/{{parentCategoryId}}/children
-
-### Get effective IDs for selection (parent → [parent + children], leaf → [id])
-GET {{baseUrl}}/api/v1/categories/{{parentCategoryId}}/ids
-
-########################################################
-# QUIZZES
-########################################################
-
-# ----------------------
-# IDs that will populate
-# ----------------------
-@quizId = 1
-
-### Get quiz by id - Returns QuizDto
-GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
-Accept: application/json
-
-### Mark quiz completed - Returns QuizDto
-POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
-Accept: application/json
-
-### Clear completion flag
-DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
-
-### Completed quizzes count (user + category)
-GET {{baseUrl}}/api/v1/quizzes/history/count?userId={{userId}}&categoryId={{childCategoryId}}
-Accept: application/json
-
-# TODO : TEST AFTER IMPLEMENTING ATTEMPT AND ATTEMPT_ANSWER
-### Accuracy per difficulty (user + category)
-GET {{baseUrl}}/api/v1/quizzes/accuracy?userId={{userId}}&categoryId={{childCategoryId}}
-Accept: application/json
-
-########################################################
-# QUIZ_QUESTIONS (join table)
-########################################################
-/
-### List only question IDs linked to a quiz
-GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/ids
-Accept: application/json
-
-### Count how many questions are attached to a quiz
-GET {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/count
-Accept: application/json
-
-### Add a single question to a quiz
-POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/2
-
-### Add many questions to a quiz (provide existing question IDs)
-POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
-Content-Type: application/json
-
-{
-  "questionIds": [1, 2, 4]
-}
-
-### Replace all links with an ordered list
-PUT {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
-Content-Type: application/json
-
-{
-  "questionIds": [5, 6, 7, 8]
-}
-
-### Remove a single question from a quiz
-DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/2
-
-### Clear all questions from a quiz
-DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/questions
-
-########################################################
-# QUESTION GENERATION (service-level)
-########################################################
-
-# ----------------------
-# IDs that will populate
-# ----------------------
-@singleQuestionId = 1
-
-### Get a single question by ID (with choices)
-GET {{baseUrl}}/api/v1/questions/{{singleQuestionId}}
-Accept: application/json
-
-### Compute quota only (RANDOM/ADAPTIVE decided in service)
-POST {{baseUrl}}/api/v1/questions/quota
-Content-Type: application/json
-
-{
-  "userId": "{{userId}}",
-  "categoryId": {{childCategoryId}},
-  "total": 20,
-  "modeOverride": null
-}
-
-### Generate questions (requires stock in DB) - Returns QuestionDto[]
+### 3. Generate quiz with questions (creates quiz + first attempt)
 POST {{baseUrl}}/api/v1/questions/generate
 Content-Type: application/json
 
 {
   "userId": "{{userId}}",
-  "categoryId": {{childCategoryId}},
-  "total": 20,
+  "categoryId": {{categoryId}},
+  "total": 5,
   "modeOverride": null
 }
 
 ########################################################
-# CHOICES
+# CORE TESTING WORKFLOWS
 ########################################################
 
-# ----------------------
-# IDs that will populate
-# ----------------------
-@mCquestionId = 3
-@choiceId = 1
-
-### Get a single choice by ID
-GET {{baseUrl}}/api/v1/choices/{{choiceId}}
+### Get quiz details
+GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
 Accept: application/json
 
-### Get choices for a given question
-GET {{baseUrl}}/api/v1/choices/question/{{mCquestionId}}
+### Get latest attempt for quiz
+GET {{baseUrl}}/api/v1/attempts/quiz/{{quizId}}/latest
 Accept: application/json
 
-### Check if a choice is correct by ID
-GET {{baseUrl}}/api/v1/choices/{{choiceId}}/is-correct
-Accept: application/json
-
-### Get correct choices for a question
-GET {{baseUrl}}/api/v1/choices/question/{{mCquestionId}}/correct
-Accept: application/json
-
-### Get correct choice IDs for a question
-GET {{baseUrl}}/api/v1/choices/question/{{mCquestionId}}/correct-ids
-Accept: application/json
-
-########################################################
-# OPEN_ANSWERS
-########################################################
-
-# ----------------------
-# IDs that will populate
-# ----------------------
-@sAquestionId = 32
-
-### Get open answer by ID
-GET http://localhost:8080/api/v1/open-answers/32
-Content-Type: application/json
-
-### Get all open answers for a specific question
-GET http://localhost:8080/api/v1/open-answers/question/{{sAquestionId}}
-Content-Type: application/json
-
-### Search for open answer by question ID and answer text
-GET http://localhost:8080/api/v1/open-answers/search?questionId={{sAquestionId}}&answer=List only running containers.
-Content-Type: application/json
-
-### Check if open answer exists
-GET http://localhost:8080/api/v1/open-answers/exists?questionId={{sAquestionId}}&answer=List only running containers.
-Content-Type: application/json
-
-### Get rubric information for an open answer
-GET http://localhost:8080/api/v1/open-answers/{{sAquestionId}}/rubric
-Content-Type: application/json
-
-### Get scoring information for rubric evaluation
-GET http://localhost:8080/api/v1/open-answers/1/scoring-info
-Content-Type: application/json
-
-########################################################
-# ATTEMPTS
-########################################################
-
-# ----------------------
-# IDs that will populate
-# ----------------------
-@attemptId = 1
-@quizIdForAttempt = 1
-
-### Get attempt by ID (basic view)
-GET {{baseUrl}}/api/v1/attempts/{{attemptId}}
-Accept: application/json
-
-### Get attempt by ID (detailed view with all answers)
+### Get attempt with detailed answers
 GET {{baseUrl}}/api/v1/attempts/{{attemptId}}/detailed
 Accept: application/json
 
-### Get all attempts for a quiz
-GET {{baseUrl}}/api/v1/attempts?quizId={{quizIdForAttempt}}
-Accept: application/json
-
-### Get all attempts for a user
-GET {{baseUrl}}/api/v1/attempts/user/{{userId}}
-Accept: application/json
-
-### Get all attempts for a user in a specific category
-GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/category/{{childCategoryId}}
-Accept: application/json
-
-### Get the most recent attempt for a quiz
-GET {{baseUrl}}/api/v1/attempts/quiz/{{quizIdForAttempt}}/latest
-Accept: application/json
-
-### Get completed attempts for a user
-GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/completed
-Accept: application/json
-
-### Get incomplete attempts for a user
-GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/incomplete
-Accept: application/json
-
-### Get attempt statistics for a user
-GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/stats
-Accept: application/json
-
-### Retry a quiz (start a new attempt for an existing quiz)
-### Note: Initial attempts are created automatically via /questions/generate
-POST {{baseUrl}}/api/v1/attempts/retry
-Content-Type: application/json
-
-{
-  "quizId": {{quizIdForAttempt}}
-}
-
-### Submit selected choices for an attempt
-POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/choices
-Content-Type: application/json
-
-{
-  "selectedChoices": [
-    {
-      "questionId": 1,
-      "choiceId": 1
-    },
-    {
-      "questionId": 2,
-      "choiceId": 5
-    }
-  ]
-}
-
-### Submit text answers for an attempt
-POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/text-answers
-Content-Type: application/json
-
-{
-  "textAnswers": [
-    {
-      "questionId": 7,
-      "answerText": "React hooks allow functional components to use state and lifecycle methods. useState is for state management."
-    },
-    {
-      "questionId": 8,
-      "answerText": "useEffect is used for side effects like data fetching, subscriptions, or manually changing the DOM."
-    }
-  ]
-}
-
-### Complete an attempt (mark as finished)
-POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/complete
-Accept: application/json
-
-### Score a text answer (admin/teacher functionality)
-PUT {{baseUrl}}/api/v1/attempts/{{attemptId}}/text-answers/score
-Content-Type: application/json
-
-{
-  "questionId": 7,
-  "score": 85,
-  "isCorrect": true,
-  "feedback": "Good explanation of React hooks. Could be more detailed about useState syntax."
-}
-
-### Get all unscored text answers (for grading interface)
-GET {{baseUrl}}/api/v1/attempts/text-answers/unscored
-Accept: application/json
-
-### Get unscored text answers for a specific attempt
-GET {{baseUrl}}/api/v1/attempts/{{attemptId}}/text-answers/unscored
-Accept: application/json
-
-########################################################
-# ATTEMPT SELECTED CHOICES
-########################################################
-
-# ----------------------
-# IDs that will populate
-# ----------------------
-@attemptChoiceAttemptId = 1
-@attemptChoiceQuestionId = 1
-@attemptChoiceChoiceId = 1
-
-### Get a specific selected choice by composite ID
-GET {{baseUrl}}/api/v1/attempt-choices/{{attemptChoiceAttemptId}}/{{attemptChoiceQuestionId}}/{{attemptChoiceChoiceId}}
-Accept: application/json
-
-### Get all selected choices for an attempt
-GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}
-Accept: application/json
-
-### Get selected choices for a specific question in an attempt
-GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}/question/{{attemptChoiceQuestionId}}
-Accept: application/json
-
-### Get choice selection statistics for an attempt
-GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}/stats
-Accept: application/json
-
-### Submit a single choice selection
-POST {{baseUrl}}/api/v1/attempt-choices
-Content-Type: application/json
-
-{
-  "attemptId": {{attemptChoiceAttemptId}},
-  "questionId": {{attemptChoiceQuestionId}},
-  "choiceId": {{attemptChoiceChoiceId}}
-}
-
-### Submit multiple choice selections in batch
+### Submit multiple choice answers (batch)
 POST {{baseUrl}}/api/v1/attempt-choices/batch
 Content-Type: application/json
 
 {
-  "attemptId": {{attemptChoiceAttemptId}},
+  "attemptId": {{attemptId}},
   "selectedChoices": [
-    {
-      "questionId": 1,
-      "choiceId": 1
-    },
-    {
-      "questionId": 2,
-      "choiceId": 5
-    },
-    {
-      "questionId": 3,
-      "choiceId": 9
-    }
+    {"questionId": 1, "choiceId": 1},
+    {"questionId": 2, "choiceId": 5}
   ]
 }
 
-### Update a choice selection (change from one choice to another)
-PUT {{baseUrl}}/api/v1/attempt-choices/{{attemptChoiceAttemptId}}/{{attemptChoiceQuestionId}}/{{attemptChoiceChoiceId}}
+### Complete attempt
+POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/complete
+Accept: application/json
+
+### Retry quiz (creates new attempt)
+POST {{baseUrl}}/api/v1/attempts/retry
 Content-Type: application/json
 
 {
-  "newChoiceId": 2
+  "quizId": {{quizId}}
 }
 
-### Remove a specific choice selection
-DELETE {{baseUrl}}/api/v1/attempt-choices/{{attemptChoiceAttemptId}}/{{attemptChoiceQuestionId}}/{{attemptChoiceChoiceId}}
-
-### Remove all choice selections for an attempt
-DELETE {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}
-
-### Check if a question has been answered in an attempt
-GET {{baseUrl}}/api/v1/attempt-choices/attempt/{{attemptChoiceAttemptId}}/question/{{attemptChoiceQuestionId}}/answered
+### Get user statistics
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/stats
 Accept: application/json
 
 ########################################################
-# ATTEMPT TEXT ANSWERS
+# AUTOMATIC SCORING TESTS - Text Answer Evaluation
 ########################################################
 
-# ----------------------
-# IDs that will populate
-# ----------------------
-@attemptTextAttemptId = 1
-@attemptTextQuestionId = 7
-
-### Get a specific text answer by composite ID
-GET {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}
-Accept: application/json
-
-### Get a text answer for a specific attempt and question (alternative endpoint)
-GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/question/{{attemptTextQuestionId}}
-Accept: application/json
-
-### Get all text answers for an attempt
-GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}
-Accept: application/json
-
-### Get text answer statistics for an attempt
-GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/stats
-Accept: application/json
-
-### Submit a single text answer
+### Submit text answer (automatically scored)
 POST {{baseUrl}}/api/v1/attempt-text-answers
 Content-Type: application/json
 
 {
-  "attemptId": {{attemptTextAttemptId}},
-  "questionId": {{attemptTextQuestionId}},
-  "answerText": "React hooks allow functional components to use state and lifecycle methods. The most common hooks are useState for state management and useEffect for side effects."
+  "attemptId": {{attemptId}},
+  "questionId": {{questionId}},
+  "answerText": "React hooks allow functional components to use state and lifecycle methods. useState manages state while useEffect handles side effects like data fetching."
 }
 
-### Submit multiple text answers in batch
+### Update text answer (automatically re-scored)
+PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/{{questionId}}
+Content-Type: application/json
+
+{
+  "answerText": "React hooks are functions that let you use state and lifecycle features in functional components. The most common hooks are useState and useEffect."
+}
+
+### Submit multiple text answers (batch with automatic scoring)
 POST {{baseUrl}}/api/v1/attempt-text-answers/batch
 Content-Type: application/json
 
 {
-  "attemptId": {{attemptTextAttemptId}},
+  "attemptId": {{attemptId}},
   "textAnswers": [
     {
       "questionId": 7,
@@ -504,125 +125,74 @@ Content-Type: application/json
     {
       "questionId": 8,
       "answerText": "useEffect is used for side effects like data fetching, subscriptions, event listeners, and DOM manipulation."
-    },
-    {
-      "questionId": 9,
-      "answerText": "useState returns an array with two elements: the current state value and a function to update it."
     }
   ]
 }
 
-### Update a text answer (before grading)
-PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}
-Content-Type: application/json
+### Get text answer with automatic scoring results
+GET {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/{{questionId}}
+Accept: application/json
 
-{
-  "answerText": "React hooks allow functional components to use state and lifecycle methods. useState manages component state, useEffect handles side effects, and there are many other hooks like useContext, useReducer, etc."
-}
-
-### Grade a text answer (admin/teacher functionality)
-PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}/grade
-Content-Type: application/json
-
-{
-  "score": 85,
-  "isCorrect": true,
-  "feedback": "Excellent explanation of React hooks! You covered the main concepts well. Consider adding examples of how to use useState and useEffect for even better answers."
-}
-
-### Get all unscored text answers (for grading interface)
+### Get all unscored text answers (should be empty with automatic scoring)
 GET {{baseUrl}}/api/v1/attempt-text-answers/unscored
 Accept: application/json
 
-### Get unscored text answers for a specific attempt
-GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/unscored
-Accept: application/json
-
-### Remove a specific text answer
-DELETE {{baseUrl}}/api/v1/attempt-text-answers/{{attemptTextAttemptId}}/{{attemptTextQuestionId}}
-
-### Remove all text answers for an attempt
-DELETE {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}
-
-### Check if a text question has been answered in an attempt
-GET {{baseUrl}}/api/v1/attempt-text-answers/attempt/{{attemptTextAttemptId}}/question/{{attemptTextQuestionId}}/answered
-Accept: application/json
-
-########################################################
-# COMPLETE QUIZ WORKFLOW EXAMPLE
-########################################################
-
-### 1. Generate questions (creates quiz + first attempt automatically)
-POST {{baseUrl}}/api/v1/questions/generate
+### Manual grade override (admin function)
+PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/{{questionId}}/grade
 Content-Type: application/json
 
 {
-  "userId": "{{userId}}",
-  "categoryId": {{childCategoryId}},
-  "total": 5,
-  "modeOverride": null
-}
-
-### 2. Get the generated quiz details
-GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
-Accept: application/json
-
-### 3. Get the auto-created attempt
-GET {{baseUrl}}/api/v1/attempts/quiz/{{quizId}}/latest
-Accept: application/json
-
-### 4. Submit choice answers (batch)
-POST {{baseUrl}}/api/v1/attempt-choices/batch
-Content-Type: application/json
-
-{
-  "attemptId": {{attemptId}},
-  "selectedChoices": [
-    {"questionId": 148, "choiceId": 1},
-    {"questionId": 413, "choiceId": 5}
-  ]
-}
-
-### 5. Submit text answers (batch)
-POST {{baseUrl}}/api/v1/attempt-text-answers/batch
-Content-Type: application/json
-
-{
-  "attemptId": {{attemptId}},
-  "textAnswers": [
-    {
-      "questionId": 7,
-      "answerText": "React hooks allow functional components to use state."
-    }
-  ]
-}
-
-### 6. Complete the attempt
-POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/complete
-Accept: application/json
-
-### 7. View detailed attempt results
-GET {{baseUrl}}/api/v1/attempts/{{attemptId}}/detailed
-Accept: application/json
-
-### 8. Grade text answers (admin/teacher)
-PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/7/grade
-Content-Type: application/json
-
-{
-  "score": 80,
+  "score": 95,
   "isCorrect": true,
-  "feedback": "Good basic understanding. Could be more detailed."
+  "feedback": "Excellent answer! Manual override applied."
 }
 
-### 9. Retry the same quiz (creates new attempt)
-POST {{baseUrl}}/api/v1/attempts/retry
-Content-Type: application/json
+########################################################
+# REFERENCE ENDPOINTS - Individual API Testing
+########################################################
 
-{
-  "quizId": {{quizId}}
-}
-
-### 10. View user statistics
-GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/stats
+### List root categories
+GET {{baseUrl}}/api/v1/categories/roots
 Accept: application/json
+
+### Get category details
+GET {{baseUrl}}/api/v1/categories/{{categoryId}}
+Accept: application/json
+
+### Get question by ID (with choices)
+GET {{baseUrl}}/api/v1/questions/{{questionId}}
+Accept: application/json
+
+### Get choices for a question
+GET {{baseUrl}}/api/v1/choices/question/{{questionId}}
+Accept: application/json
+
+### Get open answers for a question
+GET {{baseUrl}}/api/v1/open-answers/question/{{questionId}}
+Accept: application/json
+
+### Get user details
+GET {{baseUrl}}/api/v1/users/{{userId}}
+Accept: application/json
+
+### Get all attempts for a user
+GET {{baseUrl}}/api/v1/attempts/user/{{userId}}
+Accept: application/json
+
+########################################################
+# AUTOMATED TESTING SCRIPT INTEGRATION
+########################################################
+
+### Run the automated test script from terminal:
+### cd /Users/yoann/dev/bell-ringer
+### ./test-automatic-scoring.sh
+###
+### The script will:
+### 1. Check application connectivity
+### 2. Create test user
+### 3. Generate quiz with questions
+### 4. Submit text answers with automatic scoring
+### 5. Test answer updates with re-scoring
+### 6. Verify automatic scoring functionality
+###
+### Expected output: Automatic scoring working confirmation
