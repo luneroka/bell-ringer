@@ -1,363 +1,364 @@
 -- =======================================================
--- Bell-Ringer: Seed 24 React Questions for Testing (Postgres)
+-- Bell-Ringer — Flat Categories + Bulk Questions Seed
+-- Compatible with the existing schema from data.sql
 -- =======================================================
--- Use as Spring Boot startup data:
---   Save as: src/main/resources/data.sql
--- Or run manually via psql:
---   psql -d your_database -f seed_questions_large.sql
--- NOTE: This file uses category_id = 2.
---       Replace all occurrences of 2 with your actual childCategoryId if needed.
---       (Search/replace: ' category_id, ' lines and ' WHERE category_id = 2 ' checks.)
--- Safe to re-run in dev if you clear previous seed rows for category_id = 2.
--- -----------------------------------------------------------------------
--- OPTIONAL: Clean (uncomment carefully in a dev DB)
+
+-- --------------------------------------
+-- (Optional) DEV CLEANUP — use carefully
+-- --------------------------------------
 -- DELETE FROM attempt_answers;
 -- DELETE FROM attempts;
 -- DELETE FROM quiz_questions;
--- DELETE FROM choices WHERE question_id IN (SELECT id FROM questions WHERE category_id = 2);
--- DELETE FROM open_answers WHERE question_id IN (SELECT id FROM questions WHERE category_id = 2);
--- DELETE FROM questions WHERE category_id = 2;
--- -----------------------------------------------------------------------
+-- DELETE FROM choices WHERE question_id IN (SELECT id FROM questions);
+-- DELETE FROM open_answers WHERE question_id IN (SELECT id FROM questions);
+-- DELETE FROM questions;
+-- DELETE FROM categories;
 
--- Ensure parent and child categories exist (idempotent)
-INSERT INTO categories(name, slug, parent_id, created_at, updated_at)
-VALUES ('Frontend', 'frontend', NULL, NOW(), NOW())
-ON CONFLICT (slug)
-    DO UPDATE SET name = EXCLUDED.name, updated_at = NOW();
+-- ==========================================
+-- 1) Create Parent Categories (Areas)
+-- ==========================================
+INSERT INTO categories (name, slug, parent_id, created_at, updated_at)
+VALUES
+  ('Frontend', 'frontend', NULL, NOW(), NOW()),
+  ('Backend', 'backend', NULL, NOW(), NOW()),
+  ('Data', 'data', NULL, NOW(), NOW()),
+  ('DevOps', 'devops', NULL, NOW(), NOW())
+ON CONFLICT (slug) DO UPDATE
+SET name = EXCLUDED.name,
+    updated_at = NOW();
 
-INSERT INTO categories(name, slug, parent_id, created_at, updated_at)
-VALUES ('React Hooks', 'frontend-react-hooks', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW())
-ON CONFLICT (slug)
-    DO UPDATE SET name = EXCLUDED.name,
-                  parent_id = (SELECT id FROM categories WHERE slug = 'frontend'),
-                  updated_at = NOW();
+-- ==========================================
+-- 2) Create Child Categories under Parents
+-- ==========================================
+INSERT INTO categories (name, slug, parent_id, created_at, updated_at)
+VALUES
+  -- Frontend children
+  ('HTML & Accessibility', 'frontend-html-accessibility', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  ('CSS Fundamentals', 'frontend-css-fundamentals', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  ('TailwindCSS', 'frontend-tailwindcss', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  ('JavaScript Basics', 'frontend-frontend-javascript-basics', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  ('DOM Manipulation', 'frontend-dom-manipulation', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  ('React Fundamentals', 'frontend-react-fundamentals', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  ('React Hooks', 'frontend-react-hooks', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  ('State Management', 'frontend-state-management', (SELECT id FROM categories WHERE slug = 'frontend'), NOW(), NOW()),
+  
+  -- Backend children
+  ('Node.js Basics', 'backend-nodejs-basics', (SELECT id FROM categories WHERE slug = 'backend'), NOW(), NOW()),
+  ('Express.js', 'backend-expressjs', (SELECT id FROM categories WHERE slug = 'backend'), NOW(), NOW()),
+  ('Java Spring Boot', 'backend-java-spring-boot', (SELECT id FROM categories WHERE slug = 'backend'), NOW(), NOW()),
+  ('API Design & REST', 'backend-api-design-rest', (SELECT id FROM categories WHERE slug = 'backend'), NOW(), NOW()),
+  ('Authentication', 'backend-authentication', (SELECT id FROM categories WHERE slug = 'backend'), NOW(), NOW()),
+  ('Python & Flask', 'backend-python-flask', (SELECT id FROM categories WHERE slug = 'backend'), NOW(), NOW()),
+  
+  -- Data children
+  ('SQL Basics', 'data-data-sql-basics', (SELECT id FROM categories WHERE slug = 'data'), NOW(), NOW()),
+  ('PostgreSQL Advanced', 'data-postgresql-advanced', (SELECT id FROM categories WHERE slug = 'data'), NOW(), NOW()),
+  ('MongoDB Basics', 'data-mongodb-basics', (SELECT id FROM categories WHERE slug = 'data'), NOW(), NOW()),
+  ('Data Modeling', 'data-modeling-principles', (SELECT id FROM categories WHERE slug = 'data'), NOW(), NOW()),
+  
+  -- DevOps children
+  ('Git & GitHub', 'devops-devops-git-github', (SELECT id FROM categories WHERE slug = 'devops'), NOW(), NOW()),
+  ('Docker Fundamentals', 'devops-devops-docker-fundamentals', (SELECT id FROM categories WHERE slug = 'devops'), NOW(), NOW()),
+  ('CI/CD Basics', 'devops-cicd-basics', (SELECT id FROM categories WHERE slug = 'devops'), NOW(), NOW()),
+  ('Cloud Deployment', 'devops-cloud-deployment', (SELECT id FROM categories WHERE slug = 'devops'), NOW(), NOW())
+ON CONFLICT (slug) DO UPDATE
+SET name = EXCLUDED.name,
+    parent_id = EXCLUDED.parent_id,
+    updated_at = NOW();
 
--- =======================
--- EASY (8 questions)
--- =======================
+-- =======================================================
+-- 2) SEED QUESTIONS (mix of types & difficulties)
+--    You can duplicate these blocks for more categories.
+--    Categories included below:
+--    - react-hooks
+--    - python-flask
+--    - frontend-javascript-basics
+--    - data-sql-basics
+--    - devops-git-github
+--    - devops-docker-fundamentals
+-- =======================================================
 
+-- ==========================
+-- Category: React Hooks
+-- Slug: frontend-react-hooks
+-- ==========================
+
+-- EASY — TRUE_FALSE
 WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY', 'What is React primarily used for?', NOW(), NOW())
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY',
+          'useState returns an array with [state, setState].', NOW(), NOW())
   RETURNING id
 )
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('Building user interfaces', TRUE),
-  ('Managing databases', FALSE),
-  ('Server-side rendering only', FALSE),
-  ('Styling with CSS only', FALSE)
-) AS v(txt, ok);
-
--- E2 TRUE_FALSE (fixed)
-WITH q AS (
-    INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-        VALUES (
-                   'TRUE_FALSE',
-                   (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'),
-                   'EASY',
-                   'React uses a virtual DOM to optimize updates.',
-                   NOW(), NOW()
-               )
-        RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
+INSERT INTO choices (question_id, choice_text, is_correct)
 SELECT id, v.txt, v.ok
-FROM q
-         CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
+FROM q CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
 
+-- EASY — UNIQUE_CHOICE
 WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY', 'Which of the following are React features?', NOW(), NOW())
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY',
+          'Which hook is intended for side effects?', NOW(), NOW())
   RETURNING id
 )
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('Component-based architecture', TRUE),
-  ('One-way data flow', TRUE),
-  ('Built-in routing', FALSE),
-  ('Template-based rendering like AngularJS', FALSE)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('useEffect', TRUE), ('useMemo', FALSE), ('useId', FALSE), ('useState', FALSE)) AS v(txt, ok);
+
+-- MEDIUM — MULTIPLE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM',
+          'Which help prevent unnecessary re-renders?', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('React.memo', TRUE), ('useCallback', TRUE), ('Mutating props', FALSE), ('Always inline new functions', FALSE)) AS v(txt, ok);
+
+-- HARD — SHORT_ANSWER
+INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD',
+        'Name the hook that memoizes a function and returns a stable reference.', NOW(), NOW());
+
+WITH q AS (
+  SELECT id FROM questions
+  WHERE question = 'Name the hook that memoizes a function and returns a stable reference.'
+    AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
+)
+INSERT INTO open_answers (question_id, answer, rubric_keywords, min_score)
+SELECT id, 'useCallback', '{"must":["useCallback"],"should":["stable reference","memoize","dependencies"]}', 75 FROM q;
+
+-- ==========================
+-- Category: Python & Flask
+-- Slug: backend-python-flask
+-- ==========================
+
+-- EASY — UNIQUE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'backend-python-flask'), 'EASY',
+          'Which command runs a Flask app with auto-reload (Flask ≥2)?', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('flask run --debug', TRUE), ('flask serve', FALSE), ('python app.py --dev', FALSE), ('flask dev', FALSE)) AS v(txt, ok);
+
+-- MEDIUM — TRUE_FALSE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'backend-python-flask'), 'MEDIUM',
+          'Blueprints help modularize routes and assets.', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
+
+-- MEDIUM — SHORT_ANSWER
+INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'backend-python-flask'), 'MEDIUM',
+        'Name a common Flask DB integration extension.', NOW(), NOW());
+
+WITH q AS (
+  SELECT id FROM questions
+  WHERE question = 'Name a common Flask DB integration extension.'
+    AND category_id = (SELECT id FROM categories WHERE slug = 'backend-python-flask')
+)
+INSERT INTO open_answers (question_id, answer, rubric_keywords, min_score)
+SELECT id, 'Flask SQLAlchemy', '{"must":["SQLAlchemy"],"should":["ORM","flask_sqlalchemy"]}', 70 FROM q;
+
+-- HARD — MULTIPLE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'backend-python-flask'), 'HARD',
+          'Secure practices for secrets/config in Flask include:', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES
+  ('Environment variables / secrets manager', TRUE),
+  ('Hard-coding secrets in views', FALSE),
+  ('app.config.from_envvar / from_mapping safely', TRUE),
+  ('Committing .env with real creds', FALSE)
 ) AS v(txt, ok);
 
-INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY', 'Which hook is used to manage state in a function component?', NOW(), NOW());
+-- ==========================
+-- Category: JavaScript Basics
+-- Slug: frontend-javascript-basics
+-- ==========================
 
+-- EASY — TRUE_FALSE
 WITH q AS (
-  SELECT id FROM questions WHERE question = 'Which hook is used to manage state in a function component?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, min_score)
-SELECT id, 'useState', 60 FROM q;
-
--- Additional comprehensive answer
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'Which hook is used to manage state in a function component?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useState is a React hook that allows functional components to have state by returning a state variable and a setter function.', '{"must": ["useState", "state"], "should": ["hook", "functional components", "setter function"]}', 70 FROM q;
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY', 'JSX compiles down to calls to which function by default?', NOW(), NOW())
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'frontend-javascript-basics'), 'EASY',
+          '`const` creates a block-scoped binding.', NOW(), NOW())
   RETURNING id
 )
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('React.createElement', TRUE),
-  ('document.createElement', FALSE),
-  ('createJSX', FALSE),
-  ('renderJSX', FALSE)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
+
+-- MEDIUM — UNIQUE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-javascript-basics'), 'MEDIUM',
+          'Which operator checks both value and type equality?', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('===', TRUE), ('==', FALSE), ('=', FALSE), ('!==', FALSE)) AS v(txt, ok);
+
+-- HARD — MULTIPLE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-javascript-basics'), 'HARD',
+          'Which are falsy in JavaScript?', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES
+  ('0', TRUE), ('''', TRUE), ('undefined', TRUE), ('[]', FALSE)
 ) AS v(txt, ok);
 
+-- ==========================
+-- Category: SQL Basics
+-- Slug: data-sql-basics
+-- ==========================
+
+-- EASY — UNIQUE_CHOICE
 WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY', 'Props are mutable from inside the receiving component.', NOW(), NOW())
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'data-sql-basics'), 'EASY',
+          'Which keyword removes duplicate rows in a SELECT?', NOW(), NOW())
   RETURNING id
 )
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES ('True', FALSE), ('False', TRUE)) AS v(txt, ok);
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('DISTINCT', TRUE), ('GROUP BY', FALSE), ('UNIQUE', FALSE), ('FILTER', FALSE)) AS v(txt, ok);
+
+-- MEDIUM — SHORT_ANSWER
+INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'data-sql-basics'), 'MEDIUM',
+        'Write a WHERE clause to filter rows where price is greater than 100.', NOW(), NOW());
 
 WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY', 'Pick valid places to use JSX expressions.', NOW(), NOW())
+  SELECT id FROM questions
+  WHERE question = 'Write a WHERE clause to filter rows where price is greater than 100.'
+    AND category_id = (SELECT id FROM categories WHERE slug = 'data-sql-basics')
+)
+INSERT INTO open_answers (question_id, answer, rubric_keywords, min_score)
+SELECT id, 'WHERE price > 100', '{"must":["price > 100"],"should":["WHERE"]}', 70 FROM q;
+
+-- HARD — MULTIPLE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'data-sql-basics'), 'HARD',
+          'Which statements about indexes are true?', NOW(), NOW())
   RETURNING id
 )
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('Inside component return()', TRUE),
-  ('Inside attribute values', TRUE),
-  ('Outside any React file only', FALSE),
-  ('In plain HTML files at runtime', FALSE)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES
+  ('Indexes can speed up reads', TRUE),
+  ('Indexes always speed up writes', FALSE),
+  ('A bad index can hurt performance', TRUE),
+  ('Indexes are ignored in JOINs', FALSE)
 ) AS v(txt, ok);
 
-INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'EASY', 'Name the hook used to access a mutable value that persists across renders without causing re-renders.', NOW(), NOW());
+-- ==========================
+-- Category: Git & GitHub
+-- Slug: devops-git-github
+-- ==========================
+
+-- EASY — TRUE_FALSE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'devops-git-github'), 'EASY',
+          'A fast-forward merge moves the branch pointer without a new merge commit.', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
+
+-- MEDIUM — UNIQUE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'devops-git-github'), 'MEDIUM',
+          'Which command stages *all* modified and deleted files?', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('git add -A', TRUE), ('git add .', FALSE), ('git stage *', FALSE), ('git commit -a', FALSE)) AS v(txt, ok);
+
+-- HARD — SHORT_ANSWER
+INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'devops-git-github'), 'HARD',
+        'What option prevents fast-forward on merge to force a merge commit?', NOW(), NOW());
 
 WITH q AS (
-  SELECT id FROM questions WHERE question = 'Name the hook used to access a mutable value that persists across renders without causing re-renders.' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
+  SELECT id FROM questions
+  WHERE question = 'What option prevents fast-forward on merge to force a merge commit?'
+    AND category_id = (SELECT id FROM categories WHERE slug = 'devops-git-github')
 )
-INSERT INTO open_answers(question_id, answer, min_score)
-SELECT id, 'useRef', 60 FROM q;
+INSERT INTO open_answers (question_id, answer, rubric_keywords, min_score)
+SELECT id, '--no-ff', '{"must":["--no-ff"],"should":["merge"]}', 70 FROM q;
 
--- Additional comprehensive answer
+-- ==========================
+-- Category: Docker Fundamentals
+-- Slug: devops-docker-fundamentals
+-- ==========================
+
+-- EASY — TRUE_FALSE
 WITH q AS (
-  SELECT id FROM questions WHERE question = 'Name the hook used to access a mutable value that persists across renders without causing re-renders.' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'devops-docker-fundamentals'), 'EASY',
+          'A Docker image is an immutable snapshot used to create containers.', NOW(), NOW())
+  RETURNING id
 )
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useRef creates a mutable ref object that persists across renders and does not trigger re-renders when its value changes, commonly used for DOM element access.', '{"must": ["useRef", "mutable", "persists"], "should": ["re-renders", "DOM element", "ref object"]}', 75 FROM q;
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
+
+-- MEDIUM — UNIQUE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'devops-docker-fundamentals'), 'MEDIUM',
+          'Which command builds an image from a Dockerfile in the current directory?', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES ('docker build .', TRUE), ('docker make .', FALSE), ('docker image create .', FALSE), ('docker compose up --build', FALSE)) AS v(txt, ok);
+
+-- HARD — MULTIPLE_CHOICE
+WITH q AS (
+  INSERT INTO questions (type, category_id, difficulty, question, created_at, updated_at)
+  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'devops-docker-fundamentals'), 'HARD',
+          'Good practices for small, secure images include:', NOW(), NOW())
+  RETURNING id
+)
+INSERT INTO choices (question_id, choice_text, is_correct)
+SELECT id, v.txt, v.ok FROM q
+CROSS JOIN (VALUES
+  ('Use slim/alpine base images when appropriate', TRUE),
+  ('Copy only required artifacts', TRUE),
+  ('Run as root in production images', FALSE),
+  ('Bake secrets into the image', FALSE)
+) AS v(txt, ok);
 
 -- =======================
--- MEDIUM (8 questions)
+-- Optional sanity checks
 -- =======================
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'What prop must be supplied when rendering lists in React?', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('key', TRUE),
-  ('id', FALSE),
-  ('index', FALSE),
-  ('ref', FALSE)
-) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'useEffect runs synchronously before the browser paints.', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES ('True', FALSE), ('False', TRUE)) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'Which hooks trigger side effects or lifecycle-like behavior?', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('useEffect', TRUE),
-  ('useLayoutEffect', TRUE),
-  ('useMemo', FALSE),
-  ('useId', FALSE)
-) AS v(txt, ok);
-
-INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'What hook memoizes a computed value based on dependencies?', NOW(), NOW());
-
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'What hook memoizes a computed value based on dependencies?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useMemo', '{"must": ["useMemo", "memoization"], "should": ["dependencies", "performance", "optimization"]}', 65 FROM q;
-
--- Additional comprehensive answer
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'What hook memoizes a computed value based on dependencies?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useMemo is a React hook that memoizes expensive computations to avoid recalculating them on every render, only recalculating when dependencies change.', '{"must": ["useMemo", "memoization", "dependencies"], "should": ["performance", "expensive", "recalculate", "render"]}', 75 FROM q;
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'Which pattern helps avoid unnecessary re-renders when passing callbacks?', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('useCallback', TRUE),
-  ('Passing new inline functions every render', FALSE),
-  ('Mutating props before passing', FALSE),
-  ('Using global variables', FALSE)
-) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'Context provides a way to pass data through the component tree without prop drilling.', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'Which are valid ways to optimize expensive recalculations?', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('useMemo', TRUE),
-  ('Memoizing selectors', TRUE),
-  ('Mutating React state directly', FALSE),
-  ('Re-rendering the whole tree', FALSE)
-) AS v(txt, ok);
-
-INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'MEDIUM', 'Which hook is used to imperatively access a child component DOM node?', NOW(), NOW());
-
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'Which hook is used to imperatively access a child component DOM node?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, min_score)
-SELECT id, 'useRef', 65 FROM q;
-
--- Additional comprehensive answer
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'Which hook is used to imperatively access a child component DOM node?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useRef hook creates a reference that can be attached to DOM elements, allowing imperative access to child component DOM nodes for operations like focus or scrolling.', '{"must": ["useRef", "DOM", "imperative"], "should": ["reference", "elements", "focus", "child component"]}', 75 FROM q;
-
--- =======================
--- HARD (8 questions)
--- =======================
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'What reconciler strategy helps React efficiently update the UI?', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('Diffing with heuristics', TRUE),
-  ('Full DOM re-render on every change', FALSE),
-  ('Manual DOM patching by the developer', FALSE),
-  ('Shadow DOM from the browser', FALSE)
-) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'useLayoutEffect runs after the browser paints the screen.', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES ('True', FALSE), ('False', TRUE)) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'Which patterns help avoid unnecessary re-renders?', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('React.memo', TRUE),
-  ('useCallback', TRUE),
-  ('Always inline arrow functions in JSX', FALSE),
-  ('Mutating props before passing', FALSE)
-) AS v(txt, ok);
-
-INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'Name the hook that memoizes a callback function.', NOW(), NOW());
-
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'Name the hook that memoizes a callback function.' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useCallback', '{"must": ["useCallback", "memoization"], "should": ["callback", "function", "performance"]}', 70 FROM q;
-
--- Additional comprehensive answer
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'Name the hook that memoizes a callback function.' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useCallback is a React hook that returns a memoized version of a callback function that only changes if one of its dependencies has changed, preventing unnecessary re-renders.', '{"must": ["useCallback", "memoized", "callback"], "should": ["dependencies", "re-renders", "performance", "function"]}', 80 FROM q;
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('UNIQUE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'Which scheduling mechanism can React use to prioritize rendering?', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('Cooperative scheduling', TRUE),
-  ('Always synchronous blocking', FALSE),
-  ('Global microtask queue only', FALSE),
-  ('Mutation observers only', FALSE)
-) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('TRUE_FALSE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'Keys help React identify which items have changed in a list.', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES ('True', TRUE), ('False', FALSE)) AS v(txt, ok);
-
-WITH q AS (
-  INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-  VALUES ('MULTIPLE_CHOICE', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'Pick techniques to prevent prop-drilling or manage state at scale.', NOW(), NOW())
-  RETURNING id
-)
-INSERT INTO choices(question_id, choice_text, is_correct)
-SELECT id, v.txt, v.ok FROM q CROSS JOIN (VALUES
-  ('Context', TRUE),
-  ('Redux or other state libs', TRUE),
-  ('Mutating state in-place', FALSE),
-  ('Keeping all state in the root only', FALSE)
-) AS v(txt, ok);
-
-INSERT INTO questions(type, category_id, difficulty, question, created_at, updated_at)
-VALUES ('SHORT_ANSWER', (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'), 'HARD', 'Which hook memoizes a function and returns a stable reference across renders?', NOW(), NOW());
-
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'Which hook memoizes a function and returns a stable reference across renders?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useCallback', '{"must": ["useCallback", "stable reference"], "should": ["memoizes", "renders", "function"]}', 70 FROM q;
-
--- Additional comprehensive answer
-WITH q AS (
-  SELECT id FROM questions WHERE question = 'Which hook memoizes a function and returns a stable reference across renders?' AND category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks')
-)
-INSERT INTO open_answers(question_id, answer, rubric_keywords, min_score)
-SELECT id, 'useCallback hook memoizes functions and returns a stable reference that persists across renders unless dependencies change, helping to prevent child component re-renders.', '{"must": ["useCallback", "stable reference", "memoizes"], "should": ["dependencies", "re-renders", "child component", "persists"]}', 75 FROM q;
-
--- =======================
--- Sanity checks (optional)
--- =======================
--- SELECT difficulty, type, COUNT(*) FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks') GROUP BY difficulty, type ORDER BY difficulty, type;
--- SELECT COUNT(*) FROM choices WHERE question_id IN (SELECT id FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'));
--- SELECT COUNT(*) FROM open_answers WHERE question_id IN (SELECT id FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks'));
--- SELECT * FROM questions WHERE category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks') ORDER BY id;
--- SELECT oa.*, q.question FROM open_answers oa JOIN questions q ON oa.question_id = q.id WHERE q.category_id = (SELECT id FROM categories WHERE slug = 'frontend-react-hooks') ORDER BY oa.id;
+-- SELECT c.slug, q.difficulty, q.type, COUNT(*) AS cnt
+-- FROM questions q
+-- JOIN categories c ON c.id = q.category_id
+-- WHERE c.slug IN ('react-hooks','python-flask','frontend-javascript-basics','data-sql-basics','devops-git-github','devops-docker-fundamentals')
+-- GROUP BY c.slug, q.difficulty, q.type
+-- ORDER BY c.slug, q.difficulty, q.type;
