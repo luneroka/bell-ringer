@@ -5,6 +5,9 @@ target/
 !**/src/test/**/target/
 /backend/target
 .env
+fix_open_answers_import.sql
+AUTOMATIC_SCORING_TEST.md
+test-automatic-scoring.sh
 
 ### STS ###
 .apt_generated

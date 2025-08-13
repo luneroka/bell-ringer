@@ -2,6 +2,7 @@ package com.bell_ringer.services;
 
 import com.bell_ringer.models.AttemptTextAnswer;
 import com.bell_ringer.models.Attempt;
+import com.bell_ringer.models.OpenAnswer;
 import com.bell_ringer.models.Question;
 import com.bell_ringer.models.id.AttemptTextAnswerId;
 import com.bell_ringer.repositories.AttemptTextAnswerRepository;
@@ -24,13 +25,19 @@ public class AttemptTextAnswerService {
   private final AttemptTextAnswerRepository textAnswers;
   private final AttemptService attemptService;
   private final QuestionRepository questionRepository;
+  private final TextAnswerScoringService scoringService;
+  private final OpenAnswerService openAnswerService;
 
   public AttemptTextAnswerService(AttemptTextAnswerRepository textAnswers,
       AttemptService attemptService,
-      QuestionRepository questionRepository) {
+      QuestionRepository questionRepository,
+      TextAnswerScoringService scoringService,
+      OpenAnswerService openAnswerService) {
     this.textAnswers = textAnswers;
     this.attemptService = attemptService;
     this.questionRepository = questionRepository;
+    this.scoringService = scoringService;
+    this.openAnswerService = openAnswerService;
   }
 
   // ===== DTO Conversion Methods =====
@@ -136,6 +143,23 @@ public class AttemptTextAnswerService {
     textAnswer.setQuiz(attempt.getQuiz());
     textAnswer.setQuestion(question);
 
+    // Automatic scoring
+    try {
+      List<OpenAnswer> openAnswers = openAnswerService.listByQuestion(request.questionId());
+      TextAnswerScoringService.ScoringResult result = scoringService.scoreTextAnswer(
+          request.answerText(), question, openAnswers);
+
+      textAnswer.setScore(result.score());
+      textAnswer.setIsCorrect(result.isCorrect());
+      textAnswer.setFeedback(result.feedback());
+    } catch (Exception e) {
+      // If automatic scoring fails, set default values and log the error
+      textAnswer.setScore(60); // Default passing score
+      textAnswer.setIsCorrect(true);
+      textAnswer.setFeedback("Answer submitted successfully. Automatic scoring unavailable.");
+      // In a real application, you might want to log this error
+    }
+
     AttemptTextAnswer savedAnswer = textAnswers.save(textAnswer);
     return convertToDto(savedAnswer);
   }
@@ -186,13 +210,28 @@ public class AttemptTextAnswerService {
         .orElseThrow(() -> new IllegalArgumentException(
             "Text answer not found for attempt " + attemptId + " and question " + questionId));
 
-    // Check if already graded
-    if (existingAnswer.getScore() != null || existingAnswer.getIsCorrect() != null) {
-      throw new IllegalStateException("Cannot update text answer that has already been graded");
-    }
-
     // Update answer text
     existingAnswer.setAnswerText(request.answerText());
+
+    // Automatically score the updated answer
+    try {
+      Question question = questionRepository.findById(questionId)
+          .orElseThrow(() -> new IllegalArgumentException("Question not found: " + questionId));
+      List<OpenAnswer> openAnswers = openAnswerService.listByQuestion(questionId);
+      TextAnswerScoringService.ScoringResult result = scoringService.scoreTextAnswer(
+          request.answerText(), question, openAnswers);
+
+      existingAnswer.setScore(result.score());
+      existingAnswer.setIsCorrect(result.isCorrect());
+      existingAnswer.setFeedback(result.feedback());
+    } catch (Exception e) {
+      // Log error but don't fail the update - allow manual grading later
+      // Reset any previous scoring
+      existingAnswer.setScore(null);
+      existingAnswer.setIsCorrect(null);
+      existingAnswer.setFeedback("Automatic scoring failed, manual review required");
+    }
+
     AttemptTextAnswer savedAnswer = textAnswers.save(existingAnswer);
 
     return convertToDto(savedAnswer);

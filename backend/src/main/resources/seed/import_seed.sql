@@ -147,24 +147,26 @@ del_old_open_answers AS (
 -- Insert fresh open_answers for SHORT_ANSWER questions
 ins_open_answers AS (
   INSERT INTO open_answers (question_id, answer, rubric_keywords, min_score)
-  SELECT
+  SELECT DISTINCT
     u.question_id,
-    q.shortAnswer->>'answer' AS answer,
-    (q.shortAnswer->'rubric_keywords')::jsonb AS rubric_keywords,
-    COALESCE(NULLIF(q.shortAnswer->>'min_score','')::int, 70) AS min_score
-  FROM seed s
-  JOIN LATERAL jsonb_to_recordset(s.j->'categories')
-       AS cj(name text, slug text, description text, questions jsonb)
-       ON TRUE
-  JOIN cats ca ON ca.slug = cj.slug
-  JOIN LATERAL jsonb_to_recordset(cj.questions)
-       AS q(type text, difficulty text, question text, keywords jsonb, choices jsonb, explanations text, shortAnswer jsonb)
-       ON TRUE
-  JOIN upq u ON u.category_id = ca.id AND u.question = q.question
-  WHERE u.type = 'SHORT_ANSWER' 
-    AND q.shortAnswer IS NOT NULL
-    AND q.shortAnswer->>'answer' IS NOT NULL
-    AND trim(q.shortAnswer->>'answer') <> ''
+    jq.short_answer_data->>'answer' AS answer,
+    jq.short_answer_data->'rubric_keywords' AS rubric_keywords,
+    COALESCE((jq.short_answer_data->>'min_score')::int, 70) AS min_score
+  FROM seed s,
+       jsonb_to_recordset(s.j->'categories') AS cj(name text, slug text, questions jsonb),
+       jsonb_array_elements(cj.questions) AS q_elem,
+       LATERAL (SELECT 
+         cj.slug as category_slug,
+         q_elem->>'type' as q_type,
+         q_elem->>'question' as q_text,
+         q_elem->'shortAnswer' as short_answer_data
+       ) AS jq
+  JOIN cats ca ON ca.slug = jq.category_slug
+  JOIN upq u ON u.category_id = ca.id AND u.question = jq.q_text
+  WHERE jq.q_type = 'SHORT_ANSWER' 
+    AND jq.short_answer_data IS NOT NULL
+    AND jq.short_answer_data->>'answer' IS NOT NULL
+    AND trim(jq.short_answer_data->>'answer') <> ''
   RETURNING 1
 )
 SELECT 

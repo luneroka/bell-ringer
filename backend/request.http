@@ -11,7 +11,7 @@
 # ----------------------
 # IDs that will populate
 # ----------------------
-@userId = 1f84244e-f59e-405b-8987-4a01657af560
+@userId = 91cda570-c689-4703-b71e-08e2cdd1764e
 @parentCategoryId = 1
 @childCategoryId = 11
 
@@ -187,7 +187,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 5,
+  "total": 20,
   "modeOverride": null
 }
 
@@ -198,7 +198,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "categoryId": {{childCategoryId}},
-  "total": 5,
+  "total": 20,
   "modeOverride": null
 }
 
@@ -239,10 +239,10 @@ Accept: application/json
 # ----------------------
 # IDs that will populate
 # ----------------------
-@sAquestionId = 2
+@sAquestionId = 32
 
 ### Get open answer by ID
-GET http://localhost:8080/api/v1/open-answers/2
+GET http://localhost:8080/api/v1/open-answers/32
 Content-Type: application/json
 
 ### Get all open answers for a specific question
@@ -250,11 +250,11 @@ GET http://localhost:8080/api/v1/open-answers/question/{{sAquestionId}}
 Content-Type: application/json
 
 ### Search for open answer by question ID and answer text
-GET http://localhost:8080/api/v1/open-answers/search?questionId={{sAquestionId}}&answer=useState
+GET http://localhost:8080/api/v1/open-answers/search?questionId={{sAquestionId}}&answer=List only running containers.
 Content-Type: application/json
 
 ### Check if open answer exists
-GET http://localhost:8080/api/v1/open-answers/exists?questionId={{sAquestionId}}&answer=useState
+GET http://localhost:8080/api/v1/open-answers/exists?questionId={{sAquestionId}}&answer=List only running containers.
 Content-Type: application/json
 
 ### Get rubric information for an open answer
@@ -578,8 +578,8 @@ Content-Type: application/json
 {
   "attemptId": {{attemptId}},
   "selectedChoices": [
-    {"questionId": 1, "choiceId": 1},
-    {"questionId": 2, "choiceId": 5}
+    {"questionId": 148, "choiceId": 1},
+    {"questionId": 413, "choiceId": 5}
   ]
 }
 
