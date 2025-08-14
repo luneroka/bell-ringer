@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.google.firebase.auth.FirebaseToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 
 @Service
 public class UserService {
@@ -21,7 +24,43 @@ public class UserService {
     return userRepository.findAll();
   }
 
-  // CREATE USER
+  @Transactional
+  public User getCurrentUserOrThrow() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null || !auth.isAuthenticated()) {
+      throw new IllegalStateException("No authenticated user in context");
+    }
+
+    Object principal = auth.getPrincipal();
+    if (!(principal instanceof FirebaseToken token)) {
+      throw new IllegalStateException("Unexpected principal type");
+    }
+
+    // Upsert & return (keeps local profile fresh)
+    return syncFromToken(token);
+  }
+
+  // --- NEW: upsert user from a verified Firebase ID token ---
+  @Transactional
+  public User syncFromToken(FirebaseToken token) {
+    String uid = token.getUid();
+    String email = token.getEmail(); // may be null if provider didn’t supply one
+    Boolean emailVerified = token.isEmailVerified();
+    String displayName = token.getName();
+    String photoUrl = token.getPicture();
+
+    return upsertFromAuth(
+        "firebase",
+        uid,
+        email,
+        emailVerified,
+        displayName,
+        photoUrl
+    );
+  }
+
+
+/*  // CREATE USER
   @Transactional
   public User createUser(String email) {
     if (email == null || email.isBlank()) {
@@ -31,7 +70,7 @@ public class UserService {
     // Create a local user using a random auth UID; this keeps the method usable in dev/tests.
     String randomLocalUid = UUID.randomUUID().toString();
     return upsertFromAuth("local", randomLocalUid, normalized, false, null, null);
-  }
+  }*/
 
   // GET USER BY ID
   @Transactional(readOnly = true)

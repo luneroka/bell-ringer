@@ -5,9 +5,15 @@ target/
 !**/src/test/**/target/
 /backend/target
 .env
+.env.properties
 fix_open_answers_import.sql
 AUTOMATIC_SCORING_TEST.md
 test-automatic-scoring.sh
+serviceAccountKey.json
+
+# HTTP Client environment files with sensitive data
+http-client.private.env.json
+http-client.env.json
 
 ### STS ###
 .apt_generated

@@ -2,7 +2,6 @@ package com.bell_ringer.controllers;
 
 import com.bell_ringer.services.UserService;
 import com.bell_ringer.services.dto.UserRequest;
-import com.bell_ringer.services.dto.UserResponse;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.UUID;
@@ -38,14 +37,6 @@ public class UserController {
   @GetMapping("/{id}")
   public String getUserById(@PathVariable UUID id) {
     return userService.getUserById(id).getEmail();
-  }
-
-  // CREATE USER
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public UserResponse createUser(@Valid @RequestBody UserRequest.Create req) {
-    User user = userService.createUser(req.email());
-    return new UserResponse(user.getId(), user.getEmail());
   }
 
   // UPDATE USER
