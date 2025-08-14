@@ -1,32 +1,5 @@
-# ================================### 2. Authenticate & fetch current user (auto-creates locally) - /me endpoint
-GET {{baseUrl}}/me
-Accept: application/json
-Authorization: Bearer {{FIREBASE_ID_TOKEN}}
-
-> {%
-  const data = JSON.parse(response.body);
-  client.global.set("userId", data.id);
-%}
-
-### 2b. Get current user via unified users endpoint
-GET {{baseUrl}}/api/v1/users/me
-Accept: application/json
-Authorization: Bearer {{FIREBASE_ID_TOKEN}}
-
-### 2c. Update current user profile
-PUT {{baseUrl}}/api/v1/users/me
-Content-Type: application/json
-Authorization: Bearer {{FIREBASE_ID_TOKEN}}
-
-{
-  "displayName": "Updated Display Name",
-  "photoUrl": "https://example.com/new-photo.jpg"
-}
-
-### 2d. Get user by ID (admin operation)
-GET {{baseUrl}}/api/v1/users/{{userId}}
-Accept: application/json
-Authorization: Bearer {{FIREBASE_ID_TOKEN}}ll-Ringer API — Simplified Test Suite
+# ====================================
+# Bell-Ringer API — Simplified Test Suite
 # ====================================
 # How to use:
 # 1. Run the "Quick Setup" section first to create test data
@@ -35,7 +8,7 @@ Authorization: Bearer {{FIREBASE_ID_TOKEN}}ll-Ringer API — Simplified Test Sui
 # 4. Update IDs below as needed based on your responses
 
 @baseUrl = {{baseUrl}}
-@idToken = {{FIREBASE_ID_TOKEN}}
+@firebaseToken = {{FIREBASE_ID_TOKEN}}
 
 # ----------------------
 # Test Data IDs (update these based on your responses)
@@ -50,39 +23,48 @@ Authorization: Bearer {{FIREBASE_ID_TOKEN}}ll-Ringer API — Simplified Test Sui
 # QUICK SETUP - Run these first to create test data
 ########################################################
 
-### 0. Test idToken
+### 0. Test Firebase token
 GET https://httpbin.org/get
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### 1. Health check
 GET {{baseUrl}}/api/v1/users/ping
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
-
-### 2. Authenticate & fetch current user (auto-creates locally)
+### 2. Authenticate & fetch current user (auto-creates locally) - /me endpoint
 GET {{baseUrl}}/me
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 > {%
   const data = JSON.parse(response.body);
   client.global.set("userId", data.id);
 %}
 
-### /me with debug of {{idToken}}
-GET {{baseUrl}}/me
-Authorization: Bearer {{idToken}}
+### 2b. Get current user via unified users endpoint
+GET {{baseUrl}}/api/v1/users/me
+Accept: application/json
+Authorization: Bearer {{firebaseToken}}
 
-> {%
-    const t = "{{idToken}}";
-    client.log("idToken length: " + (t ? t.length : "null"));
-    if (t && t.length > 15) client.log("idToken starts with: " + t.substring(0, 15) + "...");
-%}
+### 2c. Update current user profile
+PUT {{baseUrl}}/api/v1/users/me
+Content-Type: application/json
+Authorization: Bearer {{firebaseToken}}
+
+{
+  "displayName": "Updated Display Name",
+  "photoUrl": "https://example.com/new-photo.jpg"
+}
+
+### 2d. Get user by ID (admin operation)
+GET {{baseUrl}}/api/v1/users/{{userId}}
+Accept: application/json
+Authorization: Bearer {{firebaseToken}}
 
 ### 3. Generate quiz with questions (creates quiz + first attempt)
 POST {{baseUrl}}/api/v1/questions/generate
 Content-Type: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 {
   "userId": "{{userId}}",
@@ -98,22 +80,22 @@ Authorization: Bearer {{idToken}}
 ### Get quiz details
 GET {{baseUrl}}/api/v1/quizzes/{{quizId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get latest attempt for quiz
 GET {{baseUrl}}/api/v1/attempts/quiz/{{quizId}}/latest
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get attempt with detailed answers
 GET {{baseUrl}}/api/v1/attempts/{{attemptId}}/detailed
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Submit multiple choice answers (batch)
 POST {{baseUrl}}/api/v1/attempt-choices/batch
 Content-Type: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 {
   "attemptId": {{attemptId}},
@@ -126,12 +108,12 @@ Authorization: Bearer {{idToken}}
 ### Complete attempt
 POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/complete
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Retry quiz (creates new attempt)
 POST {{baseUrl}}/api/v1/attempts/retry
 Content-Type: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 {
   "quizId": {{quizId}}
@@ -140,7 +122,7 @@ Authorization: Bearer {{idToken}}
 ### Get user statistics
 GET {{baseUrl}}/api/v1/attempts/user/{{userId}}/stats
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ########################################################
 # AUTOMATIC SCORING TESTS - Text Answer Evaluation
@@ -149,7 +131,7 @@ Authorization: Bearer {{idToken}}
 ### Submit text answer (automatically scored)
 POST {{baseUrl}}/api/v1/attempt-text-answers
 Content-Type: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 {
   "attemptId": {{attemptId}},
@@ -160,7 +142,7 @@ Authorization: Bearer {{idToken}}
 ### Update text answer (automatically re-scored)
 PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/{{questionId}}
 Content-Type: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 {
   "answerText": "Key prop"
@@ -169,7 +151,7 @@ Authorization: Bearer {{idToken}}
 ### Submit multiple text answers (batch with automatic scoring)
 POST {{baseUrl}}/api/v1/attempt-text-answers/batch
 Content-Type: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 {
   "attemptId": {{attemptId}},
@@ -188,17 +170,17 @@ Authorization: Bearer {{idToken}}
 ### Get text answer with automatic scoring results
 GET {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/{{questionId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get all unscored text answers (should be empty with automatic scoring)
 GET {{baseUrl}}/api/v1/attempt-text-answers/unscored
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Manual grade override (admin function)
 PUT {{baseUrl}}/api/v1/attempt-text-answers/{{attemptId}}/{{questionId}}/grade
 Content-Type: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 {
   "score": 95,
@@ -213,37 +195,37 @@ Authorization: Bearer {{idToken}}
 ### List root categories
 GET {{baseUrl}}/api/v1/categories/roots
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get category details
 GET {{baseUrl}}/api/v1/categories/{{categoryId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get question by ID (with choices)
 GET {{baseUrl}}/api/v1/questions/{{questionId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get choices for a question
 GET {{baseUrl}}/api/v1/choices/question/{{questionId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get open answers for a question
 GET {{baseUrl}}/api/v1/open-answers/question/{{questionId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get user details
 GET {{baseUrl}}/api/v1/users/{{userId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ### Get all attempts for a user
 GET {{baseUrl}}/api/v1/attempts/user/{{userId}}
 Accept: application/json
-Authorization: Bearer {{idToken}}
+Authorization: Bearer {{firebaseToken}}
 
 ########################################################
 # AUTOMATED TESTING SCRIPT INTEGRATION
@@ -261,5 +243,5 @@ Authorization: Bearer {{idToken}}
 ### 5. Test answer updates with re-scoring
 ### 6. Verify automatic scoring functionality
 ###
-### Note: You must paste a valid Firebase ID token into the @idToken variable at the top of this file to run authenticated requests.
+### Note: You must paste a valid Firebase ID token into the @firebaseToken variable at the top of this file to run authenticated requests.
 ### Expected output: Automatic scoring working confirmation
