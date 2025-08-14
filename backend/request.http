@@ -13,7 +13,7 @@
 # ----------------------
 # Test Data IDs (update these based on your responses)
 # ----------------------
-@userId = b5b4d887-74f6-4dfe-b930-aaf9da2ad4bb
+@userId = 0e1ff195-6072-4042-a581-a44665eefe85
 @categoryId = 10
 @quizId = 1
 @attemptId = 1
@@ -69,7 +69,7 @@ Authorization: Bearer {{firebaseToken}}
 {
   "userId": "{{userId}}",
   "categoryId": {{categoryId}},
-  "total": 20,
+  "total": 10,
   "modeOverride": null
 }
 
@@ -100,8 +100,8 @@ Authorization: Bearer {{firebaseToken}}
 {
   "attemptId": {{attemptId}},
   "selectedChoices": [
-    {"questionId": 24, "choiceId": 3235},
-    {"questionId": 34, "choiceId": 3197}
+    {"questionId": 223, "choiceId": 3271},
+    {"questionId": 201, "choiceId": 3303}
   ]
 }
 
@@ -146,25 +146,6 @@ Authorization: Bearer {{firebaseToken}}
 
 {
   "answerText": "Key prop"
-}
-
-### Submit multiple text answers (batch with automatic scoring)
-POST {{baseUrl}}/api/v1/attempt-text-answers/batch
-Content-Type: application/json
-Authorization: Bearer {{firebaseToken}}
-
-{
-  "attemptId": {{attemptId}},
-  "textAnswers": [
-    {
-      "questionId": 7,
-      "answerText": "React hooks allow functional components to use state and lifecycle methods like useState and useEffect."
-    },
-    {
-      "questionId": 8,
-      "answerText": "useEffect is used for side effects like data fetching, subscriptions, event listeners, and DOM manipulation."
-    }
-  ]
 }
 
 ### Get text answer with automatic scoring results
@@ -214,11 +195,6 @@ Authorization: Bearer {{firebaseToken}}
 
 ### Get open answers for a question
 GET {{baseUrl}}/api/v1/open-answers/question/{{questionId}}
-Accept: application/json
-Authorization: Bearer {{firebaseToken}}
-
-### Get user details
-GET {{baseUrl}}/api/v1/users/{{userId}}
 Accept: application/json
 Authorization: Bearer {{firebaseToken}}
 

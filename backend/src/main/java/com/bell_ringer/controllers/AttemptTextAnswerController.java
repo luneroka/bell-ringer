@@ -109,16 +109,6 @@ public class AttemptTextAnswerController {
     return ResponseEntity.status(HttpStatus.CREATED).body(textAnswer);
   }
 
-  /**
-   * Submit multiple text answers in batch
-   */
-  @PostMapping("/batch")
-  public ResponseEntity<List<AttemptTextAnswerDto>> submitTextAnswersBatch(
-      @Valid @RequestBody AttemptTextAnswerRequest.SubmitBatch request) {
-    List<AttemptTextAnswerDto> textAnswers = attemptTextAnswerService.submitTextAnswersBatch(request);
-    return ResponseEntity.status(HttpStatus.CREATED).body(textAnswers);
-  }
-
   // -------------------- Update text answers --------------------
 
   /**
