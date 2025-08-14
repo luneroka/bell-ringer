@@ -13,7 +13,7 @@
 # ----------------------
 # Test Data IDs (update these based on your responses)
 # ----------------------
-@userId = 0e1ff195-6072-4042-a581-a44665eefe85
+@userId = b78c8afe-536a-4712-ac04-7cca951e97c5
 @categoryId = 10
 @quizId = 1
 @attemptId = 1
@@ -38,7 +38,7 @@ Authorization: Bearer {{firebaseToken}}
 
 > {%
   const data = JSON.parse(response.body);
-  client.global.set("userId", data.id);
+  client.global.set("userId", data.id);SEL
 %}
 
 ### 2b. Get current user via unified users endpoint
