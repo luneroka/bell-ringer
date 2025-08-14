@@ -1,5 +1,32 @@
-# ====================================
-# Bell-Ringer API — Simplified Test Suite
+# ================================### 2. Authenticate & fetch current user (auto-creates locally) - /me endpoint
+GET {{baseUrl}}/me
+Accept: application/json
+Authorization: Bearer {{FIREBASE_ID_TOKEN}}
+
+> {%
+  const data = JSON.parse(response.body);
+  client.global.set("userId", data.id);
+%}
+
+### 2b. Get current user via unified users endpoint
+GET {{baseUrl}}/api/v1/users/me
+Accept: application/json
+Authorization: Bearer {{FIREBASE_ID_TOKEN}}
+
+### 2c. Update current user profile
+PUT {{baseUrl}}/api/v1/users/me
+Content-Type: application/json
+Authorization: Bearer {{FIREBASE_ID_TOKEN}}
+
+{
+  "displayName": "Updated Display Name",
+  "photoUrl": "https://example.com/new-photo.jpg"
+}
+
+### 2d. Get user by ID (admin operation)
+GET {{baseUrl}}/api/v1/users/{{userId}}
+Accept: application/json
+Authorization: Bearer {{FIREBASE_ID_TOKEN}}ll-Ringer API — Simplified Test Suite
 # ====================================
 # How to use:
 # 1. Run the "Quick Setup" section first to create test data

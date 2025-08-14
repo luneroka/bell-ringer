@@ -24,4 +24,12 @@ public class UserRequest {
       String displayName,
       String photoUrl) {
   }
+
+  /**
+   * Request DTO for updating user profile (Firebase authenticated users)
+   */
+  public record UpdateProfile(
+      String displayName,
+      String photoUrl) {
+  }
 }

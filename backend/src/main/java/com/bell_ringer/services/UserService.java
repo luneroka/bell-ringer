@@ -14,16 +14,19 @@ import org.springframework.security.core.Authentication;
 public class UserService {
   private final UserRepository userRepository;
 
+  // Constructor
   public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
-  //  GET ALL USERS
-  @Transactional(readOnly = true)
-  public Iterable<User> getAllUsers() {
-    return userRepository.findAll();
-  }
+  // ============================================
+  // FIREBASE AUTHENTICATION OPERATIONS
+  // ============================================
 
+  /**
+   * Get current authenticated user from Firebase token context
+   * Automatically syncs/creates user from Firebase token data
+   */
   @Transactional
   public User getCurrentUserOrThrow() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -40,7 +43,10 @@ public class UserService {
     return syncFromToken(token);
   }
 
-  // --- NEW: upsert user from a verified Firebase ID token ---
+  /**
+   * Sync/create user from a verified Firebase ID token
+   * Updates existing user or creates new one with Firebase data
+   */
   @Transactional
   public User syncFromToken(FirebaseToken token) {
     String uid = token.getUid();
@@ -55,46 +61,20 @@ public class UserService {
         email,
         emailVerified,
         displayName,
-        photoUrl
-    );
+        photoUrl);
   }
 
-
-/*  // CREATE USER
-  @Transactional
-  public User createUser(String email) {
-    if (email == null || email.isBlank()) {
-      throw new IllegalArgumentException("Email must not be blank");
-    }
-    String normalized = email.trim().toLowerCase();
-    // Create a local user using a random auth UID; this keeps the method usable in dev/tests.
-    String randomLocalUid = UUID.randomUUID().toString();
-    return upsertFromAuth("local", randomLocalUid, normalized, false, null, null);
-  }*/
-
-  // GET USER BY ID
-  @Transactional(readOnly = true)
-  public User getUserById(UUID id) {
-    return userRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
-  }
-
-  // GET USER BY EMAIL
-  @Transactional(readOnly = true)
-  public Optional<User> getUserByEmail(String email) {
-    if (email == null) return Optional.empty();
-    String normalized = email.trim().toLowerCase();
-    return userRepository.findByEmail(normalized);
-  }
-
-  // UPSERT FROM AUTH
+  /**
+   * Core upsert logic for authentication provider users
+   * Updates existing user or creates new one based on provider + UID
+   */
   @Transactional
   public User upsertFromAuth(String authProvider,
-                             String authUid,
-                             String email,
-                             Boolean emailVerified,
-                             String displayName,
-                             String photoUrl) {
+      String authUid,
+      String email,
+      Boolean emailVerified,
+      String displayName,
+      String photoUrl) {
     if (authProvider == null || authProvider.isBlank()) {
       throw new IllegalArgumentException("authProvider must not be blank");
     }
@@ -109,21 +89,59 @@ public class UserService {
     return userRepository.findByAuthProviderAndAuthUid(provider, uid)
         .map(u -> {
           u.setEmail(normalizedEmail);
-          if (emailVerified != null) u.setEmailVerified(emailVerified);
-          if (displayName != null) u.setDisplayName(displayName);
-          if (photoUrl != null) u.setPhotoUrl(photoUrl);
+          if (emailVerified != null)
+            u.setEmailVerified(emailVerified);
+          if (displayName != null)
+            u.setDisplayName(displayName);
+          if (photoUrl != null)
+            u.setPhotoUrl(photoUrl);
           return u; // Hibernate dirty checking will persist changes
         })
         .orElseGet(() -> {
           User u = new User(provider, uid, normalizedEmail);
-          if (emailVerified != null) u.setEmailVerified(emailVerified);
+          if (emailVerified != null)
+            u.setEmailVerified(emailVerified);
           u.setDisplayName(displayName);
           u.setPhotoUrl(photoUrl);
           return userRepository.save(u);
         });
   }
 
-  // GET BY AUTH
+  // ============================================
+  // USER QUERY OPERATIONS
+  // ============================================
+
+  /**
+   * Get all users in the system
+   */
+  @Transactional(readOnly = true)
+  public Iterable<User> getAllUsers() {
+    return userRepository.findAll();
+  }
+
+  /**
+   * Get user by unique ID
+   */
+  @Transactional(readOnly = true)
+  public User getUserById(UUID id) {
+    return userRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
+  }
+
+  /**
+   * Find user by email address
+   */
+  @Transactional(readOnly = true)
+  public Optional<User> getUserByEmail(String email) {
+    if (email == null)
+      return Optional.empty();
+    String normalized = email.trim().toLowerCase();
+    return userRepository.findByEmail(normalized);
+  }
+
+  /**
+   * Find user by authentication provider and UID
+   */
   @Transactional(readOnly = true)
   public Optional<User> getByAuth(String authProvider, String authUid) {
     if (authProvider == null || authProvider.isBlank() || authUid == null || authUid.isBlank()) {
@@ -132,23 +150,55 @@ public class UserService {
     return userRepository.findByAuthProviderAndAuthUid(authProvider.trim().toLowerCase(), authUid.trim());
   }
 
-  // UPDATE USER
+  // ============================================
+  // USER MODIFICATION OPERATIONS
+  // ============================================
+
+  /**
+   * Update user profile information
+   */
   @Transactional
   public User updateUser(UUID id, String email, Boolean emailVerified, String displayName, String photoUrl) {
     User user = userRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
-    if (email != null) user.setEmail(email.trim().toLowerCase());
-    if (emailVerified != null) user.setEmailVerified(emailVerified);
-    if (displayName != null) user.setDisplayName(displayName);
-    if (photoUrl != null) user.setPhotoUrl(photoUrl);
+    if (email != null)
+      user.setEmail(email.trim().toLowerCase());
+    if (emailVerified != null)
+      user.setEmailVerified(emailVerified);
+    if (displayName != null)
+      user.setDisplayName(displayName);
+    if (photoUrl != null)
+      user.setPhotoUrl(photoUrl);
 
     return userRepository.save(user);
   }
 
-  // DELETE USER
+  /**
+   * Delete user from system
+   */
   @Transactional
   public void deleteUser(UUID id) {
     User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
     userRepository.delete(user);
+  }
+
+  // ============================================
+  // UTILITY HELPER METHODS
+  // ============================================
+
+  /**
+   * Get current user's ID from Firebase token context
+   */
+  public UUID getCurrentUserId() {
+    User user = getCurrentUserOrThrow();
+    return user.getId();
+  }
+
+  /**
+   * Check if user exists by Firebase UID
+   */
+  @Transactional(readOnly = true)
+  public boolean existsByFirebaseUid(String firebaseUid) {
+    return userRepository.findByAuthProviderAndAuthUid("firebase", firebaseUid).isPresent();
   }
 }
