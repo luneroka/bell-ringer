@@ -1,0 +1,20 @@
+services:
+  backend:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_HOST=postgres
+      - DB_PORT=5432
+    # Remove volume mounts for now - they were overriding the built JAR
+    # volumes:
+    #   - ./backend:/app
+    #   - /app/target
+    networks:
+      - bell-ringer-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    # Keep postgres running on the bridge network for consistency
+    ports:
+      - '5332:5432'

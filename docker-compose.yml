@@ -1,7 +1,7 @@
 services:
-  db:
-    container_name: postgres
-    image: postgres:latest
+  postgres:
+    container_name: bell-ringer-postgres
+    image: postgres:15-alpine
     env_file:
       - .env
     environment:
@@ -9,16 +9,48 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/main/resources/seed:/docker-entrypoint-initdb.d
     ports:
-      - "5332:5432"
+      - '5332:5432'
     networks:
-      - db
+      - bell-ringer-network
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    container_name: bell-ringer-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.simple
+    ports:
+      - '8080:8080'
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_HOST=postgres
+      - DB_PORT=5432
+    networks:
+      - bell-ringer-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
-  db:
+  bell-ringer-network:
     driver: bridge
 
 volumes:
-  db:
+  postgres_data:

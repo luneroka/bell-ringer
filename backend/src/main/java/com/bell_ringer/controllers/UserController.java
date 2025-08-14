@@ -130,4 +130,10 @@ public class UserController {
   public String ping() {
     return "ok";
   }
+
+  // ROOT ENDPOINT FOR BASIC CONNECTIVITY TEST
+  @GetMapping("/")
+  public String root() {
+    return "Bell-Ringer API is running! Use /actuator/health for health checks.";
+  }
 }
