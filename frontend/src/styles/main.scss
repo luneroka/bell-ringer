@@ -1,13 +1,27 @@
+// Import Bootstrap's functions
+@import '~bootstrap/scss/functions';
+
+// Override Bootstrap variables BEFORE importing them
+$primary: #6f42c1;
+$secondary: #adb5bd;
+
+// Custom variables that don't override Bootstrap defaults
+$main-text: #212529;
+
+// Font variables
+$font-family-primary: 'Poppins', sans-serif;
+$font-family-heading: 'Lato', sans-serif;
+
+// Import Bootstrap's variables (after our overrides)
+@import '~bootstrap/scss/variables';
+
+// Reference Bootstrap variables in custom variables
+$surface: $light;
+
+// Import Bootstrap's mixins (needed for utilities)
+@import '~bootstrap/scss/mixins';
+
 // Import all of Bootstrap's CSS
 @import '~bootstrap/scss/bootstrap';
 
-// Custom variables (place before the Bootstrap import above to override)
-// Example:
-// $primary: #007bff;
-// $secondary: #6c757d;
-
-// Custom styles go here
-// Example:
-// body {
-//   font-family: 'Your Custom Font';
-// }
+// Custom styles
