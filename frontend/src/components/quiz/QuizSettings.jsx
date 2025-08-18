@@ -1,14 +1,14 @@
 function QuizSettings() {
   return (
-    <div className='d-flex justify-content-between align-items-end'>
+    <div className='d-flex justify-content-between align-items-end gap-3'>
       {/* SELECTED TOPIC */}
-      <div>
+      <div className='selector'>
         <p className='selector-p small-text text-muted'>Topic</p>
         <div className='selected-box button-text'>REACT</div>
       </div>
 
       {/* SELECT QUESTIONS */}
-      <div>
+      <div className='selector'>
         <p className='selector-p small-text text-muted'>Questions</p>
         <div className='selected-box button-text'>10</div>
       </div>
@@ -16,7 +16,12 @@ function QuizSettings() {
       {/* SHUFFLE BUTTON */}
       <button
         className='btn btn-primary button-text'
-        style={{ width: '300px', height: '48px' }}
+        style={{
+          width: '100%',
+          minWidth: '120px',
+          maxWidth: '400px',
+          height: '48px',
+        }}
       >
         Re-shuffle
       </button>

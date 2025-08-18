@@ -71,15 +71,19 @@ $font-family-heading: 'Poppins', sans-serif;
 }
 
 .form-select {
-  border-color: #6f42c1 !important;
-  width: 300px;
+  border-color: $primary !important;
+  width: 100%;
+  max-width: 400px;
+  min-width: 120px;
   height: 48px;
   cursor: pointer;
+  box-sizing: border-box;
+  padding: 0rem 1rem;
 }
 
 .form-select:focus {
-  border-color: darken(#6f42c1, 8%) !important;
-  box-shadow: 0 0 0 0.15rem rgba(111, 66, 193, 0.16) !important;
+  border-color: darken($primary, 8%) !important;
+  box-shadow: 0 0 0 0.15rem rgba($primary, 0.16) !important;
 }
 
 .selected-box {
@@ -87,18 +91,24 @@ $font-family-heading: 'Poppins', sans-serif;
   border-radius: $border-radius !important;
   color: $primary !important;
   text-align: center;
-  width: 300px;
+  width: 100%;
+  max-width: 400px;
+  min-width: 120px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  padding: 0.375rem 0.75rem;
+  padding: 0rem 1rem;
 }
 
 .selector-p {
   margin-bottom: 8px;
+}
+
+.selector {
+  width: 100%;
+  min-width: 120px;
+  max-width: 400px;
 }
 
 // Apply font families globally

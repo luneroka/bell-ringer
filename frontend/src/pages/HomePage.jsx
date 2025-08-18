@@ -25,6 +25,9 @@ function HomePage() {
       <div style={{ marginTop: '96px' }}>
         <QuizSelector />
       </div>
+      <div style={{ marginTop: '96px' }}>
+        <QuizSettings />
+      </div>
     </>
   );
 }

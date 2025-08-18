@@ -11,6 +11,7 @@ function App() {
           marginRight: '208px',
           marginTop: '96px',
           marginBottom: '96px',
+          width: '100%',
         }}
       >
         <Outlet />
