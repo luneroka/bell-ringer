@@ -5,7 +5,14 @@ function App() {
   return (
     <div className='d-flex'>
       <NavbarAuth />
-      <main>
+      <main
+        style={{
+          marginLeft: '208px',
+          marginRight: '208px',
+          marginTop: '96px',
+          marginBottom: '96px',
+        }}
+      >
         <Outlet />
       </main>
     </div>
