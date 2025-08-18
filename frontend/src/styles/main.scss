@@ -3,10 +3,15 @@
 
 // Override Bootstrap variables BEFORE importing them
 $primary: #6f42c1;
-$secondary: #adb5bd;
+$secondary: #ebe5fc;
+
+// Optional: Override button-specific variables for more control
+$btn-border-width: 1px;
+$btn-font-weight: 500;
 
 // Custom variables that don't override Bootstrap defaults
 $main-text: #212529;
+$gray-text: #6c757d;
 
 // Font variables
 $font-family-primary: 'Poppins', sans-serif;
@@ -15,13 +20,23 @@ $font-family-heading: 'Lato', sans-serif;
 // Import Bootstrap's variables (after our overrides)
 @import '~bootstrap/scss/variables';
 
-// Reference Bootstrap variables in custom variables
-$surface: $light;
-
 // Import Bootstrap's mixins (needed for utilities)
 @import '~bootstrap/scss/mixins';
 
 // Import all of Bootstrap's CSS
 @import '~bootstrap/scss/bootstrap';
 
-// Custom styles
+// Custom styles (optional additional customization)
+.btn-secondary {
+  font-weight: $btn-font-weight;
+
+  &:hover {
+    background-color: darken($secondary, 5%);
+    border-color: darken($secondary, 10%);
+  }
+}
+
+// Custom utility classes
+.text-main-text {
+  color: $main-text !important;
+}
