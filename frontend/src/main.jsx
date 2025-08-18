@@ -1,5 +1,6 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage.jsx';
 
 // Import our custom CSS (which includes Bootstrap)
 import './styles/main.scss';
@@ -10,7 +11,12 @@ import * as bootstrap from 'bootstrap';
 import App from './App.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+  <BrowserRouter>
+    <Routes>
+      {/* HOME ROUTES */}
+      <Route path='/' element={<App />}>
+        <Route index element={<HomePage />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
 );
