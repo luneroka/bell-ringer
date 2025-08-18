@@ -1,4 +1,5 @@
 import QuizSelector from '../components/quiz/QuizSelector';
+import QuizSettings from '../components/quiz/QuizSettings';
 
 function HomePage() {
   return (

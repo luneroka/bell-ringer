@@ -32,7 +32,7 @@ function QuizSelector() {
 
       {/* SHUFFLE BUTTON */}
       <button
-        className='btn btn-primary font-headings button-text'
+        className='btn btn-primary button-text'
         style={{ width: '300px', height: '48px' }}
       >
         Shuffle
