@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaRegUser, FaUser } from 'react-icons/fa';
-import { IoSettingsOutline, IoSettings } from 'react-icons/io5';
+import {
+  IoHomeOutline,
+  IoHome,
+  IoSettingsOutline,
+  IoSettings,
+} from 'react-icons/io5';
 
 function Navbar() {
   const [hoveredIcon, setHoveredIcon] = useState(null);
@@ -24,20 +29,36 @@ function Navbar() {
         className='d-flex flex-column align-items-center justify-content-between py-5'
         style={{ height: '100%' }}
       >
-        <Link to='/login'>
-          <div
-            role='button'
-            className='text-white'
-            onMouseEnter={() => setHoveredIcon('user')}
-            onMouseLeave={() => setHoveredIcon(null)}
-          >
-            {hoveredIcon === 'user' ? (
-              <FaUser size={32} />
-            ) : (
-              <FaRegUser size={32} />
-            )}
-          </div>
-        </Link>
+        <div className='d-flex flex-column gap-4'>
+          <Link to='/'>
+            <div
+              role='button'
+              className='text-white'
+              onMouseEnter={() => setHoveredIcon('hom')}
+              onMouseLeave={() => setHoveredIcon(null)}
+            >
+              {hoveredIcon === 'hom' ? (
+                <IoHome size={32} />
+              ) : (
+                <IoHomeOutline size={32} />
+              )}
+            </div>
+          </Link>
+          <Link to='/login'>
+            <div
+              role='button'
+              className='text-white'
+              onMouseEnter={() => setHoveredIcon('user')}
+              onMouseLeave={() => setHoveredIcon(null)}
+            >
+              {hoveredIcon === 'user' ? (
+                <FaUser size={32} />
+              ) : (
+                <FaRegUser size={32} />
+              )}
+            </div>
+          </Link>
+        </div>
 
         <div
           role='button'

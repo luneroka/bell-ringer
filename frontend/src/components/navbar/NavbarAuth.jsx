@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaRegUser, FaUser } from 'react-icons/fa';
 import {
+  IoHome,
+  IoHomeOutline,
   IoLogOutOutline,
   IoLogOut,
   IoSettingsOutline,
@@ -37,13 +38,13 @@ function NavbarAuth() {
             <div
               role='button'
               className='text-white'
-              onMouseEnter={() => setHoveredIcon('user')}
+              onMouseEnter={() => setHoveredIcon('hom')}
               onMouseLeave={() => setHoveredIcon(null)}
             >
-              {hoveredIcon === 'user' ? (
-                <FaUser size={32} />
+              {hoveredIcon === 'hom' ? (
+                <IoHome size={32} />
               ) : (
-                <FaRegUser size={32} />
+                <IoHomeOutline size={32} />
               )}
             </div>
           </Link>
