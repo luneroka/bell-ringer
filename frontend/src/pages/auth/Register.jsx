@@ -1,23 +1,32 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
-function Login() {
+function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmationPassword, setConfirmationPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const { signup } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
+    if (password !== confirmationPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
     try {
       setError('');
       setLoading(true);
-      await login(email, password);
+      await signup(email, password);
+      navigate('/login');
     } catch (error) {
-      setError('Failed to log in: ' + error.message);
+      setError('Failed to register: ' + error.message);
     }
 
     setLoading(false);
@@ -29,7 +38,7 @@ function Login() {
         <div className='col-md-6'>
           <div className='card'>
             <div className='card-body'>
-              <h2 className='card-title text-center mb-4'>Log In</h2>
+              <h2 className='card-title text-center mb-4'>Register</h2>
               {error && <div className='alert alert-danger'>{error}</div>}
               <form onSubmit={handleSubmit}>
                 <div className='mb-3'>
@@ -58,14 +67,31 @@ function Login() {
                     required
                   />
                 </div>
+                <div className='mb-3'>
+                  <label htmlFor='confirmation' className='form-label'>
+                    Confirm password
+                  </label>
+                  <input
+                    type='password'
+                    className='form-control'
+                    id='confirmation'
+                    value={confirmationPassword}
+                    onChange={(e) => setConfirmationPassword(e.target.value)}
+                    required
+                  />
+                </div>
                 <button
                   disabled={loading}
                   className='btn btn-primary w-100'
                   type='submit'
                 >
-                  {loading ? 'Logging in...' : 'Log In'}
+                  {loading ? 'Signing up...' : 'Sign Up'}
                 </button>
               </form>
+
+              <div className='mt-5'>
+                Already an account ? <Link to='/login'>Log In</Link>
+              </div>
             </div>
           </div>
         </div>
@@ -74,4 +100,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

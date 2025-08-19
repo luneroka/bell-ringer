@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 function Login() {
@@ -6,6 +7,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const { login } = useAuth();
 
@@ -16,6 +18,7 @@ function Login() {
       setError('');
       setLoading(true);
       await login(email, password);
+      navigate('/');
     } catch (error) {
       setError('Failed to log in: ' + error.message);
     }
@@ -66,6 +69,10 @@ function Login() {
                   {loading ? 'Logging in...' : 'Log In'}
                 </button>
               </form>
+
+              <div className='mt-5'>
+                Already an account ? <Link to='/register'>Sign Up</Link>
+              </div>
             </div>
           </div>
         </div>

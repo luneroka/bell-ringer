@@ -1,8 +1,5 @@
 import { Outlet } from 'react-router';
 import NavbarAuth from './components/navbar/Navbar';
-import Login from './components/auth/Login';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import './utils/firebase.config';
 
 function App() {
   return (
