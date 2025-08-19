@@ -1,4 +1,12 @@
-// Global root reset: box-sizing and default margins
+/*
+================================================================================
+BELL RINGER - MAIN STYLESHEET
+================================================================================
+
+/* ============================================================================
+   1. GLOBAL RESETS & BASE STYLES
+   ============================================================================ */
+
 :root,
 *,
 *::before,
@@ -15,20 +23,23 @@ body,
 body {
   margin: 0;
   min-height: 100%;
+  font-size: 16px;
 }
 
-// Import Bootstrap's functions
+/* ============================================================================
+   2. BOOTSTRAP IMPORTS & VARIABLE OVERRIDES
+   ============================================================================ */
+
+// Import Bootstrap's functions first
 @import '~bootstrap/scss/functions';
 
 // Override Bootstrap variables BEFORE importing them
 $primary: #6f42c1;
 $secondary: #ebe5fc;
-
-// Optional: Override button-specific variables for more control
 $btn-border-width: 1px;
 $btn-font-weight: 500;
 
-// Custom variables that don't override Bootstrap defaults
+// Custom color variables
 $main-text: #212529;
 $gray-text: #6c757d;
 
@@ -36,29 +47,34 @@ $gray-text: #6c757d;
 $font-family-primary: 'Lato', sans-serif;
 $font-family-heading: 'Poppins', sans-serif;
 
-// Import Bootstrap's variables (after our overrides)
+// Import Bootstrap's variables and mixins
 @import '~bootstrap/scss/variables';
-
-// Import Bootstrap's mixins (needed for utilities)
 @import '~bootstrap/scss/mixins';
 
 // Import all of Bootstrap's CSS
 @import '~bootstrap/scss/bootstrap';
 
-// Custom styles (optional additional customization)
-.btn-secondary {
-  font-weight: $btn-font-weight;
+/* ============================================================================
+   3. TYPOGRAPHY & GLOBAL STYLES
+   ============================================================================ */
 
-  &:hover {
-    background-color: darken($secondary, 5%);
-    border-color: darken($secondary, 10%);
-  }
-}
-
-// Custom utility classes
-.body-text {
+body {
+  font-family: $font-family-primary;
   color: $main-text;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-family-heading;
+}
+
+/* ============================================================================
+   4. UTILITY CLASSES
+   ============================================================================ */
 
 .button-text {
   color: $light;
@@ -70,6 +86,23 @@ $font-family-heading: 'Poppins', sans-serif;
   font-size: 0.875rem;
 }
 
+/* ============================================================================
+   5. BOOTSTRAP COMPONENT OVERRIDES
+   ============================================================================ */
+
+.btn-secondary {
+  font-weight: $btn-font-weight;
+
+  &:hover {
+    background-color: darken($secondary, 5%);
+    border-color: darken($secondary, 10%);
+  }
+}
+
+/* ============================================================================
+   6. FORM ELEMENTS & SELECTORS
+   ============================================================================ */
+
 .form-select {
   border-color: $primary !important;
   width: 100%;
@@ -79,11 +112,11 @@ $font-family-heading: 'Poppins', sans-serif;
   cursor: pointer;
   box-sizing: border-box;
   padding: 0rem 1rem;
-}
 
-.form-select:focus {
-  border-color: darken($primary, 8%) !important;
-  box-shadow: 0 0 0 0.15rem rgba($primary, 0.16) !important;
+  &:focus {
+    border-color: darken($primary, 8%) !important;
+    box-shadow: 0 0 0 0.15rem rgba($primary, 0.16) !important;
+  }
 }
 
 .selected-box {
@@ -101,26 +134,180 @@ $font-family-heading: 'Poppins', sans-serif;
   padding: 0rem 1rem;
 }
 
-.selector-p {
-  margin-bottom: 8px;
-}
-
 .selector {
   width: 100%;
   min-width: 120px;
   max-width: 400px;
 }
 
-// Apply font families globally
-body {
-  font-family: $font-family-primary;
+.selector-p {
+  margin-bottom: 8px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: $font-family-heading;
+/* ============================================================================
+   7. BUTTON STYLES
+   ============================================================================ */
+
+.send-btn,
+.next-btn {
+  background-color: #ebe5fc;
+  border-color: #6f42c1;
+  color: #6f42c1;
+  padding: 0.5rem 1rem;
+  width: auto;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #6f42c1;
+    color: $light;
+  }
+
+  &:active {
+    background-color: $secondary;
+    border-color: $secondary;
+    color: rgba(111, 66, 193, 0.55);
+  }
+}
+
+.next-btn {
+  border: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  font-size: 48px;
+  position: fixed;
+  right: 208px;
+  bottom: 96px;
+  z-index: 1000;
+}
+
+/* ============================================================================
+   8. QUIZ COMPONENTS
+   ============================================================================ */
+
+#quiz-question {
+  margin-top: 64px;
+  padding: 0 48px;
+}
+
+/* Multiple Choice Questions */
+.choices-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 806px;
+  padding: 0px;
+}
+
+.choice-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+  width: 100%;
+  height: 24px;
+  cursor: pointer;
+
+  input[type='radio'],
+  input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #ebe5fc;
+    border-radius: 50%; /* For radio buttons */
+    appearance: none; /* Remove default styling */
+    -webkit-appearance: none; /* Remove default styling for Safari */
+    -moz-appearance: none; /* Remove default styling for Firefox */
+
+    &:checked {
+      background: #6f42c1 !important;
+      border-color: #6f42c1 !important;
+      background-image: none;
+    }
+
+    /* Style for checkboxes */
+    &[type='checkbox'] {
+      border-radius: 3px; /* Square corners for checkboxes */
+
+      &:checked {
+        background: #6f42c1 !important;
+        border-color: #6f42c1 !important;
+        position: relative;
+
+        &::after {
+          content: '✓';
+          color: white;
+          font-size: 10px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    /* Style for radio buttons */
+    &[type='radio'] {
+      &:checked {
+        position: relative;
+
+        &::after {
+          content: '';
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: white;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+}
+
+.choice-label {
+  margin: 0;
+  cursor: pointer;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  font-family: 'Lato', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  color: #6c757d;
+}
+
+/* Short Answer Questions */
+.short-answer-container {
+  margin: 1rem 0;
+}
+
+.short-answer-input {
+  width: 100%;
+  resize: none; /* Disable manual resizing */
+  border: 1px dashed #6c757d;
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 50px; /* Minimum height for one row */
+  height: auto; /* Auto height to fit content */
+  overflow: hidden; /* Hide scrollbar initially */
+  line-height: 1.5;
+  font-family: inherit;
+  font-size: inherit;
 }
