@@ -1,16 +1,10 @@
 import { Outlet } from 'react-router';
 import NavbarAuth from './components/navbar/Navbar';
-import Login from './pages/auth/Login';
+import Login from './components/auth/Login';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import './utils/firebase.config';
 
-function AppContent() {
-  const { currentUser } = useAuth();
-
-  if (!currentUser) {
-    return <Login />;
-  }
-
+function App() {
   return (
     <div className='d-flex'>
       <NavbarAuth />
@@ -26,14 +20,6 @@ function AppContent() {
         <Outlet />
       </main>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
   );
 }
 

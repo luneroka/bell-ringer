@@ -3,21 +3,21 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
 import App from './App.jsx';
 import QuizPage from './pages/QuizPage.jsx';
-
-// Import our custom CSS (which includes Bootstrap)
+import { AuthProvider } from './contexts/AuthContext.jsx';
 import './styles/main.scss';
-
-// Import all of Bootstrap's JS
-import * as bootstrap from 'bootstrap';
+import Login from './components/auth/Login.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <Routes>
-      {/* HOME ROUTES */}
-      <Route path='/' element={<App />}>
-        <Route index element={<HomePage />} />
-        <Route path='/quiz' element={<QuizPage />} />
-      </Route>
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        {/* HOME ROUTES */}
+        <Route path='/' element={<App />}>
+          <Route index element={<HomePage />} />
+        </Route>
+
+        <Route path='/login' element={<Login />} />
+      </Routes>
+    </AuthProvider>
   </BrowserRouter>
 );
