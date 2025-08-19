@@ -18,7 +18,7 @@ function Login() {
       setError('');
       setLoading(true);
       await login(email, password);
-      navigate('/');
+      navigate('/auth-home');
     } catch (error) {
       setError('Failed to log in: ' + error.message);
     }
