@@ -105,13 +105,13 @@ export function renderAnswerContent(
       return (
         <div className='answer-feedback'>
           {isCorrect ? (
-            <div className='d-flex align-items-center'>
+            <div className='d-flex align-items-center fst-italic'>
               <FaCheckSquare className='text-success me-2' />
               Correct!
             </div>
           ) : (
             <div>
-              <div className='d-flex align-items-center'>
+              <div className='d-flex align-items-center fst-italic mb-2'>
                 <TiDelete size={24} className='text-danger me-2' />
                 Incorrect! <br />
               </div>
@@ -130,18 +130,18 @@ export function renderAnswerContent(
         <div className='question-answer-box'>
           <div>
             {isShortAnswerCorrect ? (
-              <div className='d-flex align-items-center'>
+              <div className='d-flex align-items-center fst-italic mb-2'>
                 <FaCheckSquare className='text-success me-2' />
                 Correct!
               </div>
             ) : (
-              <div className='d-flex align-items-center'>
+              <div className='d-flex align-items-center fst-italic mb-2'>
                 <TiDelete size={24} className='text-danger me-2' />
                 Incorrect!
               </div>
             )}
           </div>
-          <div className='fst-italic'>{answerText}</div>
+          <div>{answerText}</div>
         </div>
       );
 
