@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaRegUser, FaUser } from 'react-icons/fa';
-import { IoSettingsOutline, IoSettings } from 'react-icons/io5';
+import {
+  IoLogOutOutline,
+  IoLogOut,
+  IoSettingsOutline,
+  IoSettings,
+} from 'react-icons/io5';
 import { FaClockRotateLeft } from 'react-icons/fa6';
 import { MdOutlineSpaceDashboard, MdSpaceDashboard } from 'react-icons/md';
 import { RxCounterClockwiseClock } from 'react-icons/rx';
 
-import { useAuth } from '../../contexts/AuthContext';
-
 function NavbarAuth() {
   const [hoveredIcon, setHoveredIcon] = useState(null);
-  const { currentUser } = useAuth();
 
   return (
     <header
@@ -31,7 +33,7 @@ function NavbarAuth() {
         style={{ height: '100%' }}
       >
         <div className='d-flex flex-column gap-4'>
-          <Link to={currentUser ? '/' : '/login'}>
+          <Link to='/'>
             <div
               role='button'
               className='text-white'
@@ -46,7 +48,7 @@ function NavbarAuth() {
             </div>
           </Link>
 
-          <Link to={currentUser ? '/dashboard' : '/login'}>
+          <Link to='/dashboard'>
             <div
               role='button'
               className='text-white'
@@ -61,7 +63,7 @@ function NavbarAuth() {
             </div>
           </Link>
 
-          <Link to={currentUser ? '/history' : '/login'}>
+          <Link to='/history'>
             <div
               role='button'
               className='text-white'
@@ -77,17 +79,33 @@ function NavbarAuth() {
           </Link>
         </div>
 
-        <div
-          role='button'
-          className='text-white'
-          onMouseEnter={() => setHoveredIcon('settings')}
-          onMouseLeave={() => setHoveredIcon(null)}
-        >
-          {hoveredIcon === 'settings' ? (
-            <IoSettings size={32} />
-          ) : (
-            <IoSettingsOutline size={32} />
-          )}
+        <div className='d-flex flex-column gap-4'>
+          <Link to='/logout'>
+            <div
+              role='button'
+              className='text-white'
+              onMouseEnter={() => setHoveredIcon('logout')}
+              onMouseLeave={() => setHoveredIcon(null)}
+            >
+              {hoveredIcon === 'logout' ? (
+                <IoLogOut size={32} />
+              ) : (
+                <IoLogOutOutline size={32} />
+              )}
+            </div>
+          </Link>
+          <div
+            role='button'
+            className='text-white'
+            onMouseEnter={() => setHoveredIcon('settings')}
+            onMouseLeave={() => setHoveredIcon(null)}
+          >
+            {hoveredIcon === 'settings' ? (
+              <IoSettings size={32} />
+            ) : (
+              <IoSettingsOutline size={32} />
+            )}
+          </div>
         </div>
       </nav>
     </header>
