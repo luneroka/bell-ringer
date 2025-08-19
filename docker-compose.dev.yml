@@ -17,6 +17,8 @@ services:
       - '5173:5173'
     networks:
       - bell-ringer-network
+    env_file:
+      - ./frontend/.env
     environment:
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERVAL=1000
