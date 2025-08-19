@@ -9,7 +9,6 @@ import {
   IoSettings,
 } from 'react-icons/io5';
 import { FaClockRotateLeft } from 'react-icons/fa6';
-import { MdOutlineSpaceDashboard, MdSpaceDashboard } from 'react-icons/md';
 import { RxCounterClockwiseClock } from 'react-icons/rx';
 
 function NavbarAuth() {
@@ -45,21 +44,6 @@ function NavbarAuth() {
                 <IoHome size={32} />
               ) : (
                 <IoHomeOutline size={32} />
-              )}
-            </div>
-          </Link>
-
-          <Link to='/dashboard'>
-            <div
-              role='button'
-              className='text-white'
-              onMouseEnter={() => setHoveredIcon('dashboard')}
-              onMouseLeave={() => setHoveredIcon(null)}
-            >
-              {hoveredIcon === 'dashboard' ? (
-                <MdSpaceDashboard size={32} />
-              ) : (
-                <MdOutlineSpaceDashboard size={32} />
               )}
             </div>
           </Link>

@@ -1,3 +1,4 @@
+import AuthInstructions from '../components/instructions/AuthInstructions';
 import IndexInstructions from '../components/instructions/IndexInstructions';
 import QuizSelector from '../components/quiz/QuizSelector';
 import { useAuth } from '../contexts/AuthContext';
@@ -5,15 +6,16 @@ import { useAuth } from '../contexts/AuthContext';
 function HomePage() {
   const { currentUser } = useAuth();
 
-  return (
+  return currentUser ? (
     <>
-      <IndexInstructions />
-      {currentUser && (
-        <div style={{ marginTop: '96px' }}>
-          <QuizSelector />
-        </div>
-      )}
+      <AuthInstructions />
+
+      <div style={{ marginTop: '96px' }}>
+        <QuizSelector />
+      </div>
     </>
+  ) : (
+    <IndexInstructions />
   );
 }
 
