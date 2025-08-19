@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FaRegUser, FaUser } from 'react-icons/fa';
 import { IoSettingsOutline, IoSettings } from 'react-icons/io5';
-import { useAuth } from '../../contexts/AuthContext';
 
 function Navbar() {
   const [hoveredIcon, setHoveredIcon] = useState(null);
-  const { currentUser } = useAuth();
 
   return (
     <header
@@ -26,7 +24,7 @@ function Navbar() {
         className='d-flex flex-column align-items-center justify-content-between py-5'
         style={{ height: '100%' }}
       >
-        <Link to={currentUser ? '/' : '/login'}>
+        <Link to='/login'>
           <div
             role='button'
             className='text-white'
