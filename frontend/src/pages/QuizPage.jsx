@@ -1,4 +1,3 @@
-import Navbar from '../components/navbar/Navbar';
 import QuizQuestion from '../components/quiz/QuizQuestion';
 import QuizSettings from '../components/quiz/QuizSettings';
 import { IoIosArrowForward } from 'react-icons/io';
@@ -30,7 +29,6 @@ function QuizPage() {
 
   return (
     <>
-      <Navbar />
       <QuizSettings />
       <QuizQuestion
         index={1}

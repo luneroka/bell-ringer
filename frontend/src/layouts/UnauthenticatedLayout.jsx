@@ -1,8 +1,10 @@
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
+import Navbar from '../components/navbar/Navbar';
 
-function App() {
+function UnauthenticatedLayout() {
   return (
     <div className='d-flex'>
+      <Navbar />
       <main
         style={{
           marginLeft: '208px',
@@ -18,4 +20,4 @@ function App() {
   );
 }
 
-export default App;
+export default UnauthenticatedLayout;

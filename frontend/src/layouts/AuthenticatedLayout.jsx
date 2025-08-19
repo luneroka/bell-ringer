@@ -1,8 +1,10 @@
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
+import NavbarAuth from '../components/navbar/NavbarAuth';
 
-function App() {
+function AuthenticatedLayout() {
   return (
     <div className='d-flex'>
+      <NavbarAuth />
       <main
         style={{
           marginLeft: '208px',
@@ -18,4 +20,4 @@ function App() {
   );
 }
 
-export default App;
+export default AuthenticatedLayout;

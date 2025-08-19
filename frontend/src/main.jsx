@@ -1,39 +1,56 @@
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
-import App from './App.jsx';
 import QuizPage from './pages/QuizPage.jsx';
-import { AuthProvider } from './contexts/AuthContext.jsx';
+import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
 import './utils/firebase.config';
 import './styles/main.scss';
 import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
-import Logout from './pages/auth/Logout.jsx'; // Adjust the path if needed
-import HomePageAuth from './pages/HomePageAuth.jsx';
+import Logout from './pages/auth/Logout.jsx';
 import PrivateRoute from './contexts/PrivateRoute.jsx';
+import AuthenticatedLayout from './layouts/AuthenticatedLayout';
+import UnauthenticatedLayout from './layouts/UnauthenticatedLayout';
+
+function ConditionalLayout() {
+  const { currentUser } = useAuth();
+
+  return currentUser ? <AuthenticatedLayout /> : <UnauthenticatedLayout />;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      {/* Conditional home route */}
+      <Route element={<ConditionalLayout />}>
+        <Route path='/' element={<HomePage />} />
+      </Route>
+
+      {/* Unauthenticated Routes */}
+      <Route element={<UnauthenticatedLayout />}>
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/logout' element={<Logout />} />
+      </Route>
+
+      {/* Authenticated Routes */}
+      <Route
+        element={
+          <PrivateRoute>
+            <AuthenticatedLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route path='/quiz' element={<QuizPage />} />
+      </Route>
+    </Routes>
+  );
+}
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
-      <Routes>
-        {/* HOME ROUTES */}
-        <Route path='/' element={<App />}>
-          <Route index element={<HomePage />} />
-          <Route
-            path='/auth-home'
-            element={
-              <PrivateRoute>
-                <HomePageAuth />
-              </PrivateRoute>
-            }
-          />
-          <Route path='/quiz' element={<QuizPage />} />
-        </Route>
-
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/logout' element={<Logout />} />
-      </Routes>
+      <AppRoutes />
     </AuthProvider>
   </BrowserRouter>
 );

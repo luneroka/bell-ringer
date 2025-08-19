@@ -26,7 +26,7 @@ function Navbar() {
         className='d-flex flex-column align-items-center justify-content-between py-5'
         style={{ height: '100%' }}
       >
-        <Link to={currentUser ? '/auth-home' : '/login'}>
+        <Link to={currentUser ? '/' : '/login'}>
           <div
             role='button'
             className='text-white'
