@@ -1,6 +1,10 @@
-import { CiUser, CiSettings } from 'react-icons/ci';
+import { FaRegUser, FaUser } from 'react-icons/fa';
+import { IoSettingsOutline, IoSettings } from 'react-icons/io5';
+import { useState } from 'react';
 
 function Navbar() {
+  const [hoveredIcon, setHoveredIcon] = useState(null);
+
   return (
     <header
       className='bg-primary rounded-2'
@@ -19,8 +23,31 @@ function Navbar() {
         className='d-flex flex-column align-items-center justify-content-between py-5'
         style={{ height: '100%' }}
       >
-        <CiUser size={32} className='text-white' />
-        <CiSettings size={32} className='text-white' />
+        <div
+          role='button'
+          className='text-white'
+          onMouseEnter={() => setHoveredIcon('user')}
+          onMouseLeave={() => setHoveredIcon(null)}
+        >
+          {hoveredIcon === 'user' ? (
+            <FaUser size={32} />
+          ) : (
+            <FaRegUser size={32} />
+          )}
+        </div>
+
+        <div
+          role='button'
+          className='text-white'
+          onMouseEnter={() => setHoveredIcon('settings')}
+          onMouseLeave={() => setHoveredIcon(null)}
+        >
+          {hoveredIcon === 'settings' ? (
+            <IoSettings size={32} />
+          ) : (
+            <IoSettingsOutline size={32} />
+          )}
+        </div>
       </nav>
     </header>
   );
