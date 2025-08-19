@@ -9,6 +9,8 @@ import './styles/main.scss';
 import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
 import Logout from './pages/auth/Logout.jsx'; // Adjust the path if needed
+import HomePageAuth from './pages/HomePageAuth.jsx';
+import PrivateRoute from './contexts/PrivateRoute.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -17,6 +19,14 @@ createRoot(document.getElementById('root')).render(
         {/* HOME ROUTES */}
         <Route path='/' element={<App />}>
           <Route index element={<HomePage />} />
+          <Route
+            path='/auth-home'
+            element={
+              <PrivateRoute>
+                <HomePageAuth />
+              </PrivateRoute>
+            }
+          />
           <Route path='/quiz' element={<QuizPage />} />
         </Route>
 
