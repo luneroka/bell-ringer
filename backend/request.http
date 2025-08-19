@@ -13,7 +13,8 @@
 # ----------------------
 # Test Data IDs (update these based on your responses)
 # ----------------------
-@userId = 1b716841-649b-49dd-9742-9565da107769
+@userId = 66646275-82d8-4624-be28-02c3bb81b715
+@parentCategoryId = 2
 @categoryId = 10
 @quizId = 1
 @attemptId = 1
@@ -175,6 +176,11 @@ Authorization: Bearer {{firebaseToken}}
 
 ### List root categories
 GET {{baseUrl}}/api/v1/categories/roots
+Accept: application/json
+Authorization: Bearer {{firebaseToken}}
+
+### List children categories
+GET {{baseUrl}}/api/v1/categories/{{parentCategoryId}}/children
 Accept: application/json
 Authorization: Bearer {{firebaseToken}}
 
