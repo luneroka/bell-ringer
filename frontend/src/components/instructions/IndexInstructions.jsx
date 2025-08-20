@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 function IndexInstructions() {
   return (
     <>
-      <div className='d-fex flex-column gap-4 bg-light p-4 rounded-3'>
+      <div className='d-flex flex-column gap-4 bg-light p-4 rounded-3'>
         <p className='font-family-primary fw-semibold'>
           Welcome to Bell Ringer !
         </p>

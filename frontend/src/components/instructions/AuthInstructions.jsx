@@ -1,7 +1,7 @@
 function AuthInstructions() {
   return (
     <>
-      <div className='d-fex flex-column gap-4 bg-light p-4 rounded-3'>
+      <div className='d-flex flex-column gap-4 bg-light p-4 rounded-3'>
         <p>
           Enter your settings below to generate a quiz tailored to your goals.
         </p>
