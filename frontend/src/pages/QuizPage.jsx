@@ -14,13 +14,18 @@ function QuizPage() {
   // - an object { id: <quizId>, questions: [...] }
   const statePayload =
     location.state?.quizQuestions ?? location.state?.quiz ?? null;
+  const configPayload = location.state?.config ?? null;
 
   // fallback to sessionStorage if user refreshed
   const storedPayload = JSON.parse(
     sessionStorage.getItem('quizPayload') || 'null'
   );
+  const storedConfig = JSON.parse(
+    sessionStorage.getItem('quizConfig') || 'null'
+  );
 
   const initialPayload = statePayload || storedPayload;
+  const initialConfig = configPayload || storedConfig;
 
   // normalize to { id, questions, attemptId }
   const normalize = (p) => {
@@ -503,7 +508,7 @@ function QuizPage() {
         </div>
       )}
 
-      <QuizSettings />
+      <QuizSettings config={initialConfig} />
       {console.log('Rendering QuizQuestion with:', {
         question: current.question,
         type: current.type,

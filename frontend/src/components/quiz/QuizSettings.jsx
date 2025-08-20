@@ -1,16 +1,49 @@
-function QuizSettings() {
+function QuizSettings({ config }) {
+  // Extract display values from config
+  const getTopicDisplayName = () => {
+    if (!config) return 'Unknown Topic';
+
+    // If a child topic is selected, use it
+    if (
+      config.selectedChildTopic &&
+      config.selectedChildTopic !== 'All' &&
+      config.childrenCategories
+    ) {
+      const childCategory = config.childrenCategories.find(
+        (cat) => cat.id.toString() === config.selectedChildTopic
+      );
+      return childCategory?.name || 'Unknown Topic';
+    }
+
+    // Otherwise use parent topic
+    if (config.selectedParentTopic && config.parentCategories) {
+      const parentCategory = config.parentCategories.find(
+        (cat) => cat.id.toString() === config.selectedParentTopic
+      );
+      return parentCategory?.name || 'Unknown Topic';
+    }
+
+    return 'Unknown Topic';
+  };
+
+  const getQuestionsCount = () => {
+    return config?.selectedQuestions || '?';
+  };
+
   return (
     <div className='d-flex justify-content-between align-items-end gap-3'>
       {/* SELECTED TOPIC */}
       <div className='selector'>
         <p className='selector-p small-text text-muted'>Topic</p>
-        <div className='selected-box button-text'>REACT</div>
+        <div className='selected-box button-text fs-6'>
+          {getTopicDisplayName()}
+        </div>
       </div>
 
       {/* SELECT QUESTIONS */}
       <div className='selector'>
         <p className='selector-p small-text text-muted'>Questions</p>
-        <div className='selected-box button-text'>10</div>
+        <div className='selected-box button-text'>{getQuestionsCount()}</div>
       </div>
 
       {/* SHUFFLE BUTTON */}

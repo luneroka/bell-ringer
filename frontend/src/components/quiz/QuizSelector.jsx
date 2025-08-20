@@ -172,9 +172,24 @@ function QuizSelector() {
         questions: data.questions,
       };
 
+      // Prepare quiz configuration for display in QuizSettings
+      const quizConfig = {
+        selectedParentTopic,
+        selectedChildTopic,
+        selectedQuestions,
+        parentCategories,
+        childrenCategories,
+      };
+
       setQuizQuestions(quizInfo);
       sessionStorage.setItem('quizQuestions', JSON.stringify(quizInfo));
-      navigate('/quiz', { state: { quiz: quizInfo } });
+      sessionStorage.setItem('quizConfig', JSON.stringify(quizConfig));
+      navigate('/quiz', {
+        state: {
+          quiz: quizInfo,
+          config: quizConfig,
+        },
+      });
     } catch (err) {
       console.error('Error while generating the quiz', err);
       const message =
