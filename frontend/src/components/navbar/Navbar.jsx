@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaRegUser, FaUser } from 'react-icons/fa';
 import {
-  IoHomeOutline,
   IoHome,
+  IoHomeOutline,
+  IoLogInOutline,
+  IoLogIn,
+  IoPersonAddOutline,
+  IoPersonAdd,
   IoSettingsOutline,
   IoSettings,
 } from 'react-icons/io5';
@@ -34,43 +37,59 @@ function Navbar() {
             <div
               role='button'
               className='text-white'
-              onMouseEnter={() => setHoveredIcon('hom')}
+              onMouseEnter={() => setHoveredIcon('home')}
               onMouseLeave={() => setHoveredIcon(null)}
             >
-              {hoveredIcon === 'hom' ? (
+              {hoveredIcon === 'home' ? (
                 <IoHome size={32} />
               ) : (
                 <IoHomeOutline size={32} />
               )}
             </div>
           </Link>
+        </div>
+
+        <div className='d-flex flex-column gap-4'>
           <Link to='/login'>
             <div
               role='button'
               className='text-white'
-              onMouseEnter={() => setHoveredIcon('user')}
+              onMouseEnter={() => setHoveredIcon('login')}
               onMouseLeave={() => setHoveredIcon(null)}
             >
-              {hoveredIcon === 'user' ? (
-                <FaUser size={32} />
+              {hoveredIcon === 'login' ? (
+                <IoLogIn size={32} />
               ) : (
-                <FaRegUser size={32} />
+                <IoLogInOutline size={32} />
               )}
             </div>
           </Link>
-        </div>
-
-        <div
-          role='button'
-          className='text-white'
-          onMouseEnter={() => setHoveredIcon('settings')}
-          onMouseLeave={() => setHoveredIcon(null)}
-        >
-          {hoveredIcon === 'settings' ? (
-            <IoSettings size={32} />
-          ) : (
-            <IoSettingsOutline size={32} />
-          )}
+          <Link to='/register'>
+            <div
+              role='button'
+              className='text-white'
+              onMouseEnter={() => setHoveredIcon('register')}
+              onMouseLeave={() => setHoveredIcon(null)}
+            >
+              {hoveredIcon === 'register' ? (
+                <IoPersonAdd size={32} />
+              ) : (
+                <IoPersonAddOutline size={32} />
+              )}
+            </div>
+          </Link>
+          <div
+            role='button'
+            className='text-white'
+            onMouseEnter={() => setHoveredIcon('settings')}
+            onMouseLeave={() => setHoveredIcon(null)}
+          >
+            {hoveredIcon === 'settings' ? (
+              <IoSettings size={32} />
+            ) : (
+              <IoSettingsOutline size={32} />
+            )}
+          </div>
         </div>
       </nav>
     </header>

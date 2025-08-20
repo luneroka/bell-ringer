@@ -71,7 +71,7 @@ function Login() {
               </form>
 
               <div className='mt-5'>
-                Already an account ? <Link to='/register'>Sign Up</Link>
+                Need an account? <Link to='/register'>Sign Up</Link>
               </div>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   renderQuestionContent,
   renderAnswerContent,
@@ -5,24 +6,68 @@ import {
 
 function QuizQuestion({
   index,
+  total,
   question,
   type,
   choices,
   correctChoices,
   answerText,
+  loading = false,
+  onSubmit,
 }) {
+  const [userAnswers, setUserAnswers] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  // Reset state when question changes
+  useEffect(() => {
+    setUserAnswers([]);
+    setSubmitted(false);
+  }, [index, question]); // Reset when question or index changes
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    if (onSubmit) {
+      onSubmit(userAnswers);
+    }
+  };
+
   return (
     <div id='quiz-question' className='d-flex flex-column gap-4'>
       <div>
-        <p className='text-muted small-text'>Question {index}/10</p>
+        <p className='text-muted small-text'>
+          Question {index}/{total}
+        </p>
         <div className='question-answer-box'>{question}</div>
       </div>
 
-      <div className='w-100'>{renderQuestionContent(type, choices, index)}</div>
+      {loading ? (
+        <div>Loading question details...</div>
+      ) : (
+        <div className='w-100'>
+          {renderQuestionContent(
+            type,
+            choices,
+            index,
+            userAnswers,
+            setUserAnswers,
+            submitted
+          )}
+        </div>
+      )}
 
-      <button className='mx-auto send-btn button-text'>Send</button>
+      <button
+        className='mx-auto send-btn button-text'
+        onClick={handleSubmit}
+        disabled={submitted || loading || userAnswers.length === 0}
+      >
+        {submitted ? 'Submitted' : 'Send'}
+      </button>
 
-      <div>{renderAnswerContent(type, correctChoices, answerText)}</div>
+      {submitted && (
+        <div>
+          {renderAnswerContent(type, correctChoices, answerText, userAnswers)}
+        </div>
+      )}
     </div>
   );
 }

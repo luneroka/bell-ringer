@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { auth } from '../../utils/firebase.config';
 
@@ -11,6 +11,8 @@ function QuizSelector() {
   const [selectedParentTopic, setSelectedParentTopic] = useState('');
   const [selectedChildTopic, setSelectedChildTopic] = useState('');
   const [selectedQuestions, setSelectedQuestions] = useState('');
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -61,6 +63,7 @@ function QuizSelector() {
   const fetchChildCategories = async (parentId) => {
     try {
       const user = auth.currentUser;
+      if (!user) return;
       const idToken = await user.getIdToken();
 
       const baseUrl =
@@ -87,74 +90,164 @@ function QuizSelector() {
     }
   }, [selectedParentTopic]);
 
+  // Handle quiz generation
+  const handleGenerateQuiz = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (!selectedParentTopic) {
+        setError('Please select an area.');
+        setLoading(false);
+        return;
+      }
+
+      const rawCategoryId =
+        selectedChildTopic && selectedChildTopic !== 'All'
+          ? selectedChildTopic
+          : selectedParentTopic;
+
+      const categoryId = Number(rawCategoryId);
+
+      const total = parseInt(selectedQuestions, 10);
+      if (!total || Number.isNaN(total)) {
+        setError('Please select the number of questions.');
+        setLoading(false);
+        return;
+      }
+
+      const user = auth.currentUser;
+      if (!user) {
+        setError('User not authenticated.');
+        setLoading(false);
+        return;
+      }
+
+      const idToken = await user.getIdToken(/* forceRefresh = */ false);
+
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+      // Resolve backend internal user id (the backend expects the DB user.id)
+      let internalUserId = null;
+      try {
+        const meResp = await axios.get(`${baseUrl}/api/v1/users/me`, {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        internalUserId = meResp?.data?.id || null;
+      } catch (e) {
+        console.error('Failed to resolve internal user id via /users/me', e);
+      }
+
+      if (!internalUserId) {
+        setError(
+          'Could not resolve internal user id. Ensure a backend user record exists for this Firebase account.'
+        );
+        setLoading(false);
+        return;
+      }
+
+      const payload = {
+        userId: internalUserId,
+        categoryId,
+        total,
+        modeOverride: null,
+      };
+
+      const response = await axios.post(
+        `${baseUrl}/api/v1/questions/generate`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${idToken}` },
+        }
+      );
+
+      const data = response.data;
+      setQuizQuestions(data);
+      sessionStorage.setItem('quizQuestions', JSON.stringify(data));
+      navigate('/quiz', { state: { quizQuestions: data } });
+    } catch (err) {
+      console.error('Error while generating the quiz', err);
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        err?.message ||
+        'Error while generating the quiz, please try again.';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className='d-flex justify-content-between align-items-end gap-3'>
-      {error && <div style={{ color: 'red' }}>Error: {error}</div>}
-
-      {/* GENERAL TOPIC SELECT */}
-      <div className='selector'>
-        <p className='selector-p small-text text-muted'>Area</p>
-        <select
-          name='general-topic'
-          id='general-topic-select'
-          className='form-select'
-          value={selectedParentTopic}
-          onChange={(e) => setSelectedParentTopic(e.target.value)}
-        >
-          <option value='' disabled>
-            SELECT
-          </option>
-          {parentCategories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
+    <>
+      {error && (
+        <div style={{ color: 'red', marginBottom: '32px' }}>Error: {error}</div>
+      )}
+      <div className='d-flex justify-content-between align-items-end gap-3'>
+        {/* GENERAL TOPIC SELECT */}
+        <div className='selector'>
+          <p className='selector-p small-text text-muted'>Area</p>
+          <select
+            name='general-topic'
+            id='general-topic-select'
+            className='form-select'
+            value={selectedParentTopic}
+            onChange={(e) => setSelectedParentTopic(e.target.value)}
+          >
+            <option value='' disabled>
+              SELECT
             </option>
-          ))}
-        </select>
-      </div>
+            {parentCategories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* SPECIFIC TOPIC SELECT */}
-      <div className='selector'>
-        <p className='selector-p small-text text-muted'>Topic (optional)</p>
-        <select
-          name='specific-topic'
-          id='specific-topic-select'
-          className='form-select'
-          value={selectedChildTopic}
-          onChange={(e) => setSelectedChildTopic(e.target.value)}
-        >
-          <option value='frontend'>All</option>
-          {childrenCategories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
+        {/* SPECIFIC TOPIC SELECT */}
+        <div className='selector'>
+          <p className='selector-p small-text text-muted'>Topic (optional)</p>
+          <select
+            name='specific-topic'
+            id='specific-topic-select'
+            className='form-select'
+            value={selectedChildTopic}
+            onChange={(e) => setSelectedChildTopic(e.target.value)}
+          >
+            <option value='All'>All</option>
+            {childrenCategories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* QUESTIONS SELECT */}
+        <div className='selector'>
+          <p className='selector-p small-text text-muted'>
+            Select number of questions
+          </p>
+          <select
+            name='questions'
+            id='questions-select'
+            className='form-select'
+            value={selectedQuestions}
+            onChange={(e) => setSelectedQuestions(e.target.value)}
+          >
+            <option value='' disabled>
+              SELECT
             </option>
-          ))}
-        </select>
-      </div>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
 
-      {/* QUESTIONS SELECT */}
-      <div className='selector'>
-        <p className='selector-p small-text text-muted'>
-          Select number of questions
-        </p>
-        <select
-          name='questions'
-          id='questions-select'
-          className='form-select'
-          value={selectedQuestions}
-          onChange={(e) => setSelectedQuestions(e.target.value)}
-        >
-          <option value='' disabled>
-            SELECT
-          </option>
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={15}>15</option>
-          <option value={20}>20</option>
-        </select>
-      </div>
-
-      {/* SHUFFLE BUTTON */}
-      <Link to='/quiz'>
+        {/* SHUFFLE BUTTON */}
         <button
           className='btn btn-primary button-text'
           style={{
@@ -163,11 +256,14 @@ function QuizSelector() {
             maxWidth: '400px',
             height: '48px',
           }}
+          onClick={handleGenerateQuiz}
+          disabled={loading}
+          type='button'
         >
-          Shuffle
+          {loading ? 'Generating...' : 'Shuffle'}
         </button>
-      </Link>
-    </div>
+      </div>
+    </>
   );
 }
 
