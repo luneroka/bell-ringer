@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
 import QuizPage from './pages/QuizPage.jsx';
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
@@ -42,6 +42,10 @@ function AppRoutes() {
         }
       >
         <Route path='/quiz' element={<QuizPage />} />
+        <Route
+          path='/history'
+          element={<div>History page coming soon...</div>}
+        />
       </Route>
     </Routes>
   );
