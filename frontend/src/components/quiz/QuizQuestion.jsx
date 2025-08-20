@@ -12,7 +12,9 @@ function QuizQuestion({
   choices,
   correctChoices,
   answerText,
+  scoringResult,
   loading = false,
+  submitting = false,
   onSubmit,
 }) {
   const [userAnswers, setUserAnswers] = useState([]);
@@ -58,14 +60,22 @@ function QuizQuestion({
       <button
         className='mx-auto send-btn button-text'
         onClick={handleSubmit}
-        disabled={submitted || loading || userAnswers.length === 0}
+        disabled={
+          submitted || loading || submitting || userAnswers.length === 0
+        }
       >
-        {submitted ? 'Submitted' : 'Send'}
+        {submitting ? 'Submitting...' : submitted ? 'Submitted' : 'Send'}
       </button>
 
       {submitted && (
         <div>
-          {renderAnswerContent(type, correctChoices, answerText, userAnswers)}
+          {renderAnswerContent(
+            type,
+            correctChoices,
+            answerText,
+            userAnswers,
+            scoringResult
+          )}
         </div>
       )}
     </div>

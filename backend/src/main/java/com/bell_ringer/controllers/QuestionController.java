@@ -4,10 +4,9 @@ import com.bell_ringer.services.QuestionService;
 import com.bell_ringer.services.QuestionService.QuotaDTO;
 import com.bell_ringer.services.dto.GenerationRequest;
 import com.bell_ringer.services.dto.QuestionDto;
+import com.bell_ringer.services.dto.QuizGenerationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/questions")
@@ -26,12 +25,12 @@ public class QuestionController {
   }
 
   @PostMapping("/generate")
-  public ResponseEntity<List<QuestionDto>> generate(@RequestBody GenerationRequest request) {
+  public ResponseEntity<QuizGenerationResponse> generate(@RequestBody GenerationRequest request) {
     if (request == null)
       return ResponseEntity.badRequest().build();
     // QuestionService handles the rest (mode, quota, draw)
-    var list = questionService.generate(request);
-    return ResponseEntity.ok(list);
+    var response = questionService.generate(request);
+    return ResponseEntity.ok(response);
   }
 
   // Optional sanity endpoint

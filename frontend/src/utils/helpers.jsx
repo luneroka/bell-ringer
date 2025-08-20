@@ -126,7 +126,8 @@ export function renderAnswerContent(
   type,
   correctChoices,
   answerText,
-  userAnswers = []
+  userAnswers = [],
+  scoringResult = null
 ) {
   const normalizedType = normalizeType(type);
 
@@ -208,15 +209,44 @@ export function renderAnswerContent(
   }
 
   if (normalizedType === 'short_answer') {
+    // If we have scoring result, display the score and feedback
+    if (scoringResult) {
+      const isCorrect = scoringResult.isCorrect || false;
+
+      return (
+        <div className='answer-feedback'>
+          {isCorrect ? (
+            <div className='d-flex align-items-center fst-italic mb-2'>
+              <FaCheckSquare className='text-success me-2' />
+              <span className='text-success'>Correct!</span>
+            </div>
+          ) : (
+            <div className='d-flex align-items-center fst-italic mb-2'>
+              <TiDelete size={24} className='text-danger me-2' />
+              <span className='text-danger'>Incorrect!</span>
+            </div>
+          )}
+          {answerText && (
+            <div>
+              <strong>Correct answer:</strong> {answerText}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Fallback for when no scoring result is available yet
     return (
       <div className='question-answer-box'>
         <div className='d-flex align-items-center fst-italic mb-2'>
           <span className='text-info me-2'>📝</span>
           Your answer submitted for review
         </div>
-        <div>
-          <strong>Expected answer:</strong> {answerText}
-        </div>
+        {answerText && (
+          <div>
+            <strong>Expected answer:</strong> {answerText}
+          </div>
+        )}
       </div>
     );
   }

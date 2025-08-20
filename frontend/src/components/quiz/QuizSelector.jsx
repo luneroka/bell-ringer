@@ -163,9 +163,18 @@ function QuizSelector() {
       );
 
       const data = response.data;
-      setQuizQuestions(data);
-      sessionStorage.setItem('quizQuestions', JSON.stringify(data));
-      navigate('/quiz', { state: { quizQuestions: data } });
+      console.log('Quiz generation response:', data);
+
+      // Extract quiz information and questions from the new response format
+      const quizInfo = {
+        id: data.quizId,
+        attemptId: data.attemptId,
+        questions: data.questions,
+      };
+
+      setQuizQuestions(quizInfo);
+      sessionStorage.setItem('quizQuestions', JSON.stringify(quizInfo));
+      navigate('/quiz', { state: { quiz: quizInfo } });
     } catch (err) {
       console.error('Error while generating the quiz', err);
       const message =

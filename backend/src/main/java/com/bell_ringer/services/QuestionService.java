@@ -7,6 +7,7 @@ import com.bell_ringer.models.Question.Type;
 import com.bell_ringer.repositories.QuestionRepository;
 import com.bell_ringer.services.dto.GenerationRequest;
 import com.bell_ringer.services.dto.QuestionDto;
+import com.bell_ringer.services.dto.QuizGenerationResponse;
 import com.bell_ringer.services.dto.ChoiceDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -228,7 +229,7 @@ public class QuestionService {
 
   // ===== Orchestrator =====
   @Transactional
-  public List<QuestionDto> generate(GenerationRequest req) {
+  public QuizGenerationResponse generate(GenerationRequest req) {
     if (req.userId() == null)
       throw new IllegalArgumentException("userId required");
     if (req.categoryId() == null)
@@ -254,10 +255,13 @@ public class QuestionService {
     quizService.addQuestions(quizId, questionIds);
 
     // 5) Create the initial attempt for this quiz
-    attemptService.startAttempt(quizId);
+    var attempt = attemptService.startAttempt(quizId);
 
     // 6) Convert to DTOs (without choices for performance)
-    return convertToDtoListWithoutChoices(selected);
+    var questionDtos = convertToDtoListWithoutChoices(selected);
+
+    // 7) Return complete response with quiz, attempt, and questions
+    return new QuizGenerationResponse(quizId, attempt.id(), questionDtos);
   }
 
   // ===== Helpers =====
