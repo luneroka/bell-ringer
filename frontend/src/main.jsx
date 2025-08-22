@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
 import QuizPage from './pages/QuizPage.jsx';
+import QuizResults from './pages/QuizResults.jsx';
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
 import './utils/firebase.config';
 import './styles/main.scss';
@@ -42,6 +43,7 @@ function AppRoutes() {
         }
       >
         <Route path='/quiz' element={<QuizPage />} />
+        <Route path='/quiz-results' element={<QuizResults />} />
         <Route
           path='/history'
           element={<div>History page coming soon...</div>}
