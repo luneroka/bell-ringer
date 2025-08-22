@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { auth } from '../../utils/firebase.config';
 
-function QuizSelector() {
+function QuizSelector({ retryConfig }) {
   const [parentCategories, setParentCategories] = useState([]);
   const [childrenCategories, setChildrenCategories] = useState([]);
   const [error, setError] = useState(null);
@@ -13,6 +13,41 @@ function QuizSelector() {
   const [selectedQuestions, setSelectedQuestions] = useState('');
   const [quizQuestions, setQuizQuestions] = useState([]);
   const navigate = useNavigate();
+
+  // Handle retry configuration
+  useEffect(() => {
+    if (retryConfig) {
+      console.log('Setting up retry with config:', retryConfig);
+
+      // Set the form values from retry config
+      if (retryConfig.selectedParentTopic) {
+        setSelectedParentTopic(retryConfig.selectedParentTopic);
+      }
+      if (retryConfig.selectedChildTopic) {
+        setSelectedChildTopic(retryConfig.selectedChildTopic);
+      }
+      if (retryConfig.selectedQuestions) {
+        setSelectedQuestions(retryConfig.selectedQuestions);
+      }
+
+      // Set the categories data if available
+      if (retryConfig.parentCategories) {
+        setParentCategories(retryConfig.parentCategories);
+      }
+      if (retryConfig.childrenCategories) {
+        setChildrenCategories(retryConfig.childrenCategories);
+      }
+
+      // Auto-generate quiz after a short delay to ensure state is set
+      const timer = setTimeout(() => {
+        if (retryConfig.selectedParentTopic && retryConfig.selectedQuestions) {
+          handleGenerateQuiz();
+        }
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [retryConfig]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {

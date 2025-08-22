@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import AuthInstructions from '../components/instructions/AuthInstructions';
 import IndexInstructions from '../components/instructions/IndexInstructions';
 import QuizSelector from '../components/quiz/QuizSelector';
@@ -5,13 +6,17 @@ import { useAuth } from '../contexts/AuthContext';
 
 function HomePage() {
   const { currentUser } = useAuth();
+  const location = useLocation();
+
+  // Get retry configuration from navigation state
+  const retryConfig = location.state?.retryConfig;
 
   return currentUser ? (
     <>
       <AuthInstructions />
 
       <div style={{ marginTop: '96px' }}>
-        <QuizSelector />
+        <QuizSelector retryConfig={retryConfig} />
       </div>
     </>
   ) : (

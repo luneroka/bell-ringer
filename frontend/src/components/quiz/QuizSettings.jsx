@@ -1,4 +1,4 @@
-function QuizSettings({ config }) {
+function QuizSettings({ config, onAbort }) {
   // Extract display values from config
   const getTopicDisplayName = () => {
     if (!config) return 'Unknown Topic';
@@ -30,6 +30,16 @@ function QuizSettings({ config }) {
     return config?.selectedQuestions || '?';
   };
 
+  const handleAbort = () => {
+    if (
+      window.confirm(
+        'Are you sure you want to abort this quiz? Your progress will be lost.'
+      )
+    ) {
+      onAbort?.();
+    }
+  };
+
   return (
     <div className='d-flex justify-content-between align-items-end gap-3'>
       {/* SELECTED TOPIC */}
@@ -46,9 +56,10 @@ function QuizSettings({ config }) {
         <div className='selected-box button-text'>{getQuestionsCount()}</div>
       </div>
 
-      {/* SHUFFLE BUTTON */}
+      {/* ABORT BUTTON */}
       <button
-        className='btn btn-primary button-text'
+        className='btn btn-danger button-text'
+        onClick={handleAbort}
         style={{
           width: '100%',
           minWidth: '120px',
@@ -56,7 +67,7 @@ function QuizSettings({ config }) {
           height: '48px',
         }}
       >
-        Re-shuffle
+        Abort Quiz
       </button>
     </div>
   );
