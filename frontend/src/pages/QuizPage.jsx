@@ -462,12 +462,9 @@ function QuizPage() {
         import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
       console.log('Completing quiz attempt:', attemptId);
-      console.log(
-        'API URL:',
-        `${baseUrl}/api/v1/attempts/${attemptId}/complete`
-      );
 
-      const response = await fetch(
+      // Step 1: Complete the attempt
+      const completeResponse = await fetch(
         `${baseUrl}/api/v1/attempts/${attemptId}/complete`,
         {
           method: 'POST',
@@ -477,27 +474,160 @@ function QuizPage() {
         }
       );
 
-      console.log('Complete quiz response status:', response.status);
-      if (!response.ok) {
-        const errorText = await response.text();
+      if (!completeResponse.ok) {
+        const errorText = await completeResponse.text();
         console.error(
-          `Failed to complete quiz: ${response.status} ${errorText}`
+          `Failed to complete quiz: ${completeResponse.status} ${errorText}`
         );
-        // Don't block navigation even if completion fails
-      } else {
-        console.log('Quiz completed successfully');
-        const result = await response.json();
-        console.log('Completion result:', result);
+        // If completion fails, navigate home
+        sessionStorage.removeItem('quizPayload');
+        navigate('/', { replace: true });
+        return;
       }
+
+      console.log('Quiz completed successfully');
+
+      // Step 2: Get the detailed attempt data with answers to calculate score
+      const attemptResponse = await fetch(
+        `${baseUrl}/api/v1/attempts/${attemptId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
+      );
+
+      if (!attemptResponse.ok) {
+        console.error('Failed to fetch attempt details for scoring');
+        // Fall back to local calculation if API fails
+        const fallbackScore = calculateLocalScore();
+        navigateToResults(fallbackScore, questions?.length || 0);
+        return;
+      }
+
+      const attemptData = await attemptResponse.json();
+      console.log('Attempt data for scoring:', attemptData);
+
+      // Step 3: Calculate the actual score from the attempt data
+      const calculatedScore = calculateScoreFromAttempt(attemptData);
+
+      // Clean up session storage
+      sessionStorage.removeItem('quizPayload');
+      sessionStorage.removeItem('quizConfig');
+
+      // Navigate to results page with calculated score
+      navigate('/quiz-results', {
+        state: {
+          score: calculatedScore,
+          totalQuestions: questions?.length || 0,
+          config: initialConfig,
+          quizId: quizId, // Pass quizId for retry functionality
+        },
+        replace: true,
+      });
     } catch (e) {
       console.error('Error completing quiz:', e);
-      // Don't block navigation even if completion fails
-    } finally {
-      // Always clean up and navigate
-      sessionStorage.removeItem('quizPayload');
-      // TODO: Navigate to results page with quiz results
-      navigate('/', { replace: true });
+      // Even if completion fails, try to show results with local score calculation
+      const fallbackScore = calculateLocalScore();
+      navigateToResults(fallbackScore, questions?.length || 0);
     }
+  };
+
+  // Helper function to calculate score from attempt data
+  const calculateScoreFromAttempt = (attemptData) => {
+    let score = 0;
+
+    // Calculate score from choice questions
+    if (attemptData.selectedChoices && questions) {
+      const choiceScore = questions.reduce((count, question) => {
+        if (!question.choices) return count;
+
+        // Get user's selected choices for this question
+        const userChoices = attemptData.selectedChoices.filter(
+          (choice) => choice.questionId === question.id
+        );
+
+        if (userChoices.length === 0) return count; // No answer selected
+
+        // Check if the question is correctly answered
+        const questionType = question.type?.toLowerCase();
+
+        if (questionType === 'multiple_choice') {
+          // For multiple choice, all correct choices must be selected and no incorrect ones
+          const correctChoiceIds = question.choices
+            .filter((choice) => choice.isCorrect)
+            .map((choice) => choice.id);
+          const selectedChoiceIds = userChoices.map(
+            (choice) => choice.choiceId
+          );
+
+          const hasAllCorrect = correctChoiceIds.every((id) =>
+            selectedChoiceIds.includes(id)
+          );
+          const hasNoIncorrect = selectedChoiceIds.every((id) =>
+            correctChoiceIds.includes(id)
+          );
+
+          return hasAllCorrect && hasNoIncorrect ? count + 1 : count;
+        } else {
+          // For single choice (unique_choice, true_false)
+          const selectedChoice = question.choices.find(
+            (choice) => choice.id === userChoices[0].choiceId
+          );
+          return selectedChoice?.isCorrect ? count + 1 : count;
+        }
+      }, 0);
+
+      score += choiceScore;
+    }
+
+    // Calculate score from text answers
+    if (attemptData.textAnswers) {
+      const textScore = attemptData.textAnswers.reduce((count, answer) => {
+        return answer.isCorrect ? count + 1 : count;
+      }, 0);
+
+      score += textScore;
+    }
+
+    console.log('Calculated score:', score, 'from attempt data:', attemptData);
+    return score;
+  };
+
+  // Helper function for local score calculation (fallback)
+  const calculateLocalScore = () => {
+    return (
+      questions?.reduce((count, question) => {
+        // For text answers, check scoring result
+        if (question.scoringResult) {
+          return question.scoringResult.isCorrect ? count + 1 : count;
+        }
+        return count;
+      }, 0) || 0
+    );
+  };
+
+  // Helper function to navigate to results
+  const navigateToResults = (score, totalQuestions) => {
+    sessionStorage.removeItem('quizPayload');
+    sessionStorage.removeItem('quizConfig');
+
+    navigate('/quiz-results', {
+      state: {
+        score: score,
+        totalQuestions: totalQuestions,
+        config: initialConfig,
+        quizId: quizId,
+      },
+      replace: true,
+    });
+  };
+
+  const handleAbortQuiz = () => {
+    // Clean up session storage and navigate back to home
+    sessionStorage.removeItem('quizPayload');
+    sessionStorage.removeItem('quizConfig');
+    navigate('/', { replace: true });
   };
 
   return (
@@ -508,7 +638,7 @@ function QuizPage() {
         </div>
       )}
 
-      <QuizSettings config={initialConfig} />
+      <QuizSettings config={initialConfig} onAbort={handleAbortQuiz} />
       {console.log('Rendering QuizQuestion with:', {
         question: current.question,
         type: current.type,
