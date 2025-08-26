@@ -183,8 +183,6 @@ public class QuestionService {
     if (total <= 0)
       throw new IllegalArgumentException("total must be > 0");
 
-    System.out.println("DEBUG: Drawing questions with quota: " + quota + ", total: " + total);
-
     // Stock guard (can be relaxed to allow partial fills)
     assertEnoughStock(categoryIds, total);
 
@@ -198,44 +196,32 @@ public class QuestionService {
     if (quota.easy() > 0) {
       var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.EASY.name(),
           quota.easy() * over);
-      System.out.println("DEBUG: Easy batch fetched " + batch.size() + " questions, need " + quota.easy());
       addUntilUnique(out, batch, quota.easy(), seen);
-      System.out.println("DEBUG: After easy batch, out.size=" + out.size() + ", seen.size=" + seen.size());
     }
 
     // MEDIUM
     if (quota.medium() > 0) {
       var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.MEDIUM.name(),
           quota.medium() * over);
-      System.out.println("DEBUG: Medium batch fetched " + batch.size() + " questions, need " + quota.medium());
       addUntilUnique(out, batch, quota.medium(), seen);
-      System.out.println("DEBUG: After medium batch, out.size=" + out.size() + ", seen.size=" + seen.size());
     }
 
     // HARD
     if (quota.hard() > 0) {
       var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.HARD.name(),
           quota.hard() * over);
-      System.out.println("DEBUG: Hard batch fetched " + batch.size() + " questions, need " + quota.hard());
       addUntilUnique(out, batch, quota.hard(), seen);
-      System.out.println("DEBUG: After hard batch, out.size=" + out.size() + ", seen.size=" + seen.size());
     }
 
     // Fallback: if any bucket was short, top up with any difficulty
     int missing = total - out.size();
     if (missing > 0) {
       var topUp = questionRepository.pickRandomFilteredMany(categoryIds, null, null, missing * over);
-      System.out.println("DEBUG: Top-up batch fetched " + topUp.size() + " questions, need " + missing);
       addUntilUnique(out, topUp, missing, seen);
-      System.out.println("DEBUG: After top-up, out.size=" + out.size() + ", seen.size=" + seen.size());
     }
 
     // Final shuffle so order is random across difficulties
     Collections.shuffle(out);
-
-    // Print final question IDs for debugging
-    List<Long> questionIds = out.stream().map(Question::getId).toList();
-    System.out.println("DEBUG: Final selected question IDs: " + questionIds);
 
     // Truncate in case we slightly overfilled (defensive)
     return out.size() > total ? out.subList(0, total) : out;
@@ -358,20 +344,14 @@ public class QuestionService {
       int need,
       Set<Long> seen) {
     int added = 0;
-    System.out.println("DEBUG: addUntilUnique called with batch.size=" + batch.size() + ", need=" + need
-        + ", seen.size=" + seen.size());
     for (Question q : batch) {
       if (added >= need)
         break;
       if (seen.add(q.getId())) {
         target.add(q);
         added++;
-        System.out.println("DEBUG: Added question ID " + q.getId() + " (added=" + added + "/" + need + ")");
-      } else {
-        System.out.println("DEBUG: Skipped duplicate question ID " + q.getId());
       }
     }
-    System.out.println("DEBUG: addUntilUnique completed, added=" + added + ", final seen.size=" + seen.size());
     return added;
   }
 
