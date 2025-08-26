@@ -174,26 +174,22 @@ function QuizResults() {
         {/* Action Buttons */}
         <div className='d-flex gap-3 justify-content-center'>
           <button
-            className='btn btn-primary px-5 py-3 fs-5 fw-bold'
+            className='btn btn-primary button-text'
             onClick={handleRetry}
             disabled={retrying}
             style={{
-              borderRadius: '25px',
               minWidth: '150px',
-              backgroundColor: '#8B5FBF',
-              borderColor: '#8B5FBF',
+              height: '48px',
             }}
           >
             {retrying ? 'Starting...' : 'Retry'}
           </button>
           <button
-            className='btn btn-primary px-5 py-3 fs-5 fw-bold'
+            className='btn btn-primary button-text'
             onClick={handleHome}
             style={{
-              borderRadius: '25px',
               minWidth: '150px',
-              backgroundColor: '#8B5FBF',
-              borderColor: '#8B5FBF',
+              height: '48px',
             }}
           >
             Home
