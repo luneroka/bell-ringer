@@ -68,13 +68,6 @@ function QuizPage() {
   const [error, setError] = useState(null);
   const [submittingAnswer, setSubmittingAnswer] = useState(false);
 
-  // Debug logging
-  console.log('QuizPage initialized with:', {
-    quizId,
-    attemptId,
-    questionsCount: questions?.length,
-  });
-
   // Helper functions for API calls
   const getAuthenticatedUser = async () => {
     const user = (await import('../utils/firebase.config')).auth.currentUser;
@@ -163,15 +156,8 @@ function QuizPage() {
       if (!questions || !questions[currentIndex]) return;
 
       const question = questions[currentIndex];
-      console.log(
-        'fetchExtras called for question:',
-        question.id,
-        'type:',
-        question.type
-      );
 
       if (!needsChoices(question) && !needsAnswerText(question)) {
-        console.log('No need to fetch - already has data');
         return;
       }
 
@@ -180,38 +166,25 @@ function QuizPage() {
 
       try {
         if (needsChoices(question)) {
-          console.log(
-            'Fetching choices for question:',
-            question.id,
-            'type:',
-            question.type
-          );
           const choices = await fetchChoices(question.id);
 
           setQuestions((prev) => {
             const copy = [...prev];
             copy[currentIndex] = { ...copy[currentIndex], choices };
-            console.log('Updated question with choices:', copy[currentIndex]);
             return copy;
           });
         }
 
         if (needsAnswerText(question)) {
-          console.log('Fetching open answer for question:', question.id);
           const answerText = await fetchOpenAnswer(question.id);
 
           setQuestions((prev) => {
             const copy = [...prev];
             copy[currentIndex] = { ...copy[currentIndex], answerText };
-            console.log(
-              'Updated question with answerText:',
-              copy[currentIndex]
-            );
             return copy;
           });
         }
       } catch (error) {
-        console.error('Failed to fetch question extras', error);
         setError('Failed to load question details. Please try refreshing.');
       } finally {
         setLoadingQuestion(false);
@@ -301,7 +274,6 @@ function QuizPage() {
     if (!response.ok && response.status === 500) {
       const errorText = await response.text();
       if (errorText.includes('Text answer already exists')) {
-        console.log('Answer already exists, updating instead...');
         response = await fetch(
           `${baseUrl}/api/v1/attempt-text-answers/${attemptId}/${question.id}`,
           {
@@ -324,7 +296,6 @@ function QuizPage() {
     }
 
     const result = await response.json();
-    console.log('Text answer submitted successfully:', result);
 
     // Store the scoring result for display
     setQuestions((prev) => {
@@ -344,7 +315,6 @@ function QuizPage() {
 
     // Check if this question has already been submitted
     if (submittedQuestions.has(currentQuestion.id)) {
-      console.log('Question already submitted, skipping...');
       return;
     }
 
@@ -402,16 +372,9 @@ function QuizPage() {
       submittedQuestions.has(questions[currentIndex].id));
 
   const handleNext = () => {
-    console.log(
-      'handleNext called - currentIndex:',
-      currentIndex,
-      'total questions:',
-      questions.length
-    );
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((i) => i + 1);
     } else {
-      console.log('Finishing quiz - calling completeQuiz()');
       completeQuiz();
     }
   };
@@ -424,8 +387,6 @@ function QuizPage() {
   // Score calculation functions
   const calculateScoreFromAttempt = (attemptData) => {
     let score = 0;
-
-    console.log('Calculating score from attempt data:', attemptData);
 
     // Calculate score from choice questions
     if (attemptData.selectedChoices && questions) {
@@ -456,23 +417,16 @@ function QuizPage() {
           );
 
           const isCorrect = hasAllCorrect && hasNoIncorrect;
-          console.log(
-            `Question ${question.id} (multiple_choice): correct=${isCorrect}`
-          );
           return isCorrect ? count + 1 : count;
         } else {
           const selectedChoice = question.choices.find(
             (choice) => choice.id === userChoices[0].choiceId
           );
           const isCorrect = selectedChoice?.isCorrect || false;
-          console.log(
-            `Question ${question.id} (${questionType}): correct=${isCorrect}`
-          );
           return isCorrect ? count + 1 : count;
         }
       }, 0);
 
-      console.log('Choice questions score:', choiceScore);
       score += choiceScore;
     }
 
@@ -480,17 +434,12 @@ function QuizPage() {
     if (attemptData.textAnswers) {
       const textScore = attemptData.textAnswers.reduce((count, answer) => {
         const isCorrect = answer.isCorrect || false;
-        console.log(
-          `Text answer for question ${answer.questionId}: correct=${isCorrect}`
-        );
         return isCorrect ? count + 1 : count;
       }, 0);
 
-      console.log('Text questions score:', textScore);
       score += textScore;
     }
 
-    console.log('Final calculated score:', score);
     return score;
   };
 
@@ -506,7 +455,6 @@ function QuizPage() {
   };
 
   const completeQuiz = async () => {
-    console.log('completeQuiz called with attemptId:', attemptId);
     if (!attemptId) {
       console.error('No attemptId available to complete quiz');
       navigateToResults(0, questions?.length || 0);
@@ -516,8 +464,6 @@ function QuizPage() {
     try {
       const headers = await getApiHeaders();
       const baseUrl = getBaseUrl();
-
-      console.log('Completing quiz attempt:', attemptId);
 
       // Step 1: Complete the attempt
       const completeResponse = await fetch(
@@ -537,8 +483,6 @@ function QuizPage() {
         return;
       }
 
-      console.log('Quiz completed successfully');
-
       // Step 2: Get the detailed attempt data with answers to calculate score
       const attemptResponse = await fetch(
         `${baseUrl}/api/v1/attempts/${attemptId}/detailed`,
@@ -553,7 +497,6 @@ function QuizPage() {
       }
 
       const attemptData = await attemptResponse.json();
-      console.log('Attempt data for scoring:', attemptData);
 
       // Step 3: Calculate the actual score from the attempt data
       const calculatedScore = calculateScoreFromAttempt(attemptData);
@@ -586,12 +529,7 @@ function QuizPage() {
       )}
 
       <QuizSettings config={initialConfig} onAbort={handleAbortQuiz} />
-      {console.log('Rendering QuizQuestion with:', {
-        question: currentQuestion.question,
-        type: currentQuestion.type,
-        answerText: currentQuestion.answerText,
-        scoringResult: currentQuestion.scoringResult,
-      })}
+
       <QuizQuestion
         index={currentIndex + 1}
         total={questions.length}
