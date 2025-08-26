@@ -68,11 +68,14 @@ function QuizResults() {
       console.log('New attempt created:', newAttempt);
 
       // Get the quiz data which contains the question IDs
-      const quizResponse = await fetch(`${baseUrl}/api/v1/quizzes/${quizId}`, {
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-        },
-      });
+      const quizResponse = await fetch(
+        `${baseUrl}/api/v1/quizzes/${quizId}/detailed`,
+        {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
+      );
 
       if (!quizResponse.ok) {
         const errorText = await quizResponse.text();

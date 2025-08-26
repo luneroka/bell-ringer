@@ -24,13 +24,15 @@ public class QuizService {
 
     private final QuizRepository quizzes;
     private final CategoryService categories;
+    private final QuizQuestionService quizQuestionService;
 
     @PersistenceContext
     private EntityManager em;
 
-    public QuizService(QuizRepository quizzes, CategoryService categories) {
+    public QuizService(QuizRepository quizzes, CategoryService categories, QuizQuestionService quizQuestionService) {
         this.quizzes = quizzes;
         this.categories = categories;
+        this.quizQuestionService = quizQuestionService;
     }
 
     // ===== DTO Conversion Methods =====
@@ -76,6 +78,12 @@ public class QuizService {
     public QuizDto getRequiredDto(Long id) {
         Quiz quiz = getRequired(id);
         return convertToDto(quiz);
+    }
+
+    public QuizDto getRequiredDtoWithQuestions(Long id) {
+        Quiz quiz = getRequired(id);
+        List<Long> questionIds = quizQuestionService.findQuestionIdsByQuizId(id);
+        return convertToDtoWithQuestions(quiz, questionIds);
     }
 
     // ----------------- Creation & linkage -----------------

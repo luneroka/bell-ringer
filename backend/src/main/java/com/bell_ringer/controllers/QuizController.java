@@ -29,6 +29,13 @@ public class QuizController {
         return quizService.getRequiredDto(id);
     }
 
+    /** Get a quiz by id with question IDs included */
+    @Transactional(readOnly = true)
+    @GetMapping("/{id}/detailed")
+    public QuizDto getByIdWithQuestions(@PathVariable Long id) {
+        return quizService.getRequiredDtoWithQuestions(id);
+    }
+
     /** Mark a quiz as completed (sets completed_at = now) */
     @PostMapping("/{id}/complete")
     public QuizDto markCompleted(@PathVariable Long id) {
