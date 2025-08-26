@@ -44,7 +44,6 @@ function QuizResults() {
         import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
       // Create a new attempt for the same quiz using the retry endpoint
-      console.log('Starting new attempt for quiz:', quizId);
       const response = await fetch(`${baseUrl}/api/v1/attempts/retry`, {
         method: 'POST',
         headers: {
@@ -86,7 +85,6 @@ function QuizResults() {
       }
 
       const quizData = await quizResponse.json();
-      console.log('Quiz data for retry:', quizData);
 
       // Get the actual questions using the question IDs
       if (!quizData.questionIds || quizData.questionIds.length === 0) {
@@ -110,7 +108,6 @@ function QuizResults() {
       );
 
       const questions = await Promise.all(questionPromises);
-      console.log('Fetched questions for retry:', questions);
 
       // Navigate to quiz page with the new attempt and questions
       navigate('/quiz', {

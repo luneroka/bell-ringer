@@ -244,8 +244,6 @@ function QuizPage() {
         `Failed to submit choices: ${response.status} ${errorText}`
       );
     }
-
-    console.log('Choice answers submitted successfully');
   };
 
   const submitTextAnswer = async (question, answerText) => {

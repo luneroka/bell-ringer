@@ -17,8 +17,6 @@ function QuizSelector({ retryConfig }) {
   // Handle retry configuration
   useEffect(() => {
     if (retryConfig) {
-      console.log('Setting up retry with config:', retryConfig);
-
       // Set the form values from retry config
       if (retryConfig.selectedParentTopic) {
         setSelectedParentTopic(retryConfig.selectedParentTopic);
@@ -198,7 +196,6 @@ function QuizSelector({ retryConfig }) {
       );
 
       const data = response.data;
-      console.log('Quiz generation response:', data);
 
       // Extract quiz information and questions from the new response format
       const quizInfo = {
