@@ -34,14 +34,13 @@ public class QuizQuestionService {
     /** Return all link rows for a quiz. */
     public List<QuizQuestion> findAllByQuizId(Long quizId) {
         Objects.requireNonNull(quizId, "quizId must not be null");
-        return links.findAllByQuizId(quizId);
+        return links.findAllByQuizIdWithQuestion(quizId);
     }
 
     /** Return only question IDs linked to a quiz. */
     public List<Long> findQuestionIdsByQuizId(Long quizId) {
-        return findAllByQuizId(quizId).stream()
-                .map(qq -> qq.getQuestion().getId())
-                .toList();
+        Objects.requireNonNull(quizId, "quizId must not be null");
+        return links.findQuestionIdsByQuizId(quizId);
     }
 
     /** Count how many questions are attached to a quiz. */
@@ -84,7 +83,8 @@ public class QuizQuestionService {
     @Transactional
     public List<QuizQuestion> addAllIfAbsent(Long quizId, List<Long> questionIds) {
         Objects.requireNonNull(quizId, "quizId must not be null");
-        if (questionIds == null || questionIds.isEmpty()) return List.of();
+        if (questionIds == null || questionIds.isEmpty())
+            return List.of();
         Set<Long> unique = new HashSet<>(questionIds);
         List<QuizQuestion> created = new ArrayList<>(unique.size());
         for (Long qid : unique) {

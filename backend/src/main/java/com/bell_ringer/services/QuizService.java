@@ -83,6 +83,7 @@ public class QuizService {
     public QuizDto getRequiredDtoWithQuestions(Long id) {
         Quiz quiz = getRequired(id);
         List<Long> questionIds = quizQuestionService.findQuestionIdsByQuizId(id);
+        System.out.println("DEBUG: Quiz " + id + " has question IDs: " + questionIds);
         return convertToDtoWithQuestions(quiz, questionIds);
     }
 
