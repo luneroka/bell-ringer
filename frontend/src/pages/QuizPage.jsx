@@ -5,44 +5,68 @@ import QuizSettings from '../components/quiz/QuizSettings';
 import { IoIosArrowForward } from 'react-icons/io';
 import { FaFlagCheckered } from 'react-icons/fa';
 
+// Constants
+const QUESTION_TYPES = {
+  MULTIPLE_CHOICE: ['multiple_choice', 'MULTIPLE_CHOICE'],
+  UNIQUE_CHOICE: ['unique_choice', 'UNIQUE_CHOICE'],
+  TRUE_FALSE: ['true_false', 'TRUE_FALSE'],
+  SHORT_ANSWER: ['short_answer', 'SHORT_ANSWER'],
+};
+
+const CHOICE_QUESTION_TYPES = [
+  ...QUESTION_TYPES.MULTIPLE_CHOICE,
+  ...QUESTION_TYPES.UNIQUE_CHOICE,
+  ...QUESTION_TYPES.TRUE_FALSE,
+];
+
 function QuizPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // location.state may contain either:
-  // - an array of questions (quizQuestions)
-  // - an object { id: <quizId>, questions: [...] }
+  // Helper functions
+  const getStorageData = (key, fallback = null) =>
+    JSON.parse(sessionStorage.getItem(key) || 'null') || fallback;
+
+  const setStorageData = (key, data) =>
+    sessionStorage.setItem(key, JSON.stringify(data));
+
+  const removeStorageData = (key) => sessionStorage.removeItem(key);
+
+  // Get quiz data from location state or session storage
   const statePayload =
     location.state?.quizQuestions ?? location.state?.quiz ?? null;
   const configPayload = location.state?.config ?? null;
 
-  // fallback to sessionStorage if user refreshed
-  const storedPayload = JSON.parse(
-    sessionStorage.getItem('quizPayload') || 'null'
-  );
-  const storedConfig = JSON.parse(
-    sessionStorage.getItem('quizConfig') || 'null'
-  );
+  const storedPayload = getStorageData('quizPayload');
+  const storedConfig = getStorageData('quizConfig');
 
   const initialPayload = statePayload || storedPayload;
   const initialConfig = configPayload || storedConfig;
 
-  // normalize to { id, questions, attemptId }
-  const normalize = (p) => {
-    if (!p) return null;
-    if (Array.isArray(p)) return { id: null, questions: p, attemptId: null };
-    // assume object with id, questions, and attemptId
+  // Normalize payload to consistent format
+  const normalizePayload = (payload) => {
+    if (!payload) return null;
+    if (Array.isArray(payload))
+      return { id: null, questions: payload, attemptId: null };
     return {
-      id: p.id ?? null,
-      questions: p.questions ?? null,
-      attemptId: p.attemptId ?? null,
+      id: payload.id ?? null,
+      questions: payload.questions ?? null,
+      attemptId: payload.attemptId ?? null,
     };
   };
 
-  const normalized = normalize(initialPayload);
+  const normalized = normalizePayload(initialPayload);
+
+  // State management
   const [quizId, setQuizId] = useState(normalized?.id || null);
   const [attemptId, setAttemptId] = useState(normalized?.attemptId || null);
   const [questions, setQuestions] = useState(normalized?.questions || null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadingQuestion, setLoadingQuestion] = useState(false);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [submittedQuestions, setSubmittedQuestions] = useState(new Set());
+  const [error, setError] = useState(null);
+  const [submittingAnswer, setSubmittingAnswer] = useState(false);
 
   // Debug logging
   console.log('QuizPage initialized with:', {
@@ -51,178 +75,134 @@ function QuizPage() {
     questionsCount: questions?.length,
   });
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loadingQuestion, setLoadingQuestion] = useState(false);
-  const [userAnswers, setUserAnswers] = useState({}); // Store answers by question index
-  const [submittedQuestions, setSubmittedQuestions] = useState(new Set()); // Track submitted questions
-  const [error, setError] = useState(null);
-  const [submittingAnswer, setSubmittingAnswer] = useState(false);
+  // Helper functions for API calls
+  const getAuthenticatedUser = async () => {
+    const user = (await import('../utils/firebase.config')).auth.currentUser;
+    if (!user) throw new Error('User not authenticated. Please log in again.');
+    return user;
+  };
+
+  const getApiHeaders = async () => {
+    const user = await getAuthenticatedUser();
+    const idToken = await user.getIdToken();
+    return { Authorization: `Bearer ${idToken}` };
+  };
+
+  const getBaseUrl = () =>
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+  const isChoiceQuestionType = (type) => CHOICE_QUESTION_TYPES.includes(type);
+
+  const isShortAnswerType = (type) =>
+    QUESTION_TYPES.SHORT_ANSWER.includes(type);
+
+  const needsChoices = (question) =>
+    isChoiceQuestionType(question.type) &&
+    (!question.choices || question.choices.length === 0);
+
+  const needsAnswerText = (question) =>
+    isShortAnswerType(question.type) && !question.answerText;
 
   // persist payload for refresh/resume
   useEffect(() => {
     if (questions) {
       const payload = { id: quizId, questions, attemptId };
-      sessionStorage.setItem('quizPayload', JSON.stringify(payload));
+      setStorageData('quizPayload', payload);
     }
   }, [quizId, questions, attemptId]);
+
+  // API fetch functions
+  const fetchChoices = async (questionId) => {
+    const headers = await getApiHeaders();
+    const baseUrl = getBaseUrl();
+
+    const response = await fetch(
+      `${baseUrl}/api/v1/choices/question/${questionId}`,
+      { headers }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to fetch choices: ${response.status} ${errorText}`
+      );
+    }
+
+    const choices = await response.json();
+    return Array.isArray(choices) ? choices : choices.choices || choices;
+  };
+
+  const fetchOpenAnswer = async (questionId) => {
+    const headers = await getApiHeaders();
+    const baseUrl = getBaseUrl();
+
+    const response = await fetch(
+      `${baseUrl}/api/v1/open-answers/question/${questionId}`,
+      { headers }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to fetch open answer: ${response.status} ${errorText}`
+      );
+    }
+
+    const answerData = await response.json();
+
+    // Handle different response formats
+    if (Array.isArray(answerData) && answerData.length > 0) {
+      return answerData[0].answerText || answerData[0].answer;
+    }
+    return answerData.answerText || answerData.answer;
+  };
 
   // fetch choices/open-answer for current question when it becomes active
   useEffect(() => {
     async function fetchExtras() {
       if (!questions || !questions[currentIndex]) return;
-      const q = questions[currentIndex];
 
-      console.log('fetchExtras called for question:', q.id, 'type:', q.type);
-      console.log('Current choices:', q.choices);
-      console.log('Current answerText:', q.answerText);
+      const question = questions[currentIndex];
+      console.log(
+        'fetchExtras called for question:',
+        question.id,
+        'type:',
+        question.type
+      );
 
-      // Check if we need to fetch choices/answerText
-      const needsChoices =
-        (q.type === 'multiple_choice' ||
-          q.type === 'MULTIPLE_CHOICE' ||
-          q.type === 'unique_choice' ||
-          q.type === 'UNIQUE_CHOICE' ||
-          q.type === 'true_false' ||
-          q.type === 'TRUE_FALSE') &&
-        (!q.choices || q.choices.length === 0);
-      const needsAnswerText =
-        (q.type === 'short_answer' || q.type === 'SHORT_ANSWER') &&
-        !q.answerText;
-
-      if (!needsChoices && !needsAnswerText) {
+      if (!needsChoices(question) && !needsAnswerText(question)) {
         console.log('No need to fetch - already has data');
         return;
       }
 
       setLoadingQuestion(true);
       setError(null);
+
       try {
-        const user = (await import('../utils/firebase.config')).auth
-          .currentUser;
-        if (!user) {
-          setError('User not authenticated. Please log in again.');
-          return;
-        }
-        const idToken = await user.getIdToken();
-        const baseUrl =
-          import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-
-        if (
-          q.type === 'multiple_choice' ||
-          q.type === 'MULTIPLE_CHOICE' ||
-          q.type === 'unique_choice' ||
-          q.type === 'UNIQUE_CHOICE'
-        ) {
-          console.log('Fetching choices for question:', q.id, 'type:', q.type);
-          const resp = await fetch(
-            `${baseUrl}/api/v1/choices/question/${q.id}`,
-            {
-              headers: { Authorization: `Bearer ${idToken}` },
-            }
+        if (needsChoices(question)) {
+          console.log(
+            'Fetching choices for question:',
+            question.id,
+            'type:',
+            question.type
           );
+          const choices = await fetchChoices(question.id);
 
-          console.log('Response status:', resp.status);
-
-          if (!resp.ok) {
-            const errorText = await resp.text();
-            console.error('API Error:', errorText);
-            throw new Error(
-              `Failed to fetch choices: ${resp.status} ${resp.statusText}`
-            );
-          }
-
-          const choices = await resp.json();
-          console.log('Fetched choices raw response:', choices);
-
-          // Handle different response formats - could be array or object with choices property
-          const choicesArray = Array.isArray(choices)
-            ? choices
-            : choices.choices || choices;
-          console.log('Processed choices array:', choicesArray);
-
-          // merge choices into questions state
           setQuestions((prev) => {
             const copy = [...prev];
-            copy[currentIndex] = {
-              ...copy[currentIndex],
-              choices: choicesArray,
-            };
+            copy[currentIndex] = { ...copy[currentIndex], choices };
             console.log('Updated question with choices:', copy[currentIndex]);
             return copy;
           });
-        } else if (q.type === 'true_false' || q.type === 'TRUE_FALSE') {
-          console.log('Fetching choices for true/false question:', q.id);
-          const resp = await fetch(
-            `${baseUrl}/api/v1/choices/question/${q.id}`,
-            {
-              headers: { Authorization: `Bearer ${idToken}` },
-            }
-          );
+        }
 
-          if (!resp.ok) {
-            const errorText = await resp.text();
-            console.error('API Error for true/false:', errorText);
-            throw new Error(
-              `Failed to fetch choices: ${resp.status} ${resp.statusText}`
-            );
-          }
-
-          const choices = await resp.json();
-          console.log('Fetched true/false choices:', choices);
-
-          // Handle different response formats
-          const choicesArray = Array.isArray(choices)
-            ? choices
-            : choices.choices || choices;
-
-          // merge choices into questions state
-          setQuestions((prev) => {
-            const copy = [...prev];
-            copy[currentIndex] = {
-              ...copy[currentIndex],
-              choices: choicesArray,
-            };
-            return copy;
-          });
-        } else if (q.type === 'short_answer' || q.type === 'SHORT_ANSWER') {
-          console.log('Fetching open answer for question:', q.id);
-          const resp = await fetch(
-            `${baseUrl}/api/v1/open-answers/question/${q.id}`,
-            {
-              headers: { Authorization: `Bearer ${idToken}` },
-            }
-          );
-
-          console.log('Open answer response status:', resp.status);
-          if (!resp.ok) {
-            const errorText = await resp.text();
-            console.error('Failed to fetch open answer:', errorText);
-            throw new Error(
-              `Failed to fetch open answer: ${resp.status} ${errorText}`
-            );
-          }
-
-          const answerData = await resp.json();
-          console.log('Open answer data received:', answerData);
-
-          // Handle different response formats - could be single object or array
-          let answerText = null;
-          if (Array.isArray(answerData) && answerData.length > 0) {
-            answerText = answerData[0].answerText || answerData[0].answer;
-          } else if (answerData.answerText) {
-            answerText = answerData.answerText;
-          } else if (answerData.answer) {
-            answerText = answerData.answer;
-          }
-
-          console.log('Extracted answer text:', answerText);
+        if (needsAnswerText(question)) {
+          console.log('Fetching open answer for question:', question.id);
+          const answerText = await fetchOpenAnswer(question.id);
 
           setQuestions((prev) => {
             const copy = [...prev];
-            copy[currentIndex] = {
-              ...copy[currentIndex],
-              answerText: answerText,
-            };
+            copy[currentIndex] = { ...copy[currentIndex], answerText };
             console.log(
               'Updated question with answerText:',
               copy[currentIndex]
@@ -230,8 +210,8 @@ function QuizPage() {
             return copy;
           });
         }
-      } catch (e) {
-        console.error('Failed to fetch question extras', e);
+      } catch (error) {
+        console.error('Failed to fetch question extras', error);
         setError('Failed to load question details. Please try refreshing.');
       } finally {
         setLoadingQuestion(false);
@@ -239,7 +219,7 @@ function QuizPage() {
     }
 
     fetchExtras();
-  }, [currentIndex]); // Only depend on currentIndex to avoid infinite loop when questions state changes
+  }, [currentIndex]);
 
   useEffect(() => {
     if (!questions) {
@@ -252,8 +232,110 @@ function QuizPage() {
 
   const current = questions[currentIndex];
 
+  // Submission functions
+  const submitChoiceAnswers = async (question, answers) => {
+    if (!question.choices || answers.length === 0) {
+      throw new Error('No choices available or no answers selected');
+    }
+
+    const selectedChoices = answers.map((answer) => {
+      const choice = question.choices.find((c) => {
+        const choiceText =
+          typeof c === 'string' ? c : c.choiceText || c.text || String(c);
+        return choiceText === answer;
+      });
+      if (!choice?.id) {
+        throw new Error(`Could not find choice ID for answer: ${answer}`);
+      }
+      return { questionId: question.id, choiceId: choice.id };
+    });
+
+    const headers = await getApiHeaders();
+    const baseUrl = getBaseUrl();
+
+    const response = await fetch(`${baseUrl}/api/v1/attempt-choices/batch`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+      body: JSON.stringify({
+        attemptId: attemptId,
+        selectedChoices: selectedChoices,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to submit choices: ${response.status} ${errorText}`
+      );
+    }
+
+    console.log('Choice answers submitted successfully');
+  };
+
+  const submitTextAnswer = async (question, answerText) => {
+    if (!answerText?.trim()) {
+      throw new Error('Text answer is required');
+    }
+
+    const headers = await getApiHeaders();
+    const baseUrl = getBaseUrl();
+
+    // Try to submit a new answer first
+    let response = await fetch(`${baseUrl}/api/v1/attempt-text-answers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+      body: JSON.stringify({
+        attemptId: attemptId,
+        questionId: question.id,
+        answerText: answerText.trim(),
+      }),
+    });
+
+    // If answer already exists, update it instead
+    if (!response.ok && response.status === 500) {
+      const errorText = await response.text();
+      if (errorText.includes('Text answer already exists')) {
+        console.log('Answer already exists, updating instead...');
+        response = await fetch(
+          `${baseUrl}/api/v1/attempt-text-answers/${attemptId}/${question.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              ...headers,
+            },
+            body: JSON.stringify({ answerText: answerText.trim() }),
+          }
+        );
+      }
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to submit text answer: ${response.status} ${errorText}`
+      );
+    }
+
+    const result = await response.json();
+    console.log('Text answer submitted successfully:', result);
+
+    // Store the scoring result for display
+    setQuestions((prev) => {
+      const copy = [...prev];
+      copy[currentIndex] = { ...copy[currentIndex], scoringResult: result };
+      return copy;
+    });
+  };
+
   const handleQuestionSubmit = async (answers) => {
-    if (!attemptId || !questions || !questions[currentIndex]) {
+    if (!attemptId || !questions?.[currentIndex]) {
       console.error('Missing attemptId or question data for submission');
       return;
     }
@@ -270,15 +352,6 @@ function QuizPage() {
     setError(null);
 
     try {
-      const user = (await import('../utils/firebase.config')).auth.currentUser;
-      if (!user) {
-        setError('User not authenticated. Please log in again.');
-        return;
-      }
-      const idToken = await user.getIdToken();
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-
       const questionType = currentQuestion.type?.toLowerCase();
 
       if (
@@ -286,143 +359,49 @@ function QuizPage() {
           questionType
         )
       ) {
-        // Submit choice answers
-        if (!currentQuestion.choices || answers.length === 0) {
-          throw new Error('No choices available or no answers selected');
-        }
-
-        // Find choice IDs for selected answers
-        const selectedChoices = [];
-        for (const answer of answers) {
-          const choice = currentQuestion.choices.find((c) => {
-            const choiceText =
-              typeof c === 'string' ? c : c.choiceText || c.text || String(c);
-            return choiceText === answer;
-          });
-          if (choice && choice.id) {
-            selectedChoices.push({
-              questionId: currentQuestion.id,
-              choiceId: choice.id,
-            });
-          }
-        }
-
-        if (selectedChoices.length === 0) {
-          throw new Error('Could not find choice IDs for selected answers');
-        }
-
-        console.log('Submitting choice answers:', selectedChoices);
-
-        const response = await fetch(
-          `${baseUrl}/api/v1/attempt-choices/batch`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${idToken}`,
-            },
-            body: JSON.stringify({
-              attemptId: attemptId,
-              selectedChoices: selectedChoices,
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(
-            `Failed to submit choices: ${response.status} ${errorText}`
-          );
-        }
-
-        console.log('Choice answers submitted successfully');
+        await submitChoiceAnswers(currentQuestion, answers);
       } else if (questionType === 'short_answer') {
-        // Submit text answer
-        if (!answers[0] || answers[0].trim() === '') {
-          throw new Error('Text answer is required');
-        }
-
-        console.log('Submitting text answer:', answers[0]);
-
-        // Try to submit a new answer first
-        let response = await fetch(`${baseUrl}/api/v1/attempt-text-answers`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${idToken}`,
-          },
-          body: JSON.stringify({
-            attemptId: attemptId,
-            questionId: currentQuestion.id,
-            answerText: answers[0].trim(),
-          }),
-        });
-
-        // If answer already exists, update it instead
-        if (!response.ok && response.status === 500) {
-          const errorText = await response.text();
-          if (errorText.includes('Text answer already exists')) {
-            console.log('Answer already exists, updating instead...');
-            response = await fetch(
-              `${baseUrl}/api/v1/attempt-text-answers/${attemptId}/${currentQuestion.id}`,
-              {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${idToken}`,
-                },
-                body: JSON.stringify({
-                  answerText: answers[0].trim(),
-                }),
-              }
-            );
-          }
-        }
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(
-            `Failed to submit text answer: ${response.status} ${errorText}`
-          );
-        }
-
-        const result = await response.json();
-        console.log('Text answer submitted successfully:', result);
-
-        // Store the scoring result for display
-        setQuestions((prev) => {
-          const copy = [...prev];
-          copy[currentIndex] = {
-            ...copy[currentIndex],
-            scoringResult: result, // Store the complete scoring result
-          };
-          return copy;
-        });
+        await submitTextAnswer(currentQuestion, answers[0]);
       }
 
       // Mark this question as submitted to prevent double submissions
       setSubmittedQuestions((prev) => new Set(prev).add(currentQuestion.id));
-    } catch (e) {
-      console.error('Failed to submit answer:', e);
-      setError(`Failed to submit answer: ${e.message}`);
+
+      // Store user's answers for this question locally for display
+      setUserAnswers((prev) => ({ ...prev, [currentIndex]: answers }));
+    } catch (error) {
+      console.error('Failed to submit answer:', error);
+      setError(`Failed to submit answer: ${error.message}`);
     } finally {
       setSubmittingAnswer(false);
     }
+  };
 
-    // Store user's answers for this question locally for display
-    setUserAnswers((prev) => ({
-      ...prev,
-      [currentIndex]: answers,
-    }));
+  // Navigation and completion functions
+  const cleanupSession = () => {
+    removeStorageData('quizPayload');
+    removeStorageData('quizConfig');
+  };
+
+  const navigateToResults = (score, totalQuestions) => {
+    cleanupSession();
+    navigate('/quiz-results', {
+      state: {
+        score,
+        totalQuestions,
+        config: initialConfig,
+        quizId: quizId,
+      },
+      replace: true,
+    });
   };
 
   const isCurrentQuestionAnswered =
     userAnswers.hasOwnProperty(currentIndex) ||
-    (questions &&
-      questions[currentIndex] &&
+    (questions?.[currentIndex] &&
       submittedQuestions.has(questions[currentIndex].id));
 
-  function handleNext() {
+  const handleNext = () => {
     console.log(
       'handleNext called - currentIndex:',
       currentIndex,
@@ -432,134 +411,36 @@ function QuizPage() {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((i) => i + 1);
     } else {
-      // Last question - complete the quiz
       console.log('Finishing quiz - calling completeQuiz()');
       completeQuiz();
     }
-  }
-
-  const completeQuiz = async () => {
-    console.log('completeQuiz called with attemptId:', attemptId);
-    if (!attemptId) {
-      console.error('No attemptId available to complete quiz');
-      // Still navigate away to avoid user being stuck
-      sessionStorage.removeItem('quizPayload');
-      navigate('/', { replace: true });
-      return;
-    }
-
-    try {
-      const user = (await import('../utils/firebase.config')).auth.currentUser;
-      if (!user) {
-        console.error('User not authenticated');
-        sessionStorage.removeItem('quizPayload');
-        navigate('/', { replace: true });
-        return;
-      }
-
-      const idToken = await user.getIdToken();
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-
-      console.log('Completing quiz attempt:', attemptId);
-
-      // Step 1: Complete the attempt
-      const completeResponse = await fetch(
-        `${baseUrl}/api/v1/attempts/${attemptId}/complete`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        }
-      );
-
-      if (!completeResponse.ok) {
-        const errorText = await completeResponse.text();
-        console.error(
-          `Failed to complete quiz: ${completeResponse.status} ${errorText}`
-        );
-        // If completion fails, navigate home
-        sessionStorage.removeItem('quizPayload');
-        navigate('/', { replace: true });
-        return;
-      }
-
-      console.log('Quiz completed successfully');
-
-      // Step 2: Get the detailed attempt data with answers to calculate score
-      const attemptResponse = await fetch(
-        `${baseUrl}/api/v1/attempts/${attemptId}/detailed`,
-        {
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        }
-      );
-
-      if (!attemptResponse.ok) {
-        console.error('Failed to fetch attempt details for scoring');
-        // Fall back to local calculation if API fails
-        const fallbackScore = calculateLocalScore();
-        navigateToResults(fallbackScore, questions?.length || 0);
-        return;
-      }
-
-      const attemptData = await attemptResponse.json();
-      console.log('Attempt data for scoring:', attemptData);
-      console.log('Questions data for scoring:', questions);
-      console.log('Attempt data selectedChoices:', attemptData.selectedChoices);
-      console.log('Attempt data textAnswers:', attemptData.textAnswers);
-
-      // Step 3: Calculate the actual score from the attempt data
-      const calculatedScore = calculateScoreFromAttempt(attemptData);
-
-      // Clean up session storage
-      sessionStorage.removeItem('quizPayload');
-      sessionStorage.removeItem('quizConfig');
-
-      // Navigate to results page with calculated score
-      navigate('/quiz-results', {
-        state: {
-          score: calculatedScore,
-          totalQuestions: questions?.length || 0,
-          config: initialConfig,
-          quizId: quizId, // Pass quizId for retry functionality
-        },
-        replace: true,
-      });
-    } catch (e) {
-      console.error('Error completing quiz:', e);
-      // Even if completion fails, try to show results with local score calculation
-      const fallbackScore = calculateLocalScore();
-      navigateToResults(fallbackScore, questions?.length || 0);
-    }
   };
 
-  // Helper function to calculate score from attempt data
+  const handleAbortQuiz = () => {
+    cleanupSession();
+    navigate('/', { replace: true });
+  };
+
+  // Score calculation functions
   const calculateScoreFromAttempt = (attemptData) => {
     let score = 0;
 
     console.log('Calculating score from attempt data:', attemptData);
-    console.log('Questions for scoring:', questions);
 
     // Calculate score from choice questions
     if (attemptData.selectedChoices && questions) {
       const choiceScore = questions.reduce((count, question) => {
         if (!question.choices) return count;
 
-        // Get user's selected choices for this question
         const userChoices = attemptData.selectedChoices.filter(
           (choice) => choice.questionId === question.id
         );
 
-        if (userChoices.length === 0) return count; // No answer selected
+        if (userChoices.length === 0) return count;
 
-        // Check if the question is correctly answered
         const questionType = question.type?.toLowerCase();
 
         if (questionType === 'multiple_choice') {
-          // For multiple choice, all correct choices must be selected and no incorrect ones
           const correctChoiceIds = question.choices
             .filter((choice) => choice.isCorrect)
             .map((choice) => choice.id);
@@ -576,17 +457,16 @@ function QuizPage() {
 
           const isCorrect = hasAllCorrect && hasNoIncorrect;
           console.log(
-            `Question ${question.id} (multiple_choice): correct=${isCorrect}, correctIds=${correctChoiceIds}, selectedIds=${selectedChoiceIds}`
+            `Question ${question.id} (multiple_choice): correct=${isCorrect}`
           );
           return isCorrect ? count + 1 : count;
         } else {
-          // For single choice (unique_choice, true_false)
           const selectedChoice = question.choices.find(
             (choice) => choice.id === userChoices[0].choiceId
           );
           const isCorrect = selectedChoice?.isCorrect || false;
           console.log(
-            `Question ${question.id} (${questionType}): correct=${isCorrect}, selectedChoiceId=${userChoices[0]?.choiceId}, selectedChoiceIsCorrect=${selectedChoice?.isCorrect}`
+            `Question ${question.id} (${questionType}): correct=${isCorrect}`
           );
           return isCorrect ? count + 1 : count;
         }
@@ -610,20 +490,13 @@ function QuizPage() {
       score += textScore;
     }
 
-    console.log(
-      'Final calculated score:',
-      score,
-      'from attempt data:',
-      attemptData
-    );
+    console.log('Final calculated score:', score);
     return score;
   };
 
-  // Helper function for local score calculation (fallback)
   const calculateLocalScore = () => {
     return (
       questions?.reduce((count, question) => {
-        // For text answers, check scoring result
         if (question.scoringResult) {
           return question.scoringResult.isCorrect ? count + 1 : count;
         }
@@ -632,28 +505,77 @@ function QuizPage() {
     );
   };
 
-  // Helper function to navigate to results
-  const navigateToResults = (score, totalQuestions) => {
-    sessionStorage.removeItem('quizPayload');
-    sessionStorage.removeItem('quizConfig');
+  const completeQuiz = async () => {
+    console.log('completeQuiz called with attemptId:', attemptId);
+    if (!attemptId) {
+      console.error('No attemptId available to complete quiz');
+      navigateToResults(0, questions?.length || 0);
+      return;
+    }
 
-    navigate('/quiz-results', {
-      state: {
-        score: score,
-        totalQuestions: totalQuestions,
-        config: initialConfig,
-        quizId: quizId,
-      },
-      replace: true,
-    });
+    try {
+      const headers = await getApiHeaders();
+      const baseUrl = getBaseUrl();
+
+      console.log('Completing quiz attempt:', attemptId);
+
+      // Step 1: Complete the attempt
+      const completeResponse = await fetch(
+        `${baseUrl}/api/v1/attempts/${attemptId}/complete`,
+        {
+          method: 'POST',
+          headers,
+        }
+      );
+
+      if (!completeResponse.ok) {
+        const errorText = await completeResponse.text();
+        console.error(
+          `Failed to complete quiz: ${completeResponse.status} ${errorText}`
+        );
+        navigateToResults(0, questions?.length || 0);
+        return;
+      }
+
+      console.log('Quiz completed successfully');
+
+      // Step 2: Get the detailed attempt data with answers to calculate score
+      const attemptResponse = await fetch(
+        `${baseUrl}/api/v1/attempts/${attemptId}/detailed`,
+        { headers }
+      );
+
+      if (!attemptResponse.ok) {
+        console.error('Failed to fetch attempt details for scoring');
+        const fallbackScore = calculateLocalScore();
+        navigateToResults(fallbackScore, questions?.length || 0);
+        return;
+      }
+
+      const attemptData = await attemptResponse.json();
+      console.log('Attempt data for scoring:', attemptData);
+
+      // Step 3: Calculate the actual score from the attempt data
+      const calculatedScore = calculateScoreFromAttempt(attemptData);
+      navigateToResults(calculatedScore, questions?.length || 0);
+    } catch (error) {
+      console.error('Error completing quiz:', error);
+      const fallbackScore = calculateLocalScore();
+      navigateToResults(fallbackScore, questions?.length || 0);
+    }
   };
 
-  const handleAbortQuiz = () => {
-    // Clean up session storage and navigate back to home
-    sessionStorage.removeItem('quizPayload');
-    sessionStorage.removeItem('quizConfig');
-    navigate('/', { replace: true });
-  };
+  // Redirect to home if no questions
+  useEffect(() => {
+    if (!questions) {
+      navigate('/', { replace: true });
+    }
+  }, [questions, navigate]);
+
+  // Early return if no questions
+  if (!questions || questions.length === 0) return null;
+
+  const currentQuestion = questions[currentIndex];
 
   return (
     <>
@@ -665,20 +587,20 @@ function QuizPage() {
 
       <QuizSettings config={initialConfig} onAbort={handleAbortQuiz} />
       {console.log('Rendering QuizQuestion with:', {
-        question: current.question,
-        type: current.type,
-        answerText: current.answerText,
-        scoringResult: current.scoringResult,
+        question: currentQuestion.question,
+        type: currentQuestion.type,
+        answerText: currentQuestion.answerText,
+        scoringResult: currentQuestion.scoringResult,
       })}
       <QuizQuestion
         index={currentIndex + 1}
         total={questions.length}
-        question={current.question}
-        type={current.type}
-        choices={current.choices}
-        correctChoices={current.choices} // Use choices array since it contains isCorrect info
-        answerText={current.answerText}
-        scoringResult={current.scoringResult} // Pass scoring result for text answers
+        question={currentQuestion.question}
+        type={currentQuestion.type}
+        choices={currentQuestion.choices}
+        correctChoices={currentQuestion.choices} // Use choices array since it contains isCorrect info
+        answerText={currentQuestion.answerText}
+        scoringResult={currentQuestion.scoringResult} // Pass scoring result for text answers
         loading={loadingQuestion}
         submitting={submittingAnswer}
         onSubmit={handleQuestionSubmit}
