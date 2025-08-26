@@ -489,7 +489,7 @@ function QuizPage() {
 
       // Step 2: Get the detailed attempt data with answers to calculate score
       const attemptResponse = await fetch(
-        `${baseUrl}/api/v1/attempts/${attemptId}`,
+        `${baseUrl}/api/v1/attempts/${attemptId}/detailed`,
         {
           headers: {
             Authorization: `Bearer ${idToken}`,
@@ -507,6 +507,9 @@ function QuizPage() {
 
       const attemptData = await attemptResponse.json();
       console.log('Attempt data for scoring:', attemptData);
+      console.log('Questions data for scoring:', questions);
+      console.log('Attempt data selectedChoices:', attemptData.selectedChoices);
+      console.log('Attempt data textAnswers:', attemptData.textAnswers);
 
       // Step 3: Calculate the actual score from the attempt data
       const calculatedScore = calculateScoreFromAttempt(attemptData);
@@ -536,6 +539,9 @@ function QuizPage() {
   // Helper function to calculate score from attempt data
   const calculateScoreFromAttempt = (attemptData) => {
     let score = 0;
+
+    console.log('Calculating score from attempt data:', attemptData);
+    console.log('Questions for scoring:', questions);
 
     // Calculate score from choice questions
     if (attemptData.selectedChoices && questions) {
@@ -568,29 +574,48 @@ function QuizPage() {
             correctChoiceIds.includes(id)
           );
 
-          return hasAllCorrect && hasNoIncorrect ? count + 1 : count;
+          const isCorrect = hasAllCorrect && hasNoIncorrect;
+          console.log(
+            `Question ${question.id} (multiple_choice): correct=${isCorrect}, correctIds=${correctChoiceIds}, selectedIds=${selectedChoiceIds}`
+          );
+          return isCorrect ? count + 1 : count;
         } else {
           // For single choice (unique_choice, true_false)
           const selectedChoice = question.choices.find(
             (choice) => choice.id === userChoices[0].choiceId
           );
-          return selectedChoice?.isCorrect ? count + 1 : count;
+          const isCorrect = selectedChoice?.isCorrect || false;
+          console.log(
+            `Question ${question.id} (${questionType}): correct=${isCorrect}, selectedChoiceId=${userChoices[0]?.choiceId}, selectedChoiceIsCorrect=${selectedChoice?.isCorrect}`
+          );
+          return isCorrect ? count + 1 : count;
         }
       }, 0);
 
+      console.log('Choice questions score:', choiceScore);
       score += choiceScore;
     }
 
     // Calculate score from text answers
     if (attemptData.textAnswers) {
       const textScore = attemptData.textAnswers.reduce((count, answer) => {
-        return answer.isCorrect ? count + 1 : count;
+        const isCorrect = answer.isCorrect || false;
+        console.log(
+          `Text answer for question ${answer.questionId}: correct=${isCorrect}`
+        );
+        return isCorrect ? count + 1 : count;
       }, 0);
 
+      console.log('Text questions score:', textScore);
       score += textScore;
     }
 
-    console.log('Calculated score:', score, 'from attempt data:', attemptData);
+    console.log(
+      'Final calculated score:',
+      score,
+      'from attempt data:',
+      attemptData
+    );
     return score;
   };
 
