@@ -170,15 +170,6 @@ public class AttemptService {
     long totalCorrectAnswers = correctChoices + correctTextAnswers;
     long totalQuestions = totalChoices + totalTextAnswers;
 
-    // Debug logging
-    System.out.println("DEBUG - calculateSuccessRateByUserId for userId: " + userId);
-    System.out.println("  correctChoices: " + correctChoices);
-    System.out.println("  totalChoices: " + totalChoices);
-    System.out.println("  correctTextAnswers: " + correctTextAnswers);
-    System.out.println("  totalTextAnswers: " + totalTextAnswers);
-    System.out.println("  totalCorrectAnswers: " + totalCorrectAnswers);
-    System.out.println("  totalQuestions: " + totalQuestions);
-
     return totalQuestions > 0 ? (double) totalCorrectAnswers / totalQuestions : 0.0;
   }
 

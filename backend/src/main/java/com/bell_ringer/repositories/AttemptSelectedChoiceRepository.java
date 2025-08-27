@@ -39,8 +39,10 @@ public interface AttemptSelectedChoiceRepository extends JpaRepository<AttemptSe
     /**
      * Count correct multiple choice answers for a specific user across all
      * completed attempts
+     * Note: Counts distinct questions where at least one correct choice was
+     * selected
      */
-    @Query("SELECT COUNT(asc) FROM AttemptSelectedChoice asc " +
+    @Query("SELECT COUNT(DISTINCT asc.questionId) FROM AttemptSelectedChoice asc " +
             "JOIN asc.choice c " +
             "JOIN asc.attempt a " +
             "WHERE asc.quiz.userId = :userId " +
@@ -51,8 +53,9 @@ public interface AttemptSelectedChoiceRepository extends JpaRepository<AttemptSe
     /**
      * Count total multiple choice answers for a specific user across all completed
      * attempts
+     * Note: Counts distinct questions answered
      */
-    @Query("SELECT COUNT(asc) FROM AttemptSelectedChoice asc " +
+    @Query("SELECT COUNT(DISTINCT asc.questionId) FROM AttemptSelectedChoice asc " +
             "JOIN asc.attempt a " +
             "WHERE asc.quiz.userId = :userId " +
             "AND a.completedAt IS NOT NULL")
