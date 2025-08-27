@@ -10,6 +10,7 @@ target/
 fix_open_answers_import.sql
 AUTOMATIC_SCORING_TEST.md
 test-automatic-scoring.sh
+SUCCESS_RATE_IMPLEMENTATION.md
 serviceAccountKey.json
 node_modules/
 

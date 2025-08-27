@@ -9,6 +9,7 @@ import com.bell_ringer.models.id.AttemptTextAnswerId;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface AttemptTextAnswerRepository extends JpaRepository<AttemptTextAnswer, AttemptTextAnswerId> {
 
@@ -47,4 +48,31 @@ public interface AttemptTextAnswerRepository extends JpaRepository<AttemptTextAn
    * Delete all text answers for an attempt (cleanup)
    */
   void deleteByAttemptId(Long attemptId);
+
+  /**
+   * Count correct text answers for a specific user across all completed attempts
+   */
+  @Query("SELECT COUNT(ata) FROM AttemptTextAnswer ata " +
+      "JOIN ata.attempt a " +
+      "WHERE ata.quiz.userId = :userId " +
+      "AND a.completedAt IS NOT NULL " +
+      "AND ata.isCorrect = true")
+  long countCorrectTextAnswersByUserId(@Param("userId") UUID userId);
+
+  /**
+   * Count total text answers for a specific user across all completed attempts
+   */
+  @Query("SELECT COUNT(ata) FROM AttemptTextAnswer ata " +
+      "JOIN ata.attempt a " +
+      "WHERE ata.quiz.userId = :userId " +
+      "AND a.completedAt IS NOT NULL")
+  long countTotalTextAnswersByUserId(@Param("userId") UUID userId);
+
+  /**
+   * Count correct text answers for a specific attempt
+   */
+  @Query("SELECT COUNT(ata) FROM AttemptTextAnswer ata " +
+      "WHERE ata.attemptId = :attemptId " +
+      "AND ata.isCorrect = true")
+  long countCorrectTextAnswersByAttemptId(@Param("attemptId") Long attemptId);
 }

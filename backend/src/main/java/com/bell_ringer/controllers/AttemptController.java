@@ -137,17 +137,31 @@ public class AttemptController {
     long completedAttempts = attemptService.countCompletedByUserId(userId);
     long incompleteAttempts = totalAttempts - completedAttempts;
     double completionRate = totalAttempts > 0 ? (double) completedAttempts / totalAttempts : 0.0;
+    double successRate = attemptService.calculateSuccessRateByUserId(userId);
 
     Map<String, Object> stats = Map.of(
         "userId", userId,
         "totalAttempts", totalAttempts,
         "completedAttempts", completedAttempts,
         "incompleteAttempts", incompleteAttempts,
-        "completionRate", completionRate);
+        "completionRate", completionRate,
+        "successRate", successRate);
 
     return ResponseEntity.ok()
         .cacheControl(CacheControl.maxAge(120, TimeUnit.SECONDS))
         .body(stats);
+  }
+
+  /**
+   * Get detailed quiz results for a user (for history table)
+   */
+  @GetMapping("/user/{userId}/results")
+  public ResponseEntity<List<AttemptService.AttemptScoreDto>> getUserQuizResults(@PathVariable UUID userId) {
+    List<AttemptService.AttemptScoreDto> results = attemptService.getQuizResultsByUserId(userId);
+
+    return ResponseEntity.ok()
+        .cacheControl(CacheControl.maxAge(120, TimeUnit.SECONDS))
+        .body(results);
   }
 
   // -------------------- Attempt management --------------------

@@ -155,6 +155,74 @@ public class AttemptService {
     return attempts.countCompletedByUserId(userId);
   }
 
+  /**
+   * Calculate overall success rate for a user (correct answers / total questions)
+   */
+  public double calculateSuccessRateByUserId(UUID userId) {
+    long correctChoices = selectedChoices.countCorrectChoicesByUserId(userId);
+    long totalChoices = selectedChoices.countTotalChoicesByUserId(userId);
+    long correctTextAnswers = textAnswers.countCorrectTextAnswersByUserId(userId);
+    long totalTextAnswers = textAnswers.countTotalTextAnswersByUserId(userId);
+
+    long totalCorrectAnswers = correctChoices + correctTextAnswers;
+    long totalQuestions = totalChoices + totalTextAnswers;
+
+    // Debug logging
+    System.out.println("DEBUG - calculateSuccessRateByUserId for userId: " + userId);
+    System.out.println("  correctChoices: " + correctChoices);
+    System.out.println("  totalChoices: " + totalChoices);
+    System.out.println("  correctTextAnswers: " + correctTextAnswers);
+    System.out.println("  totalTextAnswers: " + totalTextAnswers);
+    System.out.println("  totalCorrectAnswers: " + totalCorrectAnswers);
+    System.out.println("  totalQuestions: " + totalQuestions);
+
+    return totalQuestions > 0 ? (double) totalCorrectAnswers / totalQuestions : 0.0;
+  }
+
+  /**
+   * Calculate score for a specific attempt
+   */
+  public AttemptScoreDto calculateAttemptScore(Long attemptId) {
+    Attempt attempt = getRequired(attemptId);
+
+    long correctChoices = selectedChoices.countCorrectChoicesByAttemptId(attemptId);
+    long totalChoices = selectedChoices.countByAttemptId(attemptId);
+    long correctTextAnswers = textAnswers.countCorrectTextAnswersByAttemptId(attemptId);
+    long totalTextAnswers = textAnswers.countByAttemptId(attemptId);
+
+    long totalCorrectAnswers = correctChoices + correctTextAnswers;
+    long totalQuestions = totalChoices + totalTextAnswers;
+
+    return new AttemptScoreDto(
+        attemptId,
+        attempt.getQuiz().getId(),
+        totalCorrectAnswers,
+        totalQuestions,
+        totalQuestions > 0 ? (double) totalCorrectAnswers / totalQuestions : 0.0,
+        attempt.getCompletedAt());
+  }
+
+  /**
+   * Get detailed quiz results for all completed attempts by a user
+   */
+  public List<AttemptScoreDto> getQuizResultsByUserId(UUID userId) {
+    List<Attempt> completedAttempts = attempts.findCompletedByUserId(userId);
+
+    return completedAttempts.stream()
+        .map(attempt -> calculateAttemptScore(attempt.getId()))
+        .collect(Collectors.toList());
+  }
+
+  // DTO for attempt scores
+  public record AttemptScoreDto(
+      Long attemptId,
+      Long quizId,
+      Long correctAnswers,
+      Long totalQuestions,
+      Double successRate,
+      OffsetDateTime completedAt) {
+  }
+
   // ----------------- Creation & management -----------------
 
   /**

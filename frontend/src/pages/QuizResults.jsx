@@ -12,7 +12,10 @@ function QuizResults() {
   useEffect(() => {
     // If no results data, redirect to home
     if (!score && score !== 0) {
-      navigate('/', { replace: true });
+      navigate('/', {
+        state: { refreshUserData: true },
+        replace: true,
+      });
     }
   }, [score, navigate]);
 
@@ -35,7 +38,10 @@ function QuizResults() {
       const user = (await import('../utils/firebase.config')).auth.currentUser;
       if (!user) {
         console.error('User not authenticated');
-        navigate('/', { replace: true });
+        navigate('/', {
+          state: { refreshUserData: true },
+          replace: true,
+        });
         return;
       }
 
@@ -64,7 +70,6 @@ function QuizResults() {
       }
 
       const newAttempt = await response.json();
-      console.log('New attempt created:', newAttempt);
 
       // Get the quiz data which contains the question IDs
       const quizResponse = await fetch(
@@ -136,8 +141,10 @@ function QuizResults() {
   };
 
   const handleHome = () => {
-    // Navigate to home page
-    navigate('/', { replace: true });
+    // Navigate to home page with refresh flag to update UserData stats
+    navigate('/', {
+      state: { refreshUserData: true },
+    });
   };
 
   if (!score && score !== 0) {

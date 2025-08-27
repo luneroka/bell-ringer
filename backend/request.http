@@ -13,7 +13,7 @@
 # ----------------------
 # Test Data IDs (update these based on your responses)
 # ----------------------
-@userId = 66646275-82d8-4624-be28-02c3bb81b715
+@userId = ec1c2d83-c588-4a0d-95dd-5587fc5abfa0
 @parentCategoryId = 2
 @categoryId = 10
 @quizId = 1
@@ -39,7 +39,7 @@ Authorization: Bearer {{firebaseToken}}
 
 > {%
   const data = JSON.parse(response.body);
-  client.global.set("userId", data.id);SEL
+  client.global.set("userId", data.id);
 %}
 
 ### 2b. Get current user via unified users endpoint
@@ -109,6 +109,15 @@ Authorization: Bearer {{firebaseToken}}
 ### Complete attempt
 POST {{baseUrl}}/api/v1/attempts/{{attemptId}}/complete
 Accept: application/json
+Authorization: Bearer {{firebaseToken}}
+
+### Complete quiz (mark quiz as completed)
+POST {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
+Accept: application/json
+Authorization: Bearer {{firebaseToken}}
+
+### Clear quiz completion (admin/debug)
+DELETE {{baseUrl}}/api/v1/quizzes/{{quizId}}/complete
 Authorization: Bearer {{firebaseToken}}
 
 ### Retry quiz (creates new attempt)

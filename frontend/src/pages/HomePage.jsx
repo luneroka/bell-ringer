@@ -11,10 +11,12 @@ function HomePage() {
 
   // Get retry configuration from navigation state
   const retryConfig = location.state?.retryConfig;
+  // Get refresh flag from navigation state (when returning from quiz results)
+  const refreshUserData = location.state?.refreshUserData;
 
   return currentUser ? (
     <>
-      <UserData />
+      <UserData refreshTrigger={refreshUserData} />
 
       <AuthInstructions />
 
