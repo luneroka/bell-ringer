@@ -247,8 +247,12 @@ public class AttemptService {
       throw new IllegalStateException("Attempt already completed: " + attemptId);
     }
 
+    // Mark the attempt as completed
     attempt.setCompletedAt(OffsetDateTime.now());
     Attempt savedAttempt = attempts.save(attempt);
+
+    // Also mark the associated quiz as completed
+    quizService.markCompleted(attempt.getQuiz().getId());
 
     return convertToDto(savedAttempt);
   }
