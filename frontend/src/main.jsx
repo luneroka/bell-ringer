@@ -12,6 +12,7 @@ import Logout from './pages/auth/Logout.jsx';
 import PrivateRoute from './contexts/PrivateRoute.jsx';
 import AuthenticatedLayout from './layouts/AuthenticatedLayout';
 import UnauthenticatedLayout from './layouts/UnauthenticatedLayout';
+import HistoryPage from './pages/HistoryPage.jsx';
 
 function ConditionalLayout() {
   const { currentUser } = useAuth();
@@ -44,10 +45,7 @@ function AppRoutes() {
       >
         <Route path='/quiz' element={<QuizPage />} />
         <Route path='/quiz-results' element={<QuizResults />} />
-        <Route
-          path='/history'
-          element={<div>History page coming soon...</div>}
-        />
+        <Route path='/history' element={<HistoryPage />} />
       </Route>
     </Routes>
   );
