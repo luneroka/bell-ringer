@@ -290,9 +290,7 @@ function QuizSelector({ retryConfig }) {
 
         {/* QUESTIONS SELECT */}
         <div className='selector'>
-          <p className='selector-p small-text text-muted'>
-            Select number of questions
-          </p>
+          <p className='selector-p small-text text-muted'>Questions</p>
           <select
             name='questions'
             id='questions-select'
@@ -334,7 +332,6 @@ function QuizSelector({ retryConfig }) {
           className='btn btn-primary button-text'
           style={{
             width: '100%',
-            minWidth: '120px',
             maxWidth: '400px',
             height: '48px',
           }}
