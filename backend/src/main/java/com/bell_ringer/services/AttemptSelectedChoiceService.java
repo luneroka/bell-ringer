@@ -5,6 +5,7 @@ import com.bell_ringer.models.Attempt;
 import com.bell_ringer.models.Choice;
 import com.bell_ringer.models.Question;
 import com.bell_ringer.models.id.AttemptSelectedChoiceId;
+import com.bell_ringer.repositories.AttemptRepository;
 import com.bell_ringer.repositories.AttemptSelectedChoiceRepository;
 import com.bell_ringer.repositories.ChoiceRepository;
 import com.bell_ringer.repositories.QuestionRepository;
@@ -24,16 +25,16 @@ import java.util.stream.Collectors;
 public class AttemptSelectedChoiceService {
 
   private final AttemptSelectedChoiceRepository selectedChoices;
-  private final AttemptService attemptService;
+  private final AttemptRepository attemptRepository;
   private final QuestionRepository questionRepository;
   private final ChoiceRepository choiceRepository;
 
   public AttemptSelectedChoiceService(AttemptSelectedChoiceRepository selectedChoices,
-      AttemptService attemptService,
+      AttemptRepository attemptRepository,
       QuestionRepository questionRepository,
       ChoiceRepository choiceRepository) {
     this.selectedChoices = selectedChoices;
-    this.attemptService = attemptService;
+    this.attemptRepository = attemptRepository;
     this.questionRepository = questionRepository;
     this.choiceRepository = choiceRepository;
   }
@@ -99,7 +100,8 @@ public class AttemptSelectedChoiceService {
     Objects.requireNonNull(request.choiceId(), "choiceId must not be null");
 
     // Validate attempt exists and is not completed
-    Attempt attempt = attemptService.getRequired(request.attemptId());
+    Attempt attempt = attemptRepository.findById(request.attemptId())
+        .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + request.attemptId()));
     if (attempt.isCompleted()) {
       throw new IllegalStateException("Cannot submit choices for completed attempt: " + request.attemptId());
     }
@@ -139,7 +141,8 @@ public class AttemptSelectedChoiceService {
     Objects.requireNonNull(request.attemptId(), "attemptId must not be null");
 
     // Validate attempt exists and is not completed
-    Attempt attempt = attemptService.getRequired(request.attemptId());
+    Attempt attempt = attemptRepository.findById(request.attemptId())
+        .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + request.attemptId()));
     if (attempt.isCompleted()) {
       throw new IllegalStateException("Cannot submit choices for completed attempt: " + request.attemptId());
     }
@@ -168,7 +171,8 @@ public class AttemptSelectedChoiceService {
     Objects.requireNonNull(request, "request must not be null");
 
     // Validate attempt is not completed
-    Attempt attempt = attemptService.getRequired(attemptId);
+    Attempt attempt = attemptRepository.findById(attemptId)
+        .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
     if (attempt.isCompleted()) {
       throw new IllegalStateException("Cannot update choices for completed attempt: " + attemptId);
     }
@@ -195,7 +199,8 @@ public class AttemptSelectedChoiceService {
     Objects.requireNonNull(choiceId, "choiceId must not be null");
 
     // Validate attempt is not completed
-    Attempt attempt = attemptService.getRequired(attemptId);
+    Attempt attempt = attemptRepository.findById(attemptId)
+        .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
     if (attempt.isCompleted()) {
       throw new IllegalStateException("Cannot remove choices from completed attempt: " + attemptId);
     }

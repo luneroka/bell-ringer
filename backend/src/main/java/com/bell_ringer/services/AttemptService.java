@@ -28,15 +28,18 @@ public class AttemptService {
   private final AttemptSelectedChoiceRepository selectedChoices;
   private final AttemptTextAnswerRepository textAnswers;
   private final QuizService quizService;
+  private final AttemptSelectedChoiceService selectedChoiceService;
 
   public AttemptService(AttemptRepository attempts,
       AttemptSelectedChoiceRepository selectedChoices,
       AttemptTextAnswerRepository textAnswers,
-      QuizService quizService) {
+      QuizService quizService,
+      AttemptSelectedChoiceService selectedChoiceService) {
     this.attempts = attempts;
     this.selectedChoices = selectedChoices;
     this.textAnswers = textAnswers;
     this.quizService = quizService;
+    this.selectedChoiceService = selectedChoiceService;
   }
 
   // ===== DTO Conversion Methods =====
@@ -186,12 +189,14 @@ public class AttemptService {
     Attempt attempt = getRequired(attemptId);
 
     long correctChoices = selectedChoices.countCorrectChoicesByAttemptId(attemptId);
-    long totalChoices = selectedChoices.countByAttemptId(attemptId);
     long correctTextAnswers = textAnswers.countCorrectTextAnswersByAttemptId(attemptId);
-    long totalTextAnswers = textAnswers.countByAttemptId(attemptId);
+
+    // Count distinct questions answered, not individual choices
+    long totalChoiceQuestions = selectedChoiceService.getAnsweredQuestionCount(attemptId);
+    long totalTextQuestions = textAnswers.countByAttemptId(attemptId);
 
     long totalCorrectAnswers = correctChoices + correctTextAnswers;
-    long totalQuestions = totalChoices + totalTextAnswers;
+    long totalQuestions = totalChoiceQuestions + totalTextQuestions;
 
     return new AttemptScoreDto(
         attemptId,
