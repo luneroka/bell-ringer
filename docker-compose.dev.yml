@@ -1,7 +1,7 @@
 services:
   backend:
     environment:
-      - SPRING_PROFILES_ACTIVE=prod # Use prod for now to avoid volume issues
+      - SPRING_PROFILES_ACTIVE=dev # Use dev for table dropping
       - DB_HOST=postgres
       - DB_PORT=5432
     healthcheck:

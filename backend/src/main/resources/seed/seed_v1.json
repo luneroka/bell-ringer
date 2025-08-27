@@ -1,0 +1,7450 @@
+{
+  "version": "2025-08-13-124629-psql-seed-v1",
+  "categories": [
+    {
+      "name": "HTML & Accessibility",
+      "slug": "frontend-html-accessibility",
+      "description": "Auto-generated seed for HTML & Accessibility.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "The <main> element represents the dominant content of the <body>.",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for semantics, ARIA."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Images used as decoration should always include descriptive alt text.",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for semantics, ARIA."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "ARIA roles should not be used to change native semantics.",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for semantics, ARIA."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Every form control should be associated with a visible label or aria-label.",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for semantics, ARIA."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Tab order should generally follow the visual order.",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for semantics, ARIA."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which landmark denotes site-wide navigation?",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "<nav>",
+              "isCorrect": true
+            },
+            {
+              "text": "<aside>",
+              "isCorrect": false
+            },
+            {
+              "text": "<main>",
+              "isCorrect": false
+            },
+            {
+              "text": "<footer>",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which attribute provides alternative text for images?",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "alt",
+              "isCorrect": true
+            },
+            {
+              "text": "title",
+              "isCorrect": false
+            },
+            {
+              "text": "aria-text",
+              "isCorrect": false
+            },
+            {
+              "text": "data-alt",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which element best represents a standalone article?",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "<article>",
+              "isCorrect": true
+            },
+            {
+              "text": "<section>",
+              "isCorrect": false
+            },
+            {
+              "text": "<div>",
+              "isCorrect": false
+            },
+            {
+              "text": "<span>",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which ARIA attribute links a control to its description?",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "aria-describedby",
+              "isCorrect": true
+            },
+            {
+              "text": "aria-label",
+              "isCorrect": false
+            },
+            {
+              "text": "aria-controls",
+              "isCorrect": false
+            },
+            {
+              "text": "aria-haspopup",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which practices improve keyboard navigation?",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "Provide visible focus styles",
+              "isCorrect": true
+            },
+            {
+              "text": "Use tabindex='-1' on focusable controls",
+              "isCorrect": false
+            },
+            {
+              "text": "Ensure logical tab order",
+              "isCorrect": true
+            },
+            {
+              "text": "Trap focus in modals",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which elements are semantic headings?",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "<h1>",
+              "isCorrect": true
+            },
+            {
+              "text": "<h3>",
+              "isCorrect": true
+            },
+            {
+              "text": "<strong>",
+              "isCorrect": false
+            },
+            {
+              "text": "<h6>",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which help with accessible forms?",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [
+            {
+              "text": "<label for>",
+              "isCorrect": true
+            },
+            {
+              "text": "placeholder instead of label",
+              "isCorrect": false
+            },
+            {
+              "text": "aria-describedby for hints",
+              "isCorrect": true
+            },
+            {
+              "text": "group related fields with <fieldset>",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the attribute that explicitly associates a label with a control via ID.",
+          "keywords": [
+            "semantics",
+            "ARIA",
+            "landmarks"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "for",
+            "rubric_keywords": {
+              "must": [
+                "for"
+              ],
+              "should": [
+                "label",
+                "id"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "CSS Fundamentals",
+      "slug": "frontend-css-fundamentals",
+      "description": "Auto-generated seed for CSS Fundamentals.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "The CSS box model includes content, padding, border, and margin.",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for box model, selectors."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Specificity of #id is lower than .class.",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for box model, selectors."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Flexbox is one-dimensional; Grid is two-dimensional.",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for box model, selectors."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "The 'em' unit scales relative to the element\u2019s font size.",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for box model, selectors."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "position: fixed positions relative to the nearest positioned ancestor.",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for box model, selectors."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which property controls space inside the border?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "padding",
+              "isCorrect": true
+            },
+            {
+              "text": "margin",
+              "isCorrect": false
+            },
+            {
+              "text": "gap",
+              "isCorrect": false
+            },
+            {
+              "text": "border-spacing",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which selector has the highest specificity?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "#id",
+              "isCorrect": true
+            },
+            {
+              "text": ".class",
+              "isCorrect": false
+            },
+            {
+              "text": "div",
+              "isCorrect": false
+            },
+            {
+              "text": "[attr=value]",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which establishes a flex container?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "display: flex",
+              "isCorrect": true
+            },
+            {
+              "text": "position: flex",
+              "isCorrect": false
+            },
+            {
+              "text": "flex: container",
+              "isCorrect": false
+            },
+            {
+              "text": "layout: flex",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which grid property defines columns?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "grid-template-columns",
+              "isCorrect": true
+            },
+            {
+              "text": "grid-columns",
+              "isCorrect": false
+            },
+            {
+              "text": "columns",
+              "isCorrect": false
+            },
+            {
+              "text": "grid-span",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which are valid combinators?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": " ",
+              "isCorrect": true
+            },
+            {
+              "text": ">",
+              "isCorrect": true
+            },
+            {
+              "text": "+",
+              "isCorrect": true
+            },
+            {
+              "text": "~",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which units are absolute?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "px",
+              "isCorrect": true
+            },
+            {
+              "text": "cm",
+              "isCorrect": true
+            },
+            {
+              "text": "rem",
+              "isCorrect": false
+            },
+            {
+              "text": "in",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which are Grid-only features?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [
+            {
+              "text": "grid-template-areas",
+              "isCorrect": true
+            },
+            {
+              "text": "justify-items",
+              "isCorrect": true
+            },
+            {
+              "text": "grid-auto-flow",
+              "isCorrect": true
+            },
+            {
+              "text": "flex-grow",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "What property sets the space outside the border?",
+          "keywords": [
+            "box model",
+            "selectors",
+            "specificity"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "margin",
+            "rubric_keywords": {
+              "must": [
+                "margin"
+              ],
+              "should": [
+                "outside",
+                "border"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "TailwindCSS",
+      "slug": "frontend-tailwindcss",
+      "description": "Auto-generated seed for TailwindCSS.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Tailwind is a utility-first CSS framework.",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for utility-first, config."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Tailwind requires writing custom CSS for spacing utilities.",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for utility-first, config."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Purge/Content config removes unused classes in production builds.",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for utility-first, config."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Arbitrary values like w-[42px] are supported.",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for utility-first, config."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Tailwind cannot be customized via a config file.",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for utility-first, config."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which file customizes theme and plugins?",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "tailwind.config.js",
+              "isCorrect": true
+            },
+            {
+              "text": "postcss.config.js",
+              "isCorrect": false
+            },
+            {
+              "text": "vite.config.js",
+              "isCorrect": false
+            },
+            {
+              "text": "webpack.config.js",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which prefix targets medium screens?",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "md:",
+              "isCorrect": true
+            },
+            {
+              "text": "sm:",
+              "isCorrect": false
+            },
+            {
+              "text": "lg:",
+              "isCorrect": false
+            },
+            {
+              "text": "xl:",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which directive injects Tailwind base styles?",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "@tailwind base",
+              "isCorrect": true
+            },
+            {
+              "text": "@tailwind components",
+              "isCorrect": false
+            },
+            {
+              "text": "@apply",
+              "isCorrect": false
+            },
+            {
+              "text": "@variants",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "How do you compose utilities into a class in CSS?",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "@apply",
+              "isCorrect": true
+            },
+            {
+              "text": "@compose",
+              "isCorrect": false
+            },
+            {
+              "text": "@mixin",
+              "isCorrect": false
+            },
+            {
+              "text": "@use",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which are valid variant prefixes?",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "hover:",
+              "isCorrect": true
+            },
+            {
+              "text": "focus:",
+              "isCorrect": true
+            },
+            {
+              "text": "active:",
+              "isCorrect": true
+            },
+            {
+              "text": "first:",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which ways enable dark mode?",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "media",
+              "isCorrect": true
+            },
+            {
+              "text": "class",
+              "isCorrect": true
+            },
+            {
+              "text": "auto",
+              "isCorrect": false
+            },
+            {
+              "text": "prefers-color-scheme",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Useful performance practices include:",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [
+            {
+              "text": "limit global CSS",
+              "isCorrect": true
+            },
+            {
+              "text": "use content purge",
+              "isCorrect": true
+            },
+            {
+              "text": "avoid @apply in components",
+              "isCorrect": false
+            },
+            {
+              "text": "enable JIT",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the class that visually hides content but keeps it accessible.",
+          "keywords": [
+            "utility-first",
+            "config",
+            "variants"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "sr-only",
+            "rubric_keywords": {
+              "must": [
+                "sr-only"
+              ],
+              "should": [
+                "accessible",
+                "hidden"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "JavaScript Basics",
+      "slug": "frontend-javascript-basics",
+      "description": "Auto-generated seed for JavaScript Basics.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "const declares a block-scoped binding.",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for types, scope."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "== checks value and type equality.",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for types, scope."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "NaN === NaN is false.",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for types, scope."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Array.prototype.map transforms each element and returns a new array.",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for types, scope."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "var is block-scoped.",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for types, scope."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which operator checks both value and type?",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "===",
+              "isCorrect": true
+            },
+            {
+              "text": "==",
+              "isCorrect": false
+            },
+            {
+              "text": "=",
+              "isCorrect": false
+            },
+            {
+              "text": "!==",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which method removes the last element of an array?",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "pop",
+              "isCorrect": true
+            },
+            {
+              "text": "push",
+              "isCorrect": false
+            },
+            {
+              "text": "shift",
+              "isCorrect": false
+            },
+            {
+              "text": "unshift",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which creates a shallow copy of an array?",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "slice",
+              "isCorrect": true
+            },
+            {
+              "text": "splice",
+              "isCorrect": false
+            },
+            {
+              "text": "map without return",
+              "isCorrect": false
+            },
+            {
+              "text": "copy",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which loop iterates over iterable values?",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "for...of",
+              "isCorrect": true
+            },
+            {
+              "text": "for...in",
+              "isCorrect": false
+            },
+            {
+              "text": "for (;;)",
+              "isCorrect": false
+            },
+            {
+              "text": "while",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Truthy values include:",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "[]",
+              "isCorrect": true
+            },
+            {
+              "text": "{}",
+              "isCorrect": true
+            },
+            {
+              "text": "0",
+              "isCorrect": false
+            },
+            {
+              "text": "",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Array methods that do not mutate:",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "map",
+              "isCorrect": true
+            },
+            {
+              "text": "filter",
+              "isCorrect": true
+            },
+            {
+              "text": "reduce",
+              "isCorrect": true
+            },
+            {
+              "text": "sort",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Ways to clone objects shallowly:",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [
+            {
+              "text": "Object.assign({}, o)",
+              "isCorrect": true
+            },
+            {
+              "text": "{...o}",
+              "isCorrect": true
+            },
+            {
+              "text": "JSON.parse(JSON.stringify(o))",
+              "isCorrect": true
+            },
+            {
+              "text": "o",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "What keyword creates a constant binding?",
+          "keywords": [
+            "types",
+            "scope",
+            "hoisting"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "const",
+            "rubric_keywords": {
+              "must": [
+                "const"
+              ],
+              "should": [
+                "binding",
+                "constant"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "DOM Manipulation",
+      "slug": "frontend-dom-manipulation",
+      "description": "Auto-generated seed for DOM Manipulation.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "document.querySelector returns the first matching element.",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for DOM API, events."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "event.preventDefault() stops event propagation.",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for DOM API, events."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Creating many DOM nodes individually is faster than batching updates.",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for DOM API, events."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "innerHTML parses and inserts HTML content.",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for DOM API, events."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "addEventListener can register multiple handlers for the same event.",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for DOM API, events."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which selects all matching elements?",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "querySelectorAll",
+              "isCorrect": true
+            },
+            {
+              "text": "querySelector",
+              "isCorrect": false
+            },
+            {
+              "text": "getElementById",
+              "isCorrect": false
+            },
+            {
+              "text": "getElementsByName",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which method attaches an event handler?",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "addEventListener",
+              "isCorrect": true
+            },
+            {
+              "text": "on",
+              "isCorrect": false
+            },
+            {
+              "text": "attachEvent",
+              "isCorrect": false
+            },
+            {
+              "text": "bindEvent",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "How to prevent default link navigation?",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "event.preventDefault()",
+              "isCorrect": true
+            },
+            {
+              "text": "event.stopPropagation()",
+              "isCorrect": false
+            },
+            {
+              "text": "return false;",
+              "isCorrect": false
+            },
+            {
+              "text": "event.cancel()",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which property safely sets text without parsing HTML?",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "textContent",
+              "isCorrect": true
+            },
+            {
+              "text": "innerHTML",
+              "isCorrect": false
+            },
+            {
+              "text": "outerHTML",
+              "isCorrect": false
+            },
+            {
+              "text": "innerText",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Good event delegation practices include:",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "Attach to static parent",
+              "isCorrect": true
+            },
+            {
+              "text": "Check event.target",
+              "isCorrect": true
+            },
+            {
+              "text": "Use capture phase always",
+              "isCorrect": false
+            },
+            {
+              "text": "Filter by selector",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Improving performance when updating DOM:",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "Batch changes",
+              "isCorrect": true
+            },
+            {
+              "text": "Use document fragments",
+              "isCorrect": true
+            },
+            {
+              "text": "Force sync layout repeatedly",
+              "isCorrect": false
+            },
+            {
+              "text": "Minimize reflow/repaint",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which methods create nodes?",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [
+            {
+              "text": "document.createElement",
+              "isCorrect": true
+            },
+            {
+              "text": "cloneNode",
+              "isCorrect": true
+            },
+            {
+              "text": "createTextNode",
+              "isCorrect": true
+            },
+            {
+              "text": "appendChild",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the method that stops an event from bubbling.",
+          "keywords": [
+            "DOM API",
+            "events",
+            "selectors"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "stopPropagation",
+            "rubric_keywords": {
+              "must": [
+                "stopPropagation"
+              ],
+              "should": [
+                "event",
+                "bubbling"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "React Fundamentals",
+      "slug": "frontend-react-fundamentals",
+      "description": "Auto-generated seed for React Fundamentals.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Components must return a single parent element or a fragment.",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for components, props."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Props are mutable inside the child component.",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for components, props."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Keys help React identify list items across renders.",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for components, props."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "React re-renders when state or props change.",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for components, props."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "You should mutate state directly.",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for components, props."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which identifies list items stably?",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "Key",
+              "isCorrect": true
+            },
+            {
+              "text": "Index",
+              "isCorrect": false
+            },
+            {
+              "text": "ID attribute",
+              "isCorrect": false
+            },
+            {
+              "text": "Class",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which is used to pass data to children?",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "props",
+              "isCorrect": true
+            },
+            {
+              "text": "state",
+              "isCorrect": false
+            },
+            {
+              "text": "context only",
+              "isCorrect": false
+            },
+            {
+              "text": "events",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which syntax extension lets you write HTML-like code?",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "JSX",
+              "isCorrect": true
+            },
+            {
+              "text": "TSX",
+              "isCorrect": false
+            },
+            {
+              "text": "XML",
+              "isCorrect": false
+            },
+            {
+              "text": "HTMLX",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which is best for conditional rendering?",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "&&, ?:, early return",
+              "isCorrect": true
+            },
+            {
+              "text": "switch",
+              "isCorrect": false
+            },
+            {
+              "text": "goto",
+              "isCorrect": false
+            },
+            {
+              "text": "with",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which ways can you style components?",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "CSS Modules",
+              "isCorrect": true
+            },
+            {
+              "text": "Styled Components",
+              "isCorrect": true
+            },
+            {
+              "text": "Inline styles",
+              "isCorrect": true
+            },
+            {
+              "text": "Server Components only",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which statements are true?",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "Props are read-only",
+              "isCorrect": true
+            },
+            {
+              "text": "State updates can be async",
+              "isCorrect": true
+            },
+            {
+              "text": "Keys should be stable",
+              "isCorrect": true
+            },
+            {
+              "text": "Refs trigger re-renders",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which techniques can reduce re-renders?",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [
+            {
+              "text": "memo",
+              "isCorrect": true
+            },
+            {
+              "text": "useCallback",
+              "isCorrect": true
+            },
+            {
+              "text": "useMemo",
+              "isCorrect": true
+            },
+            {
+              "text": "Mutating props",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the prop used by React to identify list elements.",
+          "keywords": [
+            "components",
+            "props",
+            "state"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "key",
+            "rubric_keywords": {
+              "must": [
+                "key"
+              ],
+              "should": [
+                "list",
+                "identify"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "React Hooks",
+      "slug": "frontend-react-hooks",
+      "description": "Auto-generated seed for React Hooks.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "useState returns [state, setState].",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for useState, useEffect."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "useEffect with [] runs after every render.",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for useState, useEffect."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "useRef changes do not trigger re-renders.",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for useState, useEffect."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Hooks must be called at the top level of components.",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for useState, useEffect."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "useMemo memoizes values; useCallback memoizes functions.",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for useState, useEffect."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which hook is for side effects?",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "useEffect",
+              "isCorrect": true
+            },
+            {
+              "text": "useMemo",
+              "isCorrect": false
+            },
+            {
+              "text": "useRef",
+              "isCorrect": false
+            },
+            {
+              "text": "useId",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which hook memoizes a function?",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "useCallback",
+              "isCorrect": true
+            },
+            {
+              "text": "useState",
+              "isCorrect": false
+            },
+            {
+              "text": "useTransition",
+              "isCorrect": false
+            },
+            {
+              "text": "useImperativeHandle",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which hook stores a mutable value without causing re-renders?",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "useRef",
+              "isCorrect": true
+            },
+            {
+              "text": "useMemo",
+              "isCorrect": false
+            },
+            {
+              "text": "useEffect",
+              "isCorrect": false
+            },
+            {
+              "text": "useId",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which hook memoizes a computed value?",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "useMemo",
+              "isCorrect": true
+            },
+            {
+              "text": "useEffect",
+              "isCorrect": false
+            },
+            {
+              "text": "useLayoutEffect",
+              "isCorrect": false
+            },
+            {
+              "text": "useCallback",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which prevent unnecessary re-renders?",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "memo",
+              "isCorrect": true
+            },
+            {
+              "text": "useMemo",
+              "isCorrect": true
+            },
+            {
+              "text": "useCallback",
+              "isCorrect": true
+            },
+            {
+              "text": "Mutating props",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Rules of Hooks include:",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "Call at top level",
+              "isCorrect": true
+            },
+            {
+              "text": "Call from custom hooks",
+              "isCorrect": true
+            },
+            {
+              "text": "Call inside loops",
+              "isCorrect": false
+            },
+            {
+              "text": "Call inside if only",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which are valid cleanup cases for useEffect?",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [
+            {
+              "text": "unsubscribe events",
+              "isCorrect": true
+            },
+            {
+              "text": "cancel timers",
+              "isCorrect": true
+            },
+            {
+              "text": "cancel network requests",
+              "isCorrect": true
+            },
+            {
+              "text": "mutate props",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the hook that memoizes a function reference.",
+          "keywords": [
+            "useState",
+            "useEffect",
+            "useMemo"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "useCallback",
+            "rubric_keywords": {
+              "must": [
+                "useCallback"
+              ],
+              "should": [
+                "memoize",
+                "function"
+              ]
+            },
+            "min_score": 75
+          }
+        }
+      ]
+    },
+    {
+      "name": "State Management",
+      "slug": "frontend-state-management",
+      "description": "Auto-generated seed for State Management.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Context provides a way to pass data through the tree without props.",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for context, reducers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Reducers must be pure functions.",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for context, reducers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Redux state is immutable and updated via actions.",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for context, reducers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "MobX enforces immutable state by default.",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for context, reducers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Zustand uses hooks for state access.",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for context, reducers."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which React API avoids prop drilling?",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "Context",
+              "isCorrect": true
+            },
+            {
+              "text": "Refs",
+              "isCorrect": false
+            },
+            {
+              "text": "Portals",
+              "isCorrect": false
+            },
+            {
+              "text": "Fragments",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which updates state via actions and reducers?",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "Redux",
+              "isCorrect": true
+            },
+            {
+              "text": "Context only",
+              "isCorrect": false
+            },
+            {
+              "text": "Refs",
+              "isCorrect": false
+            },
+            {
+              "text": "MobX only",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which library offers simple hook-based store?",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "Zustand",
+              "isCorrect": true
+            },
+            {
+              "text": "Lodash",
+              "isCorrect": false
+            },
+            {
+              "text": "Axios",
+              "isCorrect": false
+            },
+            {
+              "text": "React Router",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which tool helps immutable updates?",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "Immer",
+              "isCorrect": true
+            },
+            {
+              "text": "Jest",
+              "isCorrect": false
+            },
+            {
+              "text": "ESLint",
+              "isCorrect": false
+            },
+            {
+              "text": "Prettier",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which are popular state libraries?",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "Redux Toolkit",
+              "isCorrect": true
+            },
+            {
+              "text": "Zustand",
+              "isCorrect": true
+            },
+            {
+              "text": "MobX",
+              "isCorrect": true
+            },
+            {
+              "text": "React Query",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Good practices include:",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "Keep state normalized",
+              "isCorrect": true
+            },
+            {
+              "text": "Avoid unnecessary global state",
+              "isCorrect": true
+            },
+            {
+              "text": "Use selectors",
+              "isCorrect": true
+            },
+            {
+              "text": "Mutate state directly",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Ways to handle async:",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [
+            {
+              "text": "Thunks",
+              "isCorrect": true
+            },
+            {
+              "text": "Sagas",
+              "isCorrect": true
+            },
+            {
+              "text": "Observables",
+              "isCorrect": true
+            },
+            {
+              "text": "CSS transitions",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the React API for passing data without props.",
+          "keywords": [
+            "context",
+            "reducers",
+            "redux"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "Context",
+            "rubric_keywords": {
+              "must": [
+                "Context"
+              ],
+              "should": [
+                "prop drilling"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Node.js Basics",
+      "slug": "backend-nodejs-basics",
+      "description": "Auto-generated seed for Node.js Basics.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "npm scripts can define custom commands in package.json.",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for npm, modules."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "CommonJS uses import/export syntax by default.",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for npm, modules."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Streams process data in chunks.",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for npm, modules."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "fs.readFile is synchronous by default.",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for npm, modules."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "process.env holds environment variables.",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for npm, modules."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which file defines npm scripts?",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "package.json",
+              "isCorrect": true
+            },
+            {
+              "text": "package-lock.json",
+              "isCorrect": false
+            },
+            {
+              "text": "node.json",
+              "isCorrect": false
+            },
+            {
+              "text": "npmrc",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which module handles filesystem?",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "fs",
+              "isCorrect": true
+            },
+            {
+              "text": "path",
+              "isCorrect": false
+            },
+            {
+              "text": "os",
+              "isCorrect": false
+            },
+            {
+              "text": "http",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which flag enables ES modules in Node?",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "\"type\": \"module\"",
+              "isCorrect": true
+            },
+            {
+              "text": "--esm",
+              "isCorrect": false
+            },
+            {
+              "text": "modules=true",
+              "isCorrect": false
+            },
+            {
+              "text": "es:1",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which reads a file asynchronously?",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "fs.promises.readFile",
+              "isCorrect": true
+            },
+            {
+              "text": "fs.readFileSync",
+              "isCorrect": false
+            },
+            {
+              "text": "readFile()",
+              "isCorrect": false
+            },
+            {
+              "text": "fs.readFileBlocking",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which are core modules?",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "fs",
+              "isCorrect": true
+            },
+            {
+              "text": "http",
+              "isCorrect": true
+            },
+            {
+              "text": "express",
+              "isCorrect": false
+            },
+            {
+              "text": "events",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Best practices include:",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "Use env vars for secrets",
+              "isCorrect": true
+            },
+            {
+              "text": "Avoid blocking the loop",
+              "isCorrect": true
+            },
+            {
+              "text": "Log errors",
+              "isCorrect": true
+            },
+            {
+              "text": "Always run as root",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Ways to handle async in Node:",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [
+            {
+              "text": "Callbacks",
+              "isCorrect": true
+            },
+            {
+              "text": "Promises",
+              "isCorrect": true
+            },
+            {
+              "text": "async/await",
+              "isCorrect": true
+            },
+            {
+              "text": "Signals",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "What JSON key enables ES modules?",
+          "keywords": [
+            "npm",
+            "modules",
+            "fs"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "\"type\": \"module\"",
+            "rubric_keywords": {
+              "must": [
+                "type",
+                "module"
+              ],
+              "should": [
+                "package.json"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Express.js",
+      "slug": "backend-expressjs",
+      "description": "Auto-generated seed for Express.js.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Middleware functions have access to req, res, and next.",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for routing, middleware."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "app.use applies middleware for all HTTP methods.",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for routing, middleware."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Route parameters use the :param syntax.",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for routing, middleware."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Sending sensitive data in GET query is safest.",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for routing, middleware."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Helmet helps set secure HTTP headers.",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for routing, middleware."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which parses JSON bodies?",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "express.json()",
+              "isCorrect": true
+            },
+            {
+              "text": "bodyParser.urlencoded()",
+              "isCorrect": false
+            },
+            {
+              "text": "multer()",
+              "isCorrect": false
+            },
+            {
+              "text": "cookieParser()",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which sets security headers?",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "helmet()",
+              "isCorrect": true
+            },
+            {
+              "text": "cors()",
+              "isCorrect": false
+            },
+            {
+              "text": "morgan()",
+              "isCorrect": false
+            },
+            {
+              "text": "rateLimiter()",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which status code for not found?",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "404",
+              "isCorrect": true
+            },
+            {
+              "text": "400",
+              "isCorrect": false
+            },
+            {
+              "text": "401",
+              "isCorrect": false
+            },
+            {
+              "text": "500",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which attaches middleware globally?",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "app.use",
+              "isCorrect": true
+            },
+            {
+              "text": "app.attach",
+              "isCorrect": false
+            },
+            {
+              "text": "use()",
+              "isCorrect": false
+            },
+            {
+              "text": "router.add",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Security best practices include:",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "rate limiting",
+              "isCorrect": true
+            },
+            {
+              "text": "input validation",
+              "isCorrect": true
+            },
+            {
+              "text": "store secrets in code",
+              "isCorrect": false
+            },
+            {
+              "text": "HTTPS",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Error handling in Express:",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "Use error-handling middleware",
+              "isCorrect": true
+            },
+            {
+              "text": "Catch async errors",
+              "isCorrect": true
+            },
+            {
+              "text": "Hide stack traces in prod",
+              "isCorrect": true
+            },
+            {
+              "text": "Return HTML for APIs",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Middleware examples:",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [
+            {
+              "text": "cors",
+              "isCorrect": true
+            },
+            {
+              "text": "helmet",
+              "isCorrect": true
+            },
+            {
+              "text": "compression",
+              "isCorrect": true
+            },
+            {
+              "text": "nodemon",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Which Express middleware parses JSON request bodies?",
+          "keywords": [
+            "routing",
+            "middleware",
+            "error handling"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "express.json()",
+            "rubric_keywords": {
+              "must": [
+                "express.json"
+              ],
+              "should": [
+                "middleware",
+                "parse"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Java Spring Boot",
+      "slug": "backend-java-spring-boot",
+      "description": "Auto-generated seed for Java Spring Boot.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "@Component marks a class as a Spring bean.",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for beans, autoconfig."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Spring Boot auto-configuration can be customized with properties.",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for beans, autoconfig."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "@RestController combines @Controller and @ResponseBody.",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for beans, autoconfig."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "@Autowired on constructors is discouraged in modern Spring.",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for beans, autoconfig."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Spring Profiles allow environment-specific beans.",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for beans, autoconfig."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which annotation exposes JSON endpoints?",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "@RestController",
+              "isCorrect": true
+            },
+            {
+              "text": "@Controller",
+              "isCorrect": false
+            },
+            {
+              "text": "@Repository",
+              "isCorrect": false
+            },
+            {
+              "text": "@Service",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which property controls JPA schema generation?",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "spring.jpa.hibernate.ddl-auto",
+              "isCorrect": true
+            },
+            {
+              "text": "spring.datasource.url",
+              "isCorrect": false
+            },
+            {
+              "text": "server.port",
+              "isCorrect": false
+            },
+            {
+              "text": "logging.level.root",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which interface provides CRUD out of the box?",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "JpaRepository",
+              "isCorrect": true
+            },
+            {
+              "text": "CrudService",
+              "isCorrect": false
+            },
+            {
+              "text": "JdbcTemplate",
+              "isCorrect": false
+            },
+            {
+              "text": "EntityManager",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which annotation creates a bean method?",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "@Bean",
+              "isCorrect": true
+            },
+            {
+              "text": "@Autowired",
+              "isCorrect": false
+            },
+            {
+              "text": "@Qualifier",
+              "isCorrect": false
+            },
+            {
+              "text": "@Primary",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which are stereotype annotations?",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "@Component",
+              "isCorrect": true
+            },
+            {
+              "text": "@Service",
+              "isCorrect": true
+            },
+            {
+              "text": "@Repository",
+              "isCorrect": true
+            },
+            {
+              "text": "@Entity",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "JPA best practices include:",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "Use lazy associations when appropriate",
+              "isCorrect": true
+            },
+            {
+              "text": "Add indexes",
+              "isCorrect": true
+            },
+            {
+              "text": "Avoid N+1",
+              "isCorrect": true
+            },
+            {
+              "text": "Always fetch all data",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Profiles can be activated by:",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [
+            {
+              "text": "spring.profiles.active",
+              "isCorrect": true
+            },
+            {
+              "text": "Env var",
+              "isCorrect": true
+            },
+            {
+              "text": "Maven profile",
+              "isCorrect": true
+            },
+            {
+              "text": "Gradle only",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Which annotation binds config to POJOs?",
+          "keywords": [
+            "beans",
+            "autoconfig",
+            "web"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "@ConfigurationProperties",
+            "rubric_keywords": {
+              "must": [
+                "ConfigurationProperties"
+              ],
+              "should": [
+                "config",
+                "bind"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "API Design & REST",
+      "slug": "backend-api-design-rest",
+      "description": "Auto-generated seed for API Design & REST.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "GET must be safe and idempotent.",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for resources, status codes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "POST is idempotent by definition.",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for resources, status codes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "PUT replaces a resource at its URI.",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for resources, status codes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "PATCH applies partial updates.",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for resources, status codes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "201 Created is common for successful resource creation.",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for resources, status codes."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which status fits successful creation?",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "201 Created",
+              "isCorrect": true
+            },
+            {
+              "text": "200 OK",
+              "isCorrect": false
+            },
+            {
+              "text": "204 No Content",
+              "isCorrect": false
+            },
+            {
+              "text": "202 Accepted",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which method should be idempotent?",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "PUT",
+              "isCorrect": true
+            },
+            {
+              "text": "POST",
+              "isCorrect": false
+            },
+            {
+              "text": "CONNECT",
+              "isCorrect": false
+            },
+            {
+              "text": "TRACE",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which URI style is recommended?",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "/users",
+              "isCorrect": true
+            },
+            {
+              "text": "/createUser",
+              "isCorrect": false
+            },
+            {
+              "text": "/doUser",
+              "isCorrect": false
+            },
+            {
+              "text": "/userAction",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which header supports concurrency control?",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "If-Match",
+              "isCorrect": true
+            },
+            {
+              "text": "Accept",
+              "isCorrect": false
+            },
+            {
+              "text": "Cookie",
+              "isCorrect": false
+            },
+            {
+              "text": "Cache-Control",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Good URI design includes:",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "Nouns not verbs",
+              "isCorrect": true
+            },
+            {
+              "text": "Plural resources",
+              "isCorrect": true
+            },
+            {
+              "text": "Deeply nested paths always",
+              "isCorrect": false
+            },
+            {
+              "text": "Use consistent casing",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Idempotent methods include:",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "GET",
+              "isCorrect": true
+            },
+            {
+              "text": "PUT",
+              "isCorrect": true
+            },
+            {
+              "text": "DELETE",
+              "isCorrect": true
+            },
+            {
+              "text": "POST",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Pagination techniques:",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [
+            {
+              "text": "limit/offset",
+              "isCorrect": true
+            },
+            {
+              "text": "cursor-based",
+              "isCorrect": true
+            },
+            {
+              "text": "page/size",
+              "isCorrect": true
+            },
+            {
+              "text": "SOAP envelopes",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Which status code indicates a resource was created?",
+          "keywords": [
+            "resources",
+            "status codes",
+            "http methods"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "201 Created",
+            "rubric_keywords": {
+              "must": [
+                "201"
+              ],
+              "should": [
+                "Created"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "slug": "backend-authentication",
+      "description": "Auto-generated seed for Authentication.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Hashing passwords is essential before storing them.",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for sessions, jwt."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "JWTs are always encrypted by default.",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for sessions, jwt."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Refresh tokens can enable long-lived sessions.",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for sessions, jwt."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "SameSite cookies help mitigate CSRF.",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for sessions, jwt."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Storing secrets in client code is safe.",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for sessions, jwt."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which protects against CSRF best with cookies?",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "SameSite",
+              "isCorrect": true
+            },
+            {
+              "text": "Expires",
+              "isCorrect": false
+            },
+            {
+              "text": "HttpOnly",
+              "isCorrect": false
+            },
+            {
+              "text": "Domain",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which is a secure password hashing function?",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "bcrypt",
+              "isCorrect": true
+            },
+            {
+              "text": "md5",
+              "isCorrect": false
+            },
+            {
+              "text": "sha1",
+              "isCorrect": false
+            },
+            {
+              "text": "crc32",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which header carries bearer tokens?",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "Authorization",
+              "isCorrect": true
+            },
+            {
+              "text": "Cookie",
+              "isCorrect": false
+            },
+            {
+              "text": "X-Token",
+              "isCorrect": false
+            },
+            {
+              "text": "Auth",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which standard adds identity to OAuth 2.0?",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "OpenID Connect",
+              "isCorrect": true
+            },
+            {
+              "text": "SAML only",
+              "isCorrect": false
+            },
+            {
+              "text": "LDAP",
+              "isCorrect": false
+            },
+            {
+              "text": "FIDO2",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "JWT pitfalls include:",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "No rotation",
+              "isCorrect": true
+            },
+            {
+              "text": "Long expiry",
+              "isCorrect": true
+            },
+            {
+              "text": "No signature verification",
+              "isCorrect": true
+            },
+            {
+              "text": "Only using HttpOnly",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "AuthZ vs AuthN:",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [
+            {
+              "text": "AuthN verifies identity",
+              "isCorrect": true
+            },
+            {
+              "text": "AuthZ checks permissions",
+              "isCorrect": true
+            },
+            {
+              "text": "They are identical",
+              "isCorrect": false
+            },
+            {
+              "text": "Both are needed",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name a secure password hash.",
+          "keywords": [
+            "sessions",
+            "jwt",
+            "oauth"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "bcrypt",
+            "rubric_keywords": {
+              "must": [
+                "bcrypt"
+              ],
+              "should": [
+                "hash",
+                "password"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Python & Flask",
+      "slug": "backend-python-flask",
+      "description": "Auto-generated seed for Python & Flask.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "flask run --debug enables auto-reload and debugger.",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for flask, blueprints."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Blueprints modularize app components.",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for flask, blueprints."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Jinja2 is the templating engine in Flask.",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for flask, blueprints."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "app.config cannot load from environment.",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for flask, blueprints."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Flask is synchronous only and cannot handle async at all.",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for flask, blueprints."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which command runs a Flask app with debug?",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "flask run --debug",
+              "isCorrect": true
+            },
+            {
+              "text": "flask serve --dev",
+              "isCorrect": false
+            },
+            {
+              "text": "python -m flask debug",
+              "isCorrect": false
+            },
+            {
+              "text": "flask dev",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which object holds request data?",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "request",
+              "isCorrect": true
+            },
+            {
+              "text": "response",
+              "isCorrect": false
+            },
+            {
+              "text": "session",
+              "isCorrect": false
+            },
+            {
+              "text": "app",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which loads templates by default?",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "Jinja2",
+              "isCorrect": true
+            },
+            {
+              "text": "Mako",
+              "isCorrect": false
+            },
+            {
+              "text": "Mustache",
+              "isCorrect": false
+            },
+            {
+              "text": "Twig",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which organizes routes into modules?",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "Blueprints",
+              "isCorrect": true
+            },
+            {
+              "text": "Routers",
+              "isCorrect": false
+            },
+            {
+              "text": "Controllers",
+              "isCorrect": false
+            },
+            {
+              "text": "Namespaces",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Common Flask extensions include:",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "Flask-Login",
+              "isCorrect": true
+            },
+            {
+              "text": "Flask-Migrate",
+              "isCorrect": true
+            },
+            {
+              "text": "Flask-WTF",
+              "isCorrect": true
+            },
+            {
+              "text": "Flask-Bad",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Debug pitfalls include:",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "Debug mode in prod",
+              "isCorrect": true
+            },
+            {
+              "text": "Exposing Werkzeug console",
+              "isCorrect": true
+            },
+            {
+              "text": "Leaking secrets",
+              "isCorrect": true
+            },
+            {
+              "text": "Using .env",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Approaches to config:",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [
+            {
+              "text": "from_envvar",
+              "isCorrect": true
+            },
+            {
+              "text": "from_mapping",
+              "isCorrect": true
+            },
+            {
+              "text": "dotenv",
+              "isCorrect": true
+            },
+            {
+              "text": "Hard-code secrets",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the object to access HTTP data.",
+          "keywords": [
+            "flask",
+            "blueprints",
+            "jinja"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "request",
+            "rubric_keywords": {
+              "must": [
+                "request"
+              ],
+              "should": [
+                "args",
+                "form",
+                "json"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "SQL Basics",
+      "slug": "data-sql-basics",
+      "description": "Auto-generated seed for SQL Basics.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "PRIMARY KEY implies UNIQUE and NOT NULL.",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for select, where."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "INNER JOIN returns unmatched rows.",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for select, where."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "COUNT(*) counts rows, including NULLs.",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for select, where."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "WHERE filters rows before aggregation.",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for select, where."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "HAVING filters groups after aggregation.",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for select, where."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which removes duplicates?",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "DISTINCT",
+              "isCorrect": true
+            },
+            {
+              "text": "GROUP BY",
+              "isCorrect": false
+            },
+            {
+              "text": "UNIQUE",
+              "isCorrect": false
+            },
+            {
+              "text": "FILTER",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which joins unmatched left rows?",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "LEFT JOIN",
+              "isCorrect": true
+            },
+            {
+              "text": "INNER JOIN",
+              "isCorrect": false
+            },
+            {
+              "text": "RIGHT JOIN",
+              "isCorrect": false
+            },
+            {
+              "text": "CROSS JOIN",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which filters groups?",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "HAVING",
+              "isCorrect": true
+            },
+            {
+              "text": "WHERE",
+              "isCorrect": false
+            },
+            {
+              "text": "GROUP BY",
+              "isCorrect": false
+            },
+            {
+              "text": "SELECT",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which counts rows?",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "COUNT(*)",
+              "isCorrect": true
+            },
+            {
+              "text": "SUM(*)",
+              "isCorrect": false
+            },
+            {
+              "text": "TOTAL()",
+              "isCorrect": false
+            },
+            {
+              "text": "NUM()",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Index facts:",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "Speed reads",
+              "isCorrect": true
+            },
+            {
+              "text": "Always speed writes",
+              "isCorrect": false
+            },
+            {
+              "text": "Help WHERE and JOIN",
+              "isCorrect": true
+            },
+            {
+              "text": "Consume space",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "JOIN types:",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "INNER",
+              "isCorrect": true
+            },
+            {
+              "text": "LEFT",
+              "isCorrect": true
+            },
+            {
+              "text": "RIGHT",
+              "isCorrect": true
+            },
+            {
+              "text": "FULL",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Aggregate functions:",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [
+            {
+              "text": "SUM",
+              "isCorrect": true
+            },
+            {
+              "text": "AVG",
+              "isCorrect": true
+            },
+            {
+              "text": "MIN",
+              "isCorrect": true
+            },
+            {
+              "text": "JOIN",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Write a clause to filter price > 100.",
+          "keywords": [
+            "select",
+            "where",
+            "joins"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "WHERE price > 100",
+            "rubric_keywords": {
+              "must": [
+                "price > 100"
+              ],
+              "should": [
+                "WHERE"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "PostgreSQL Advanced",
+      "slug": "data-postgresql-advanced",
+      "description": "Auto-generated seed for PostgreSQL Advanced.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "jsonb supports GIN indexes for containment queries.",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for jsonb, ctes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "CTEs with MATERIALIZED can control planner behavior.",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for jsonb, ctes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Window functions operate across row partitions.",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for jsonb, ctes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Partial indexes apply to a subset of rows.",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for jsonb, ctes."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "ENUM types cannot be altered after creation.",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for jsonb, ctes."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which index suits jsonb @> queries?",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "GIN",
+              "isCorrect": true
+            },
+            {
+              "text": "BTREE",
+              "isCorrect": false
+            },
+            {
+              "text": "HASH",
+              "isCorrect": false
+            },
+            {
+              "text": "BRIN",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which clause implements upsert?",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "ON CONFLICT",
+              "isCorrect": true
+            },
+            {
+              "text": "UPSERT",
+              "isCorrect": false
+            },
+            {
+              "text": "MERGE",
+              "isCorrect": false
+            },
+            {
+              "text": "IF NOT EXISTS",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which shows actual execution timings?",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "EXPLAIN ANALYZE",
+              "isCorrect": true
+            },
+            {
+              "text": "EXPLAIN",
+              "isCorrect": false
+            },
+            {
+              "text": "DESCRIBE",
+              "isCorrect": false
+            },
+            {
+              "text": "SHOW PLAN",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which creates identity columns (modern)?",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "GENERATED ... AS IDENTITY",
+              "isCorrect": true
+            },
+            {
+              "text": "SERIAL",
+              "isCorrect": false
+            },
+            {
+              "text": "BIGSERIAL",
+              "isCorrect": false
+            },
+            {
+              "text": "IDENTITY()",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Window functions include:",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "ROW_NUMBER()",
+              "isCorrect": true
+            },
+            {
+              "text": "RANK()",
+              "isCorrect": true
+            },
+            {
+              "text": "SUM() OVER()",
+              "isCorrect": true
+            },
+            {
+              "text": "NVL()",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Performance tools:",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "EXPLAIN ANALYZE",
+              "isCorrect": true
+            },
+            {
+              "text": "pg_stat_statements",
+              "isCorrect": true
+            },
+            {
+              "text": "auto_explain",
+              "isCorrect": true
+            },
+            {
+              "text": "VACUUM FREEZE only",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Index choices:",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [
+            {
+              "text": "BTREE",
+              "isCorrect": true
+            },
+            {
+              "text": "GIN",
+              "isCorrect": true
+            },
+            {
+              "text": "BRIN",
+              "isCorrect": true
+            },
+            {
+              "text": "MD5",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the clause for upsert.",
+          "keywords": [
+            "jsonb",
+            "ctes",
+            "window"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "ON CONFLICT",
+            "rubric_keywords": {
+              "must": [
+                "ON CONFLICT"
+              ],
+              "should": [
+                "upsert"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "MongoDB Basics",
+      "slug": "data-mongodb-basics",
+      "description": "Auto-generated seed for MongoDB Basics.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "MongoDB stores data as BSON documents.",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for documents, collections."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Collections enforce rigid schemas by default.",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for documents, collections."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "ObjectId includes a timestamp component.",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for documents, collections."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Embedded documents can model one-to-many within a doc.",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for documents, collections."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Aggregation pipeline stages run in any order automatically.",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for documents, collections."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which type represents documents on the wire?",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "BSON",
+              "isCorrect": true
+            },
+            {
+              "text": "JSON",
+              "isCorrect": false
+            },
+            {
+              "text": "XML",
+              "isCorrect": false
+            },
+            {
+              "text": "CSV",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which stage filters documents?",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "$match",
+              "isCorrect": true
+            },
+            {
+              "text": "$project",
+              "isCorrect": false
+            },
+            {
+              "text": "$group",
+              "isCorrect": false
+            },
+            {
+              "text": "$sort",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which operator joins collections?",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "$lookup",
+              "isCorrect": true
+            },
+            {
+              "text": "$join",
+              "isCorrect": false
+            },
+            {
+              "text": "$merge",
+              "isCorrect": false
+            },
+            {
+              "text": "$concat",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which creates an index?",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "createIndex",
+              "isCorrect": true
+            },
+            {
+              "text": "ensureIndex",
+              "isCorrect": false
+            },
+            {
+              "text": "makeIndex",
+              "isCorrect": false
+            },
+            {
+              "text": "index()",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Index best practices:",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "Prefix fields used in queries",
+              "isCorrect": true
+            },
+            {
+              "text": "Avoid too many",
+              "isCorrect": true
+            },
+            {
+              "text": "Use correct order",
+              "isCorrect": true
+            },
+            {
+              "text": "Always build wildcard indexes",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Aggregation stages:",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "$match",
+              "isCorrect": true
+            },
+            {
+              "text": "$project",
+              "isCorrect": true
+            },
+            {
+              "text": "$group",
+              "isCorrect": true
+            },
+            {
+              "text": "$sort",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Schema design tips:",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [
+            {
+              "text": "Embed for locality",
+              "isCorrect": true
+            },
+            {
+              "text": "Reference for many-to-many",
+              "isCorrect": true
+            },
+            {
+              "text": "Avoid giant docs",
+              "isCorrect": true
+            },
+            {
+              "text": "Duplicate data carefully",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Which stage filters in a pipeline?",
+          "keywords": [
+            "documents",
+            "collections",
+            "indexes"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "$match",
+            "rubric_keywords": {
+              "must": [
+                "$match"
+              ],
+              "should": [
+                "aggregation",
+                "pipeline"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Data Modeling",
+      "slug": "data-modeling-principles",
+      "description": "Auto-generated seed for Data Modeling.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Normalization reduces redundancy.",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for normalization, relationships."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Denormalization can improve read performance.",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for normalization, relationships."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "A foreign key enforces referential integrity.",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for normalization, relationships."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "One-to-one relationships always require separate tables.",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for normalization, relationships."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Composite keys can model natural identifiers.",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for normalization, relationships."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which normal form removes partial dependencies?",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "2NF",
+              "isCorrect": true
+            },
+            {
+              "text": "1NF",
+              "isCorrect": false
+            },
+            {
+              "text": "3NF",
+              "isCorrect": false
+            },
+            {
+              "text": "BCNF",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which key enforces uniqueness?",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "PRIMARY KEY",
+              "isCorrect": true
+            },
+            {
+              "text": "FOREIGN KEY",
+              "isCorrect": false
+            },
+            {
+              "text": "CHECK",
+              "isCorrect": false
+            },
+            {
+              "text": "DEFAULT",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which structure optimizes analytics?",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "Star schema",
+              "isCorrect": true
+            },
+            {
+              "text": "Linked list",
+              "isCorrect": false
+            },
+            {
+              "text": "B-tree",
+              "isCorrect": false
+            },
+            {
+              "text": "Trie",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which relationship allows many-to-many?",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "Junction table",
+              "isCorrect": true
+            },
+            {
+              "text": "Foreign key only",
+              "isCorrect": false
+            },
+            {
+              "text": "Primary key only",
+              "isCorrect": false
+            },
+            {
+              "text": "Self join only",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Good primary keys are:",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "Stable",
+              "isCorrect": true
+            },
+            {
+              "text": "Unique",
+              "isCorrect": true
+            },
+            {
+              "text": "Meaningful to users",
+              "isCorrect": false
+            },
+            {
+              "text": "Minimal",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Relationships types include:",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "1-1",
+              "isCorrect": true
+            },
+            {
+              "text": "1-many",
+              "isCorrect": true
+            },
+            {
+              "text": "many-many",
+              "isCorrect": true
+            },
+            {
+              "text": "stack",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Denormalization risks:",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [
+            {
+              "text": "Anomalies",
+              "isCorrect": true
+            },
+            {
+              "text": "Complex writes",
+              "isCorrect": true
+            },
+            {
+              "text": "Bigger storage",
+              "isCorrect": true
+            },
+            {
+              "text": "Easier constraints",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the table that resolves many-to-many.",
+          "keywords": [
+            "normalization",
+            "relationships",
+            "denormalization"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "Junction table",
+            "rubric_keywords": {
+              "must": [
+                "Junction"
+              ],
+              "should": [
+                "many-to-many",
+                "bridge"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Git & GitHub",
+      "slug": "devops-git-github",
+      "description": "Auto-generated seed for Git & GitHub.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "A fast-forward merge moves the branch pointer without a new commit.",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for git, branches."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "git rebase rewrites history.",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for git, branches."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "git commit --amend changes the last commit.",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for git, branches."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "git reset --hard discards working tree changes.",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for git, branches."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "git push --force-with-lease is safer than --force.",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for git, branches."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which stages all changes?",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "git add -A",
+              "isCorrect": true
+            },
+            {
+              "text": "git add .",
+              "isCorrect": false
+            },
+            {
+              "text": "git stage *",
+              "isCorrect": false
+            },
+            {
+              "text": "git commit -a",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which prevents fast-forward on merge?",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "--no-ff",
+              "isCorrect": true
+            },
+            {
+              "text": "--ff-only",
+              "isCorrect": false
+            },
+            {
+              "text": "--squash",
+              "isCorrect": false
+            },
+            {
+              "text": "--no-edit",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which lists branches?",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "git branch",
+              "isCorrect": true
+            },
+            {
+              "text": "git list",
+              "isCorrect": false
+            },
+            {
+              "text": "git branches",
+              "isCorrect": false
+            },
+            {
+              "text": "git show-branch",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which changes last commit message?",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "git commit --amend",
+              "isCorrect": true
+            },
+            {
+              "text": "git reset --soft",
+              "isCorrect": false
+            },
+            {
+              "text": "git rebase -i",
+              "isCorrect": false
+            },
+            {
+              "text": "git fixup",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "History rewriting commands:",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "rebase",
+              "isCorrect": true
+            },
+            {
+              "text": "commit --amend",
+              "isCorrect": true
+            },
+            {
+              "text": "reset --hard",
+              "isCorrect": true
+            },
+            {
+              "text": "merge --no-ff",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Safer force push:",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "--force-with-lease",
+              "isCorrect": true
+            },
+            {
+              "text": "--force",
+              "isCorrect": false
+            },
+            {
+              "text": "--lease-only",
+              "isCorrect": false
+            },
+            {
+              "text": "--no-force",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Common workflows:",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [
+            {
+              "text": "feature branches",
+              "isCorrect": true
+            },
+            {
+              "text": "pull requests",
+              "isCorrect": true
+            },
+            {
+              "text": "trunk-based",
+              "isCorrect": true
+            },
+            {
+              "text": "manual FTP",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Which option forces a merge commit?",
+          "keywords": [
+            "git",
+            "branches",
+            "merges"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "--no-ff",
+            "rubric_keywords": {
+              "must": [
+                "--no-ff"
+              ],
+              "should": [
+                "merge"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Docker Fundamentals",
+      "slug": "devops-docker-fundamentals",
+      "description": "Auto-generated seed for Docker Fundamentals.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "An image is an immutable snapshot used to create containers.",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for images, containers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "docker build . builds an image from the current directory.",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for images, containers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "RUN executes at build time in a Dockerfile.",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for images, containers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "COPY can copy from remote URLs directly.",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for images, containers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Multi-stage builds can reduce image size.",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for images, containers."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which builds an image?",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "docker build .",
+              "isCorrect": true
+            },
+            {
+              "text": "docker make .",
+              "isCorrect": false
+            },
+            {
+              "text": "docker image create .",
+              "isCorrect": false
+            },
+            {
+              "text": "docker compile .",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which lists running containers?",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "docker ps",
+              "isCorrect": true
+            },
+            {
+              "text": "docker ps -a",
+              "isCorrect": false
+            },
+            {
+              "text": "docker ls",
+              "isCorrect": false
+            },
+            {
+              "text": "docker containers",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which starts services with a Compose file?",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "docker compose up",
+              "isCorrect": true
+            },
+            {
+              "text": "docker up",
+              "isCorrect": false
+            },
+            {
+              "text": "compose start",
+              "isCorrect": false
+            },
+            {
+              "text": "docker run compose.yml",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which reduces image size?",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "multi-stage builds",
+              "isCorrect": true
+            },
+            {
+              "text": "install dev tools",
+              "isCorrect": false
+            },
+            {
+              "text": "copy entire repo",
+              "isCorrect": false
+            },
+            {
+              "text": "run as root",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Security best practices:",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "Drop privileges",
+              "isCorrect": true
+            },
+            {
+              "text": "Use slim bases",
+              "isCorrect": true
+            },
+            {
+              "text": "Scan images",
+              "isCorrect": true
+            },
+            {
+              "text": "Bake secrets into image",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Compose features:",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "Services",
+              "isCorrect": true
+            },
+            {
+              "text": "Volumes",
+              "isCorrect": true
+            },
+            {
+              "text": "Networks",
+              "isCorrect": true
+            },
+            {
+              "text": "Branches",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Image size reduction:",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [
+            {
+              "text": "Multi-stage",
+              "isCorrect": true
+            },
+            {
+              "text": "Only copy needed artifacts",
+              "isCorrect": true
+            },
+            {
+              "text": "Minimize layers",
+              "isCorrect": true
+            },
+            {
+              "text": "Add everything with ADD . .",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "List only running containers.",
+          "keywords": [
+            "images",
+            "containers",
+            "dockerfile"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "docker ps",
+            "rubric_keywords": {
+              "must": [
+                "docker ps"
+              ],
+              "should": [
+                "running"
+              ]
+            },
+            "min_score": 65
+          }
+        }
+      ]
+    },
+    {
+      "name": "CI/CD Basics",
+      "slug": "devops-cicd-basics",
+      "description": "Auto-generated seed for CI/CD Basics.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "CI automates building and testing on change.",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for pipelines, triggers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "CD always means continuous deployment (to prod automatically).",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for pipelines, triggers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Artifacts are build outputs passed between stages.",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for pipelines, triggers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "A failing test should fail the pipeline.",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for pipelines, triggers."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Manual approvals can gate deployments.",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for pipelines, triggers."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which practice verifies code on each commit?",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "CI",
+              "isCorrect": true
+            },
+            {
+              "text": "CD",
+              "isCorrect": false
+            },
+            {
+              "text": "Feature flags",
+              "isCorrect": false
+            },
+            {
+              "text": "Branches",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which stores build outputs?",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "Artifacts",
+              "isCorrect": true
+            },
+            {
+              "text": "Cache",
+              "isCorrect": false
+            },
+            {
+              "text": "Secrets",
+              "isCorrect": false
+            },
+            {
+              "text": "Variables",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which gates prod deploys?",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "Manual approvals",
+              "isCorrect": true
+            },
+            {
+              "text": "Unit tests only",
+              "isCorrect": false
+            },
+            {
+              "text": "Linting",
+              "isCorrect": false
+            },
+            {
+              "text": "Cron",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which runs jobs?",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "Runners",
+              "isCorrect": true
+            },
+            {
+              "text": "Pushers",
+              "isCorrect": false
+            },
+            {
+              "text": "Agents",
+              "isCorrect": false
+            },
+            {
+              "text": "Indexers",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Pipeline stages may include:",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "Build",
+              "isCorrect": true
+            },
+            {
+              "text": "Test",
+              "isCorrect": true
+            },
+            {
+              "text": "Deploy",
+              "isCorrect": true
+            },
+            {
+              "text": "Refactor",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Deployment strategies:",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "Blue/green",
+              "isCorrect": true
+            },
+            {
+              "text": "Canary",
+              "isCorrect": true
+            },
+            {
+              "text": "Recreate",
+              "isCorrect": true
+            },
+            {
+              "text": "Shadow",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Best practices:",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [
+            {
+              "text": "Fail fast",
+              "isCorrect": true
+            },
+            {
+              "text": "Immutable artifacts",
+              "isCorrect": true
+            },
+            {
+              "text": "Rollback plans",
+              "isCorrect": true
+            },
+            {
+              "text": "Ignore security",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Which practice runs tests on each commit?",
+          "keywords": [
+            "pipelines",
+            "triggers",
+            "artifacts"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "Continuous Integration",
+            "rubric_keywords": {
+              "must": [
+                "Continuous Integration"
+              ],
+              "should": [
+                "CI",
+                "tests"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cloud Deployment",
+      "slug": "devops-cloud-deployment",
+      "description": "Auto-generated seed for Cloud Deployment.",
+      "questions": [
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Auto-scaling can add or remove instances based on load.",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for cloud, infra."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Load balancers distribute traffic across instances.",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for cloud, infra."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Immutable infrastructure replaces servers instead of patching.",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for cloud, infra."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "SSH into prod servers is always recommended.",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": false
+            },
+            {
+              "text": "False",
+              "isCorrect": true
+            }
+          ],
+          "explanations": "Concept check for cloud, infra."
+        },
+        {
+          "type": "TRUE_FALSE",
+          "difficulty": "EASY",
+          "question": "Infrastructure as Code codifies infrastructure definitions.",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "True",
+              "isCorrect": true
+            },
+            {
+              "text": "False",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Concept check for cloud, infra."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which distributes traffic?",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "Load balancer",
+              "isCorrect": true
+            },
+            {
+              "text": "Auto-scaler",
+              "isCorrect": false
+            },
+            {
+              "text": "VPC",
+              "isCorrect": false
+            },
+            {
+              "text": "NAT",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which practice codifies infra?",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "IaC",
+              "isCorrect": true
+            },
+            {
+              "text": "CI",
+              "isCorrect": false
+            },
+            {
+              "text": "CD",
+              "isCorrect": false
+            },
+            {
+              "text": "MFA",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Which release exposes a subset first?",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "Canary",
+              "isCorrect": true
+            },
+            {
+              "text": "Blue/green",
+              "isCorrect": false
+            },
+            {
+              "text": "Rolling",
+              "isCorrect": false
+            },
+            {
+              "text": "Recreate",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "UNIQUE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Which scales based on metrics?",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "Auto-scaling",
+              "isCorrect": true
+            },
+            {
+              "text": "Load balancing",
+              "isCorrect": false
+            },
+            {
+              "text": "VPC peering",
+              "isCorrect": false
+            },
+            {
+              "text": "DNS",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Exactly one correct option."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "EASY",
+          "question": "Observability pillars:",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "Logs",
+              "isCorrect": true
+            },
+            {
+              "text": "Metrics",
+              "isCorrect": true
+            },
+            {
+              "text": "Traces",
+              "isCorrect": true
+            },
+            {
+              "text": "Branches",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Scaling strategies:",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "Horizontal",
+              "isCorrect": true
+            },
+            {
+              "text": "Vertical",
+              "isCorrect": true
+            },
+            {
+              "text": "Diagonal",
+              "isCorrect": false
+            },
+            {
+              "text": "Quantum",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "MULTIPLE_CHOICE",
+          "difficulty": "MEDIUM",
+          "question": "Deployment patterns:",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [
+            {
+              "text": "Rolling",
+              "isCorrect": true
+            },
+            {
+              "text": "Recreate",
+              "isCorrect": true
+            },
+            {
+              "text": "Blue/green",
+              "isCorrect": true
+            },
+            {
+              "text": "Teleport",
+              "isCorrect": false
+            }
+          ],
+          "explanations": "Select all that apply."
+        },
+        {
+          "type": "SHORT_ANSWER",
+          "difficulty": "EASY",
+          "question": "Name the practice of defining infra in code.",
+          "keywords": [
+            "cloud",
+            "infra",
+            "scaling"
+          ],
+          "choices": [],
+          "explanations": "Short free-form answer expected.",
+          "shortAnswer": {
+            "answer": "Infrastructure as Code",
+            "rubric_keywords": {
+              "must": [
+                "Infrastructure as Code"
+              ],
+              "should": [
+                "IaC"
+              ]
+            },
+            "min_score": 70
+          }
+        }
+      ]
+    }
+  ]
+}
