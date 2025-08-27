@@ -42,11 +42,25 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
-      interval: 30s
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/']
+      interval: 15s
       timeout: 10s
-      retries: 3
-      start_period: 40s
+      retries: 5
+      start_period: 60s
+
+  frontend:
+    container_name: bell-ringer-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    networks:
+      - bell-ringer-network
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
 
 networks:
   bell-ringer-network:
