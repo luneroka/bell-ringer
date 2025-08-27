@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { auth } from '../../utils/firebase.config';
 
-function HistoryTable() {
+function HistoryTable({ refreshTrigger }) {
   const [quizResults, setQuizResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,6 +29,12 @@ function HistoryTable() {
 
   useEffect(() => {
     const fetchQuizResults = async () => {
+      // If this is a refresh after quiz completion, add a small delay
+      // to ensure backend has processed the completion
+      if (refreshTrigger) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+
       setLoading(true);
       setError(null);
 
@@ -45,7 +51,12 @@ function HistoryTable() {
         // Fetch quiz results for the user
         const resultsResponse = await axios.get(
           `${baseUrl}/api/v1/attempts/user/${userId}/results`,
-          { headers }
+          {
+            headers: {
+              ...headers,
+              'Cache-Control': 'no-cache',
+            },
+          }
         );
 
         const results = resultsResponse.data;
@@ -83,11 +94,27 @@ function HistoryTable() {
                 parentCategory = parentResponse.data;
               }
 
+              // Fetch difficulty distribution for this quiz
+              let difficultyDistribution = null;
+              try {
+                const difficultyResponse = await axios.get(
+                  `${baseUrl}/api/v1/quizzes/${result.quizId}/difficulty-distribution`,
+                  { headers }
+                );
+                difficultyDistribution = difficultyResponse.data;
+              } catch (error) {
+                console.warn(
+                  `Could not fetch difficulty distribution for quiz ${result.quizId}:`,
+                  error
+                );
+              }
+
               return {
                 ...result,
                 quiz,
                 category,
                 parentCategory,
+                difficultyDistribution,
                 area: parentCategory ? parentCategory.name : category.name,
                 topic: parentCategory ? category.name : 'General',
                 actualQuestionCount, // Use the actual number of questions in the quiz
@@ -104,6 +131,7 @@ function HistoryTable() {
                 quiz: null,
                 category: null,
                 parentCategory: null,
+                difficultyDistribution: null,
                 actualQuestionCount: result.totalQuestions, // Fallback to original count
               };
             }
@@ -125,7 +153,7 @@ function HistoryTable() {
     };
 
     fetchQuizResults();
-  }, []);
+  }, [refreshTrigger]);
 
   const handleRetry = async (quizId) => {
     if (!quizId) {
@@ -187,6 +215,7 @@ function HistoryTable() {
             selectedParentTopic: '',
             selectedChildTopic: '',
             selectedQuestions: questions.length,
+            selectedDifficulty: '',
             isRetry: true,
           },
         },
@@ -213,6 +242,20 @@ function HistoryTable() {
 
   const formatSuccessRate = (rate) => {
     return Math.round(rate * 100);
+  };
+
+  const getDifficultyColor = (difficulty) => {
+    const difficultyLower = difficulty?.toLowerCase();
+    switch (difficultyLower) {
+      case 'easy':
+        return 'alert-success'; // green
+      case 'medium':
+        return 'alert-warning'; // yellow
+      case 'hard':
+        return 'alert-danger'; // red
+      default:
+        return 'alert-light'; // gray for mixed/unknown
+    }
   };
 
   if (loading) {
@@ -253,8 +296,9 @@ function HistoryTable() {
               <th scope='col'>Date</th>
               <th scope='col'>Area</th>
               <th scope='col'>Topic</th>
+              <th scope='col'>Difficulty</th>
               <th scope='col'>Questions</th>
-              <th scope='col'>Success Rate</th>
+              <th scope='col'>Score</th>
               <th scope='col'>Retry</th>
             </tr>
           </thead>
@@ -263,22 +307,39 @@ function HistoryTable() {
               <tr key={result.attemptId}>
                 <td>{formatDate(result.completedAt)}</td>
                 <td>
-                  <span className='badge bg-primary'>{result.area}</span>
+                  <div
+                    className='alert alert-primary mb-0 py-1 px-2 text-center'
+                    style={{ fontSize: '0.75rem' }}
+                  >
+                    {result.area}
+                  </div>
                 </td>
                 <td>{result.topic}</td>
+                <td>
+                  <div
+                    className={`alert ${getDifficultyColor(
+                      result.difficultyDistribution?.primaryDifficulty
+                    )} mb-0 py-1 px-2 text-center`}
+                    style={{ fontSize: '0.75rem' }}
+                  >
+                    {result.difficultyDistribution?.primaryDifficulty ||
+                      'Mixed'}
+                  </div>
+                </td>
                 <td className='text-center'>{result.actualQuestionCount}</td>
                 <td>
-                  <span
-                    className={`badge ${
+                  <div
+                    className={`alert ${
                       result.successRate >= 0.8
-                        ? 'bg-success'
+                        ? 'alert-success'
                         : result.successRate >= 0.6
-                        ? 'bg-warning'
-                        : 'bg-danger'
-                    }`}
+                        ? 'alert-warning'
+                        : 'alert-danger'
+                    } mb-0 py-1 px-2 text-center`}
+                    style={{ fontSize: '0.75rem' }}
                   >
                     {formatSuccessRate(result.successRate)}%
-                  </span>
+                  </div>
                 </td>
                 <td>
                   <button

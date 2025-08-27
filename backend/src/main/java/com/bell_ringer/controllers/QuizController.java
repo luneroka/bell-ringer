@@ -67,4 +67,16 @@ public class QuizController {
                 "medium", acc.medium(),
                 "hard", acc.hard());
     }
+
+    /** Get difficulty distribution for a quiz */
+    @GetMapping("/{id}/difficulty-distribution")
+    public Map<String, Object> getDifficultyDistribution(@PathVariable Long id) {
+        QuizService.DifficultyDistribution distribution = quizService.getQuizDifficultyDistribution(id);
+        return Map.of(
+                "quizId", id,
+                "easy", distribution.easy(),
+                "medium", distribution.medium(),
+                "hard", distribution.hard(),
+                "primaryDifficulty", distribution.primaryDifficulty());
+    }
 }

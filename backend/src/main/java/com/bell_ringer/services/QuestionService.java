@@ -178,6 +178,11 @@ public class QuestionService {
 
   @Transactional(readOnly = true)
   public List<Question> drawWithQuota(List<Integer> categoryIds, Quota quota, int total) {
+    return drawWithQuota(categoryIds, quota, total, null);
+  }
+
+  @Transactional(readOnly = true)
+  public List<Question> drawWithQuota(List<Integer> categoryIds, Quota quota, int total, String difficultyFilter) {
     if (categoryIds == null || categoryIds.isEmpty())
       throw new IllegalArgumentException("categoryIds must not be empty");
     if (total <= 0)
@@ -192,31 +197,38 @@ public class QuestionService {
     // Overdraw factor helps reduce overlap across batches
     int over = 2;
 
-    // EASY
-    if (quota.easy() > 0) {
-      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.EASY.name(),
-          quota.easy() * over);
-      addUntilUnique(out, batch, quota.easy(), seen);
+    // If difficultyFilter is specified, only draw from that difficulty
+    if (difficultyFilter != null) {
+      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, difficultyFilter, total * over);
+      addUntilUnique(out, batch, total, seen);
+    } else {
+      // EASY
+      if (quota.easy() > 0) {
+        var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.EASY.name(),
+            quota.easy() * over);
+        addUntilUnique(out, batch, quota.easy(), seen);
+      }
+
+      // MEDIUM
+      if (quota.medium() > 0) {
+        var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.MEDIUM.name(),
+            quota.medium() * over);
+        addUntilUnique(out, batch, quota.medium(), seen);
+      }
+
+      // HARD
+      if (quota.hard() > 0) {
+        var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.HARD.name(),
+            quota.hard() * over);
+        addUntilUnique(out, batch, quota.hard(), seen);
+      }
     }
 
-    // MEDIUM
-    if (quota.medium() > 0) {
-      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.MEDIUM.name(),
-          quota.medium() * over);
-      addUntilUnique(out, batch, quota.medium(), seen);
-    }
-
-    // HARD
-    if (quota.hard() > 0) {
-      var batch = questionRepository.pickRandomFilteredMany(categoryIds, null, Difficulty.HARD.name(),
-          quota.hard() * over);
-      addUntilUnique(out, batch, quota.hard(), seen);
-    }
-
-    // Fallback: if any bucket was short, top up with any difficulty
+    // Fallback: if any bucket was short, top up with any difficulty (respecting
+    // difficultyFilter)
     int missing = total - out.size();
     if (missing > 0) {
-      var topUp = questionRepository.pickRandomFilteredMany(categoryIds, null, null, missing * over);
+      var topUp = questionRepository.pickRandomFilteredMany(categoryIds, null, difficultyFilter, missing * over);
       addUntilUnique(out, topUp, missing, seen);
     }
 
@@ -240,8 +252,8 @@ public class QuestionService {
     // 1) Compute difficulty split (Step 3)
     var quota = computeQuotaInternal(req);
 
-    // 2) Draw according to quota (Step 4)
-    var selected = drawWithQuota(effectiveCategoryIds(req.categoryId()), quota, req.total());
+    // 2) Draw according to quota (Step 4) with optional difficulty filter
+    var selected = drawWithQuota(effectiveCategoryIds(req.categoryId()), quota, req.total(), req.difficultyFilter());
 
     // 3) Ensure we have a quiz to attach to (auto-create if needed)
     Long quizId = req.quizId();

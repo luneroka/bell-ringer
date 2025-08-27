@@ -30,6 +30,18 @@ function QuizSettings({ config, onAbort }) {
     return config?.selectedQuestions || '?';
   };
 
+  const getDifficultyDisplayName = () => {
+    if (!config?.selectedDifficulty) return 'Any';
+
+    const difficultyMap = {
+      EASY: 'Easy',
+      MEDIUM: 'Medium',
+      HARD: 'Hard',
+    };
+
+    return difficultyMap[config.selectedDifficulty] || 'Any';
+  };
+
   const handleAbort = () => {
     if (
       window.confirm(
@@ -54,6 +66,14 @@ function QuizSettings({ config, onAbort }) {
       <div className='selector'>
         <p className='selector-p small-text text-muted'>Questions</p>
         <div className='selected-box button-text'>{getQuestionsCount()}</div>
+      </div>
+
+      {/* DIFFICULTY */}
+      <div className='selector'>
+        <p className='selector-p small-text text-muted'>Difficulty</p>
+        <div className='selected-box button-text'>
+          {getDifficultyDisplayName()}
+        </div>
       </div>
 
       {/* ABORT BUTTON */}

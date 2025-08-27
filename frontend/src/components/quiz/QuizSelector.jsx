@@ -12,6 +12,7 @@ function QuizSelector({ retryConfig }) {
   const [selectedParentTopic, setSelectedParentTopic] = useState('');
   const [selectedChildTopic, setSelectedChildTopic] = useState('');
   const [selectedQuestions, setSelectedQuestions] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [quizQuestions, setQuizQuestions] = useState([]);
   const navigate = useNavigate();
 
@@ -27,6 +28,9 @@ function QuizSelector({ retryConfig }) {
       }
       if (retryConfig.selectedQuestions) {
         setSelectedQuestions(retryConfig.selectedQuestions);
+      }
+      if (retryConfig.selectedDifficulty) {
+        setSelectedDifficulty(retryConfig.selectedDifficulty);
       }
 
       // Set the categories data if available
@@ -186,6 +190,7 @@ function QuizSelector({ retryConfig }) {
         categoryId,
         total,
         modeOverride: null,
+        difficultyFilter: selectedDifficulty || null,
       };
 
       const response = await axios.post(
@@ -210,6 +215,7 @@ function QuizSelector({ retryConfig }) {
         selectedParentTopic,
         selectedChildTopic,
         selectedQuestions,
+        selectedDifficulty,
         parentCategories,
         childrenCategories,
       };
@@ -301,6 +307,25 @@ function QuizSelector({ retryConfig }) {
             <option value={10}>10</option>
             <option value={15}>15</option>
             <option value={20}>20</option>
+          </select>
+        </div>
+
+        {/* DIFFICULTY SELECT */}
+        <div className='selector'>
+          <p className='selector-p small-text text-muted'>
+            Difficulty (optional)
+          </p>
+          <select
+            name='difficulty'
+            id='difficulty-select'
+            className='form-select'
+            value={selectedDifficulty}
+            onChange={(e) => setSelectedDifficulty(e.target.value)}
+          >
+            <option value=''>Any</option>
+            <option value='EASY'>Easy</option>
+            <option value='MEDIUM'>Medium</option>
+            <option value='HARD'>Hard</option>
           </select>
         </div>
 

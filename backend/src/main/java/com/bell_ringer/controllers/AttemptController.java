@@ -160,7 +160,7 @@ public class AttemptController {
     List<AttemptService.AttemptScoreDto> results = attemptService.getQuizResultsByUserId(userId);
 
     return ResponseEntity.ok()
-        .cacheControl(CacheControl.maxAge(120, TimeUnit.SECONDS))
+        .cacheControl(CacheControl.noCache())
         .body(results);
   }
 

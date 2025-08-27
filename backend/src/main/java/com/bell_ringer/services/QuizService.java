@@ -174,6 +174,61 @@ public class QuizService {
     public record Accuracy(double easy, double medium, double hard) {
     }
 
+    /** DTO for quiz difficulty distribution. */
+    public record DifficultyDistribution(int easy, int medium, int hard, String primaryDifficulty) {
+    }
+
+    /** Get the difficulty distribution of questions in a quiz. */
+    @SuppressWarnings("unchecked")
+    public DifficultyDistribution getQuizDifficultyDistribution(Long quizId) {
+        Objects.requireNonNull(quizId, "quizId must not be null");
+
+        List<Object[]> result = em.createNativeQuery("""
+                SELECT q.difficulty, COUNT(*)
+                FROM quiz_questions qq
+                JOIN questions q ON q.id = qq.question_id
+                WHERE qq.quiz_id = :quizId
+                GROUP BY q.difficulty
+                """)
+                .setParameter("quizId", quizId)
+                .getResultList();
+
+        int easy = 0, medium = 0, hard = 0;
+
+        for (Object[] row : result) {
+            String difficulty = (String) row[0];
+            Number count = (Number) row[1];
+
+            if (difficulty != null) {
+                switch (difficulty.toUpperCase()) {
+                    case "EASY" -> easy = count.intValue();
+                    case "MEDIUM" -> medium = count.intValue();
+                    case "HARD" -> hard = count.intValue();
+                }
+            }
+        }
+
+        // Determine primary difficulty (the one with the most questions)
+        String primaryDifficulty;
+        if (easy > medium && easy > hard) {
+            primaryDifficulty = "Easy";
+        } else if (medium > easy && medium > hard) {
+            primaryDifficulty = "Medium";
+        } else if (hard > easy && hard > medium) {
+            primaryDifficulty = "Hard";
+        } else if (easy == medium && easy > hard) {
+            primaryDifficulty = "Mixed (Easy/Medium)";
+        } else if (easy == hard && easy > medium) {
+            primaryDifficulty = "Mixed (Easy/Hard)";
+        } else if (medium == hard && medium > easy) {
+            primaryDifficulty = "Mixed (Medium/Hard)";
+        } else {
+            primaryDifficulty = "Mixed";
+        }
+
+        return new DifficultyDistribution(easy, medium, hard, primaryDifficulty);
+    }
+
     /** Load accuracy per difficulty for a user in a category. */
     public Accuracy loadAccuracy(UUID userId, Long categoryId) {
         Objects.requireNonNull(userId, "userId must not be null");
