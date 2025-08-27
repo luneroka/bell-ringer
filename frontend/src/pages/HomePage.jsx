@@ -3,6 +3,7 @@ import AuthInstructions from '../components/instructions/AuthInstructions';
 import IndexInstructions from '../components/instructions/IndexInstructions';
 import QuizSelector from '../components/quiz/QuizSelector';
 import { useAuth } from '../contexts/AuthContext';
+import UserData from '../components/history/UserData';
 
 function HomePage() {
   const { currentUser } = useAuth();
@@ -13,6 +14,8 @@ function HomePage() {
 
   return currentUser ? (
     <>
+      <UserData />
+
       <AuthInstructions />
 
       <div style={{ marginTop: '96px' }}>

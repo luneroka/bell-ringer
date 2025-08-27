@@ -326,3 +326,16 @@ h6 {
   padding: 1.5rem;
   border-radius: 0.75rem;
 }
+
+/* ============================================================================
+   8. USER COMPONENTS
+   ============================================================================ */
+
+.data-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: $primary;
+  padding: 16px 24px;
+  border-radius: 8px;
+}
