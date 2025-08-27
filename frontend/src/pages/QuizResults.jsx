@@ -22,7 +22,7 @@ function QuizResults() {
       // Fall back to config-based retry
       navigate('/', {
         state: {
-          retryConfig: config,
+          retryConfig: { ...config, isRetry: true },
         },
         replace: true,
       });
@@ -126,7 +126,7 @@ function QuizResults() {
       // Fall back to config-based retry if API calls fail
       navigate('/', {
         state: {
-          retryConfig: config,
+          retryConfig: { ...config, isRetry: true },
         },
         replace: true,
       });
