@@ -292,7 +292,7 @@ function HistoryTable({ refreshTrigger }) {
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <thead className='table-light'>
-            <tr>
+            <tr style={{ fontSize: '0.875rem' }}>
               <th scope='col'>Date</th>
               <th scope='col'>Area</th>
               <th scope='col'>Topic</th>
@@ -305,7 +305,9 @@ function HistoryTable({ refreshTrigger }) {
           <tbody>
             {quizResults.map((result) => (
               <tr key={result.attemptId}>
-                <td>{formatDate(result.completedAt)}</td>
+                <td style={{ fontSize: '0.75rem', verticalAlign: 'middle' }}>
+                  {formatDate(result.completedAt)}
+                </td>
                 <td>
                   <div
                     className='alert alert-primary mb-0 py-1 px-2 text-center'
@@ -314,7 +316,9 @@ function HistoryTable({ refreshTrigger }) {
                     {result.area}
                   </div>
                 </td>
-                <td>{result.topic}</td>
+                <td style={{ fontSize: '0.75rem', verticalAlign: 'middle' }}>
+                  {result.topic}
+                </td>
                 <td>
                   <div
                     className={`alert ${getDifficultyColor(
@@ -326,7 +330,9 @@ function HistoryTable({ refreshTrigger }) {
                       'Mixed'}
                   </div>
                 </td>
-                <td className='text-center'>{result.actualQuestionCount}</td>
+                <td style={{ verticalAlign: 'middle' }} className='text-center'>
+                  {result.actualQuestionCount}
+                </td>
                 <td>
                   <div
                     className={`alert ${

@@ -218,10 +218,7 @@ function UserData({ refreshTrigger }) {
   }
 
   return (
-    <div
-      className='d-flex justify-content-between align-items-end gap-3'
-      style={{ marginBottom: '96px' }}
-    >
+    <div className='d-flex justify-content-between align-items-end gap-3'>
       <DataCard
         cardTitle='COMPLETED'
         cardData={loading ? '...' : numberCompleted}
