@@ -8,6 +8,7 @@ function QuizSelector({ retryConfig }) {
   const [childrenCategories, setChildrenCategories] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [selectedParentTopic, setSelectedParentTopic] = useState('');
   const [selectedChildTopic, setSelectedChildTopic] = useState('');
   const [selectedQuestions, setSelectedQuestions] = useState('');
@@ -16,7 +17,7 @@ function QuizSelector({ retryConfig }) {
 
   // Handle retry configuration
   useEffect(() => {
-    if (retryConfig) {
+    if (retryConfig && retryConfig.isRetry) {
       // Set the form values from retry config
       if (retryConfig.selectedParentTopic) {
         setSelectedParentTopic(retryConfig.selectedParentTopic);
@@ -63,7 +64,7 @@ function QuizSelector({ retryConfig }) {
   }, []);
 
   const fetchParentCategories = async () => {
-    setLoading(true);
+    setCategoriesLoading(true);
     setError(null);
     try {
       const baseUrl =
@@ -89,7 +90,7 @@ function QuizSelector({ retryConfig }) {
       console.error('Error fetching parent categories:', error);
       setError('Failed to load parent categories');
     } finally {
-      setLoading(false);
+      setCategoriesLoading(false);
     }
   };
 
