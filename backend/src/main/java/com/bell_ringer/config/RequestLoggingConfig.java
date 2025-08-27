@@ -12,7 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+// import java.nio.charset.StandardCharsets; // Unused since request logging is disabled
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,29 +32,32 @@ public class RequestLoggingConfig {
             }
 
             @Override
-            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                    FilterChain filterChain)
                     throws ServletException, IOException {
                 ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
                 try {
                     filterChain.doFilter(wrappedRequest, response);
                 } finally {
-                    logRequest(wrappedRequest);
+                    // logRequest(wrappedRequest); // Disabled to reduce console output
                 }
             }
 
             private void logRequest(ContentCachingRequestWrapper request) {
-                try {
-                    String method = request.getMethod();
-                    String uri = request.getRequestURI();
-                    String payload = "";
-                    byte[] buf = request.getContentAsByteArray();
-                    if (buf.length > 0) {
-                        payload = new String(buf, 0, buf.length, StandardCharsets.UTF_8);
-                    }
-                    logger.info("Incoming request: method={}, uri={}, payload={}");
-                } catch (Exception e) {
-                    logger.warn("Failed to log request body", e);
-                }
+                // Disable request logging to reduce console output
+                // try {
+                // String method = request.getMethod();
+                // String uri = request.getRequestURI();
+                // String payload = "";
+                // byte[] buf = request.getContentAsByteArray();
+                // if (buf.length > 0) {
+                // payload = new String(buf, 0, buf.length, StandardCharsets.UTF_8);
+                // }
+                // logger.info("Incoming request: method={}, uri={}, payload={}", method, uri,
+                // payload);
+                // } catch (Exception e) {
+                // logger.warn("Failed to log request body", e);
+                // }
             }
         };
     }
